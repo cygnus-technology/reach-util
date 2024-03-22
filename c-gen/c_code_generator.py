@@ -5,6 +5,10 @@ import re
 
 import c_code_generator_utils as ccgu
 
+SCRIPT_MAJOR_VERSION = 0
+SCRIPT_MINOR_VERSION = 0
+SCRIPT_PATCH_VERSION = 1
+
 INDENT_SIZE = 4
 INDENT = f"{' ' * INDENT_SIZE}"
 
@@ -43,6 +47,9 @@ def gen_header(brief):
  *
  * Original Author: Chuck Peplinski
  * Script Author: Joseph Peplinski
+ *
+ * Generated with version ''' + \
+        f"{SCRIPT_MAJOR_VERSION}.{SCRIPT_MINOR_VERSION}.{SCRIPT_PATCH_VERSION}" + ''' of c_code_generator.py
  *
  ********************************************************************************************/'''
 
@@ -509,7 +516,8 @@ class ReachDevice:
                     self.device_info = CrDeviceInfo(
                         parse_sheet(book[s], column_based=False,
                                     expected_header=["Device Name", "Manufacturer", "Device Description",
-                                                     "CLI Supported", "Time Supported", "Application Identifier", "Endpoints"]))
+                                                     "CLI Supported", "Time Supported", "Application Identifier",
+                                                     "Endpoints"]))
                 case "Parameters":
                     params_dicts = parse_sheet(book[s],
                                                expected_header=["Name", "Type", "Extended Type", "Description",
@@ -743,9 +751,9 @@ parser.add_argument('-i', '--include-location', help="Where to put the generated
 
 args = parser.parse_args()
 
-if (args.source_location[-1] not in ["/", "\\"]):
+if args.source_location[-1] not in ["/", "\\"]:
     args.source_location += "/"
-if (args.include_location[-1] not in ["/", "\\"]):
+if args.include_location[-1] not in ["/", "\\"]:
     args.include_location += "/"
 
 test = ReachDevice(args.xlsx)
