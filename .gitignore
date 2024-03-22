@@ -1,0 +1,12 @@
+# Python files
+*/__pycache__/
+*/dist/
+*.spec
+
+# PyCharm folders
+*/.idea/
+
+# Generated files
+c-gen/*.c
+c-gen/*.h
+
