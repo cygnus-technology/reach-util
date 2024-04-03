@@ -6,6 +6,9 @@
 # PyCharm folders
 */.idea/
 
+# Temporary Excel files
+c-gen/~$Template.xlsx
+
 # Generated files
 c-gen/*.c
 c-gen/*.h

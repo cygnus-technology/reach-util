@@ -4,7 +4,7 @@
 This is a utility for Reach device projects which are written in C, designed to simplify the process of implementing Reach services in a new project.  At a high level, this utility supports reading an .xlsx file with a standard format (designed to be human-readable for app and firmware developers) and turning this into `definitions.c` and `definitions.h` C files.  The scripts here provide one possible implementation of Reach services (particularly the parameter repository), which is not the most memory-efficient implementation possible, but is good enough for most projects.  This utility does not eliminate the need to write Reach-related firmware, but provides a reasonable framework for application-specific handling of Reach features.
 
 # Requirements
-[Python](https://www.python.org/downloads/) 3.10 or higher is required to run the scripts, though all development has been done in Python 3.11.  Additionally, the `openpyxl` package is necessary for parsing .xlsx files.
+[Python](https://www.python.org/downloads/) 3.10 or higher is required to run the scripts, though all development has been done in Python 3.11.  Additionally, the `openpyxl` package is necessary for parsing .xlsx files.  Run `python -m pip install openpyxl` to install this.
 
 ## Usage in Firmware Projects
 Typically, a firmware project using this utility should include it as a submodule within git.  To generate the C files, run the `c_code_generator.py` script with the relevant arguments (`python c_code_generator.py -h` will show the available arguments).  Typically, these arguments will not change, so it may be convenient to have a script which calls `c_code_generator.py` with the correct arguments.
@@ -50,7 +50,7 @@ Enumerations are made up of pairs of names and values, though the values are opt
 Bitfield definitions work similarly, though they define a bit position rather than a value, with valid values being between 0 and 31.
 
 ### Files
-Files are defined similarly to parameters, though with far fewer fields for each file.  All fields are required, and there is no limit on the maximum file size, but the file size must be greater than 0.  The file size is defined in bytes, and may be modified by the application as needed.
+Files are defined similarly to parameters, though with far fewer fields for each file.  All fields are required, and there is no limit on the maximum file size, but the file size must be greater than 0.  The file size is defined in bytes, and may be modified by the application as needed.  The `Require Checksum` field determines whether to do additional validation during file transfers to ensure that the data is not corrupted.
 
 ### Commands
 Commands are defined very simply, with only a name and an optional description (which is not actually used in the C code).
