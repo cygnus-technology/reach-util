@@ -407,6 +407,7 @@ class CrFile:
         temp_id = f"FILE_{self.name}"
         self.id = make_c_compatible(temp_id, upper=True)
         self.access = data["Access"]
+        self.maxSize = data["Max Size"]
         self.size = int(data["Size"])
         self.location = data["Storage Location"]
         self.require_checksum = "false"
@@ -419,6 +420,7 @@ class CrFile:
             "file_name",
             "access",
             "current_size_bytes",
+            "maximum_size_bytes",
             "storage_location",
             "require_checksum"
         ]
@@ -443,6 +445,8 @@ class CrFile:
         lines.append(f"{INDENT * (indent + 1)}.{'file_name'.ljust(max_len)} = \"{self.name}\",")
         if 'size' in self.__dict__:
             lines.append(f"{INDENT * (indent + 1)}.{'current_size_bytes'.ljust(max_len)} = {self.size},")
+        if 'maxSize' in self.__dict__:
+            lines.append(f"{INDENT * (indent + 1)}.{'maximum_size_bytes'.ljust(max_len)} = {self.maxSize},")
         lines.append(f"{INDENT * (indent + 1)}.{'access'.ljust(max_len)} = {access_levels[self.access]},")
         lines.append(f"{INDENT * (indent + 1)}"
                      f".{'storage_location'.ljust(max_len)} = {storage_locations[self.location]},")
@@ -530,9 +534,11 @@ class ReachDevice:
                     params_dicts = parse_sheet(book[s],
                                                expected_header=["Name", "Type", "Extended Type", "Description",
                                                                 "Units", "Size", "Access", "Minimum Value",
-                                                                "Default Value", "Maximum Value", "Storage Location"])
+                                                                "Default Value", "Maximum Value", "Storage Location",
+                                                                "Notify", "min period", "max period", "delta"])
                 case "Files":
-                    files = parse_sheet(book[s], expected_header=["Name", "Size", "Access", "Storage Location", "Require Checksum"])
+                    files = parse_sheet(book[s], expected_header=["Name", "Size", "Access", "Storage Location", 
+                                                                  "Require Checksum", "Max Size"])
                     self.files = []
                     for file in files:
                         self.files.append(CrFile(file))
