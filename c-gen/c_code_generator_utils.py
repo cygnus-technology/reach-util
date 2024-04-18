@@ -356,7 +356,7 @@ int crcb_parameter_ex_discover_next(cr_ParamExInfoResponse *pDesc)
     return cr_ErrorCodes_INVALID_PARAMETER;
 }'''
     weak_access_functions_h = 'int app_handle_param_repo_pre_init(void);\n' \
-                              'int app_handle_param_repo_init(cr_ParameterValue *data, cr_ParameterInfo *desc);\n' \
+                              'int app_handle_param_repo_init(cr_ParameterValue *data, const cr_ParameterInfo *desc);\n' \
                               'int app_handle_param_repo_post_init(void);\n' \
                               'int app_handle_param_repo_read(cr_ParameterValue *data);\n' \
                               'int app_handle_param_repo_write(cr_ParameterValue *data);'
@@ -364,7 +364,7 @@ int crcb_parameter_ex_discover_next(cr_ParamExInfoResponse *pDesc)
 {
     return 0;
 }
-int __attribute__((weak)) app_handle_param_repo_init(cr_ParameterValue *data, cr_ParameterInfo *desc)
+int __attribute__((weak)) app_handle_param_repo_init(cr_ParameterValue *data, const cr_ParameterInfo *desc)
 {
     (void) desc;
     return app_handle_param_repo_read(data);

@@ -587,7 +587,7 @@ class ReachDevice:
                 separator = ",\n"
                 definitions.append(f"cr_ParameterValue sCr_param_val[NUM_PARAMS];")
                 definitions.append(
-                    f"cr_ParameterInfo param_desc[NUM_PARAMS] = {{\n{separator.join(param_lines)}\n}};")
+                    f"const cr_ParameterInfo param_desc[NUM_PARAMS] = {{\n{separator.join(param_lines)}\n}};")
                 main_functions.append(ccgu.ParamRepo.main_functions)
                 weak_functions.append(ccgu.ParamRepo.weak_access_functions)
                 if self.ext_types:
@@ -601,7 +601,7 @@ class ReachDevice:
                             # Unused extended type
                             continue
                         ext_lines.append(temp)
-                    definitions.append(f"cr_ParamExInfoResponse param_ex_desc[NUM_EX_PARAMS] = {{\n"
+                    definitions.append(f"const cr_ParamExInfoResponse param_ex_desc[NUM_EX_PARAMS] = {{\n"
                                        f"{separator.join(ext_lines)}\n}};")
                     main_functions.append(ccgu.ParamRepo.ext_param_functions)
             if self.files:
@@ -616,7 +616,7 @@ class ReachDevice:
                 for cmd in self.commands:
                     cmd_lines.append(cmd.as_c_info(1))
                 separator = ",\n"
-                definitions.append(f"cr_CommandInfo command_desc[NUM_COMMANDS] = {{\n"
+                definitions.append(f"const cr_CommandInfo command_desc[NUM_COMMANDS] = {{\n"
                                    f"{separator.join(cmd_lines)}\n}};")
                 main_functions.append(ccgu.Commands.main_functions)
 
@@ -674,7 +674,7 @@ class ReachDevice:
                 enums.append(gen_enum(enum_names, enum_values, "param", transform_enum_names=True))
                 access_functions.append(ccgu.ParamRepo.weak_access_functions_h)
                 variables.append(f"extern cr_ParameterValue sCr_param_val[NUM_PARAMS];")
-                variables.append(f"extern cr_ParameterInfo param_desc[NUM_PARAMS];")
+                variables.append(f"extern const cr_ParameterInfo param_desc[NUM_PARAMS];")
                 if self.ext_types:
                     enum_struct_count = 0
                     for ext_type in self.ext_types:
@@ -683,7 +683,7 @@ class ReachDevice:
                     define_values.append(f"{enum_struct_count}")
                     for ext_type in self.ext_types:
                         enums.append(ext_type.as_c_enum(0))
-                    variables.append(f"extern cr_ParamExInfoResponse param_ex_desc[NUM_EX_PARAMS];")
+                    variables.append(f"extern const cr_ParamExInfoResponse param_ex_desc[NUM_EX_PARAMS];")
             if self.files:
                 define_names.append("INCLUDE_FILE_SERVICE")
                 define_values.append(None)
@@ -707,7 +707,7 @@ class ReachDevice:
                     enum_names.append(cmd.id)
                     enum_values.append(None)
                 enums.append(gen_enum(enum_names, enum_values, "command"))
-                variables.append(f"extern cr_CommandInfo command_desc[NUM_COMMANDS];")
+                variables.append(f"extern const cr_CommandInfo command_desc[NUM_COMMANDS];")
             if self.device_info.cli:
                 define_names.append("INCLUDE_CLI_SERVICE")
                 define_values.append(None)
