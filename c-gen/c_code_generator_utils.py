@@ -181,19 +181,38 @@ int crcb_parameter_write(const uint32_t pid, const cr_ParameterValue *data)
     return rval;
 }
 
+
+int crcb_parameter_get_count()
+{
+    int i;
+    int numAvailable = 0;
+    for (i=0; i<NUM_PARAMS; i++)
+    {
+        if (crcb_access_granted(cr_ServiceIds_PARAMETER_REPO, param_desc[i].id))
+            numAvailable++;
+    }
+    return numAvailable;
+}
+
 // return a number that changes if the parameter descriptions have changed.
 uint32_t crcb_compute_parameter_hash(void)
 {
     // Note that the layout of the structure param_desc differs by compiler.
     // The hash computed on windows won't match that computed on SiLabs.
     uint32_t *ptr = (uint32_t*)param_desc;
-    // char *cptr = (char*)param_desc;
     size_t sz = sizeof(param_desc)/(sizeof(uint32_t));
     // LOG_DUMP_MASK(LOG_MASK_PARAMS, "Raw Params", cptr, sizeof(param_desc));
 
-    uint32_t hash = ptr[0];
-    for (size_t i= 1; i<sz; i++)
-        hash ^= ptr[i];
+    // The hash should be different based on access permission
+    uint32_t hash = 0;
+    for (size_t jj = 0; jj < NUM_PARAMS; jj++)
+    {
+        if (crcb_access_granted(cr_ServiceIds_PARAMETER_REPO, jj))
+        {
+            for (size_t i= 0; i<sizeof(cr_ParameterInfo); i++)
+                hash ^= ptr[i];
+        }
+    }
 
 #ifdef NUM_EX_PARAMS
     ptr = (uint32_t*)param_ex_desc;
@@ -214,28 +233,6 @@ uint32_t crcb_compute_parameter_hash(void)
 
 static int sCurrentParameter = 0;
 
-// Gets the parameter description for the next parameter.
-// Allows the stack to iterate through the parameter list.
-// The caller provides a cr_ParameterInfo containing string pointers that will be overwritten.
-// The app owns the string pointers which must not be on the stack.
-int crcb_parameter_discover_next(cr_ParameterInfo *ppDesc)
-{
-    if (sCurrentParameter >= NUM_PARAMS)
-    {
-        I3_LOG(LOG_MASK_PARAMS, "%s: sCurrentParameter (%d) >= NUM_PARAMS (%d)",
-               __FUNCTION__, sCurrentParameter, NUM_PARAMS);
-        return cr_ErrorCodes_NO_DATA;
-    }
-    *ppDesc = param_desc[sCurrentParameter];
-    sCurrentParameter++;
-    return 0;
-}
-
-
-int crcb_parameter_get_count()
-{
-    return NUM_PARAMS;
-}
 // Resets the application's pointer into the parameter table such that
 // the next call to crcb_parameter_discover_next() will return the
 // description of this parameter.
@@ -248,7 +245,6 @@ int crcb_parameter_discover_reset(const uint32_t pid)
         return cr_ErrorCodes_INVALID_PARAMETER;
     }
     sCurrentParameter = pid;
-    I3_LOG(LOG_MASK_PARAMS, "dp reset to %d", sCurrentParameter);
     int i;
     sCurrentParameter = 0;  // in case none match
     for (i = 0; i < NUM_PARAMS; i++)
@@ -261,6 +257,35 @@ int crcb_parameter_discover_reset(const uint32_t pid)
     }
     I3_LOG(LOG_MASK_PARAMS, "dp reset(%d) reset defaults to %d", pid, sCurrentParameter);
     return cr_ErrorCodes_INVALID_PARAMETER;
+}
+
+// Gets the parameter description for the next parameter.
+// Allows the stack to iterate through the parameter list.
+// The caller provides a cr_ParameterInfo containing string pointers that will be overwritten.
+// The app owns the string pointers which must not be on the stack.
+int crcb_parameter_discover_next(cr_ParameterInfo *ppDesc)
+{
+    if (sCurrentParameter >= NUM_PARAMS)
+    {
+        I3_LOG(LOG_MASK_PARAMS, "%s: sCurrentParameter (%d) >= NUM_PARAMS (%d)",
+               __FUNCTION__, sCurrentParameter, NUM_PARAMS);
+        return cr_ErrorCodes_NO_DATA;
+    }
+    while (!crcb_access_granted(cr_ServiceIds_PARAMETER_REPO, param_desc[sCurrentParameter].id))
+    {
+        I3_LOG(LOG_MASK_PARAMS, "%s: sCurrentParameter (%d) skip, access not granted",
+                   __FUNCTION__, sCurrentParameter);
+        sCurrentParameter++;
+        if (sCurrentParameter >= NUM_PARAMS)
+        {
+            I3_LOG(LOG_MASK_PARAMS, "%s: skipped to sCurrentParameter (%d) >= NUM_PARAMS (%d)",
+                   __FUNCTION__, sCurrentParameter, NUM_PARAMS);
+            return cr_ErrorCodes_NO_DATA;
+        }
+    }
+    *ppDesc = param_desc[sCurrentParameter];
+    sCurrentParameter++;
+    return 0;
 }'''
 
     ext_param_functions = r'''// In parallel to the parameter discovery, use this to find out 
@@ -374,7 +399,14 @@ class Files:
 
 int crcb_file_get_file_count()
 {
-    return NUM_FILES;
+    int i;
+    int numAvailable = 0;
+    for (i=0; i<NUM_FILES; i++)
+    {
+        if (crcb_access_granted(cr_ServiceIds_FILES, file_descriptions[i].file_id))
+            numAvailable++;
+    }
+    return numAvailable;
 }
 
 static uint8_t sFid_index = 0;
@@ -386,20 +418,46 @@ int crcb_file_discover_reset(const uint8_t fid)
         sFid_index = 0;
         return cr_ErrorCodes_BAD_FILE;
     }
-    sFid_index = fid;
-    return 0;
+    sFid_index = 0;
+    for (sFid_index = 0; sFid_index < NUM_FILES; sFid_index++)
+    {
+        if (file_descriptions[sFid_index].file_id == fid)
+        {
+            if (!crcb_access_granted(cr_ServiceIds_FILES, file_descriptions[sFid_index].file_id))
+            {
+                sFid_index = 0;
+                break;
+            }
+            return 0;
+        }
+    }
+    sFid_index = crcb_file_get_file_count();
+    I3_LOG(LOG_MASK_PARAMS, "discover file reset (%d) reset defaults to %d", fid, sFid_index);
+    return cr_ErrorCodes_INVALID_PARAMETER;
 }
 
 int crcb_file_discover_next(cr_FileInfo *file_desc)
 {
     if (sFid_index >= NUM_FILES)
     {
-        I3_LOG(LOG_MASK_WARN, "%s: sFid_index (%d) >= NUM_FILES (%d)",
-               __FUNCTION__, sFid_index, NUM_FILES);
+        // I3_LOG(LOG_MASK_WARN, "%s: sFid_index (%d) >= NUM_FILES (%d)",
+        //        __FUNCTION__, sFid_index, NUM_FILES);
         return cr_ErrorCodes_NO_DATA;
     }
-    *file_desc = file_descriptions[sFid_index];
-    sFid_index++;
+
+    while (!crcb_access_granted(cr_ServiceIds_FILES, file_desc[sFid_index].file_id))
+    {
+        I3_LOG(LOG_MASK_FILES, "%s: sFid_index (%d) skip, access not granted",
+                   __FUNCTION__, sFid_index);
+        sFid_index++;
+        if (sCurrentParameter >= NUM_FILES)
+        {
+            I3_LOG(LOG_MASK_PARAMS, "%s: skipped to sFid_indexsFid_index (%d) >= NUM_FILES (%d)",
+                   __FUNCTION__, sFid_index, NUM_FILES);
+            return cr_ErrorCodes_NO_DATA;
+        }
+    }
+    *file_desc = file_descriptions[sFid_index++];
     return 0;
 }'''
 
@@ -410,7 +468,14 @@ uint8_t sCommandIndex = 0;
 
 int crcb_get_command_count()
 {
-    return NUM_COMMANDS;
+    int i;
+    int numAvailable = 0;
+    for (i=0; i<NUM_COMMANDS; i++)
+    {
+        if (crcb_access_granted(cr_ServiceIds_COMMANDS, command_desc[i].id))
+            numAvailable++;
+    }
+    return numAvailable;
 }
 
 int crcb_command_discover_next(cr_CommandInfo *cmd_desc)
@@ -420,6 +485,19 @@ int crcb_command_discover_next(cr_CommandInfo *cmd_desc)
         I3_LOG(LOG_MASK_REACH, "%s: Command index %d indicates discovery complete.",
                __FUNCTION__, sCommandIndex);
         return cr_ErrorCodes_NO_DATA;
+    }
+
+    while (!crcb_access_granted(cr_ServiceIds_COMMANDS, command_desc[sCommandIndex].id))
+    {
+        I3_LOG(LOG_MASK_FILES, "%s: sCommandIndex (%d) skip, access not granted",
+                   __FUNCTION__, sFid_index);
+        sFid_index++;
+        if (sCurrentParameter >= NUM_COMMANDS)
+        {
+            I3_LOG(LOG_MASK_PARAMS, "%s: skipped to sCommandIndex (%d) >= NUM_COMMANDS (%d)",
+                   __FUNCTION__, sFid_index, NUM_COMMANDS);
+            return cr_ErrorCodes_NO_DATA;
+        }
     }
     *cmd_desc = command_desc[sCommandIndex++];
     return 0;
@@ -433,8 +511,22 @@ int crcb_command_discover_reset(const uint32_t cid)
                __FUNCTION__, cid);
         return cr_ErrorCodes_INVALID_PARAMETER;
     }
-    sCommandIndex = cid;
-    return 0;
+
+    for (sCommandIndex = 0; sCommandIndex < NUM_COMMANDS; sCommandIndex++)
+    {
+        if (command_desc[sCommandIndex].id == cid) {
+            if (!crcb_access_granted(cr_ServiceIds_COMMANDS, command_desc[sCommandIndex].id))
+            {
+                sFid_index = 0;
+                break;
+            }
+            I3_LOG(LOG_MASK_PARAMS, "discover command reset (%d) reset to %d", cid, sCurrentParameter);
+            return 0;
+        }
+    }
+    sCommandIndex = crcb_get_command_count();
+    I3_LOG(LOG_MASK_PARAMS, "discover command reset (%d) reset defaults to %d", cid, sCurrentParameter);
+    return cr_ErrorCodes_INVALID_PARAMETER;
 }'''
 
 
