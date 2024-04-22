@@ -23,7 +23,7 @@ class ParamRepo:
         case cr_ParameterDataType_INT32:
             sCr_param_val[i].which_value = cr_ParameterValue_sint32_value_tag;
             if (param_desc[i].has_default_value)
-                sCr_param_val[i].value.sint32_value = (int32_t)param_desc[i].default_value;
+                sCr_param_val[i].value.int32_value = (int32_t)param_desc[i].default_value;
             break;
         case cr_ParameterDataType_FLOAT32:
             sCr_param_val[i].which_value = cr_ParameterValue_float32_value_tag;
@@ -38,7 +38,7 @@ class ParamRepo:
         case cr_ParameterDataType_INT64:
             sCr_param_val[i].which_value = cr_ParameterValue_sint64_value_tag;
             if (param_desc[i].has_default_value)
-                sCr_param_val[i].value.sint64_value = (int64_t)param_desc[i].default_value;
+                sCr_param_val[i].value.int64_value = (int64_t)param_desc[i].default_value;
             break;
         case cr_ParameterDataType_FLOAT64:
             sCr_param_val[i].which_value = cr_ParameterValue_float64_value_tag;
@@ -124,7 +124,7 @@ int crcb_parameter_write(const uint32_t pid, const cr_ParameterValue *data)
             sCr_param_val[pid].value.uint32_value = data->value.uint32_value;
             break;
         case cr_ParameterValue_sint32_value_tag:
-            sCr_param_val[pid].value.sint32_value = data->value.sint32_value;
+            sCr_param_val[pid].value.int32_value = data->value.int32_value;
             break;
         case cr_ParameterValue_float32_value_tag:
             sCr_param_val[pid].value.float32_value = data->value.float32_value;
@@ -133,7 +133,7 @@ int crcb_parameter_write(const uint32_t pid, const cr_ParameterValue *data)
             sCr_param_val[pid].value.uint64_value = data->value.uint64_value;
             break;
         case cr_ParameterValue_sint64_value_tag:
-            sCr_param_val[pid].value.sint64_value = data->value.sint64_value;
+            sCr_param_val[pid].value.int64_value = data->value.int64_value;
             break;
         case cr_ParameterValue_float64_value_tag:
             sCr_param_val[pid].value.float64_value = data->value.float64_value;
