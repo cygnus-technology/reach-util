@@ -1,0 +1,45 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "fileDescription",
+	"title": "File Description",
+	"description": "A description of a file accessible via Reach",
+	"type": "object",
+	"properties": {
+		"id": {
+			"Description": "A unique identifier for the file.  This will be assigned automatically if not defined.",
+			"type": "integer",
+			"minimum": 0,
+			"maximum": 4294967295
+		},
+		"name": {
+			"Description": "A unique name for the file",
+			"type": "string",
+			"maxLength": 24
+		},
+		"maxSize": {
+			"Description": "The maximum size of the file",
+			"type": "integer",
+			"minimum": 0,
+			"maximum": 4294967295
+		},
+		"access": {
+			"Description": "Allowed interactions with the file",
+			"type": "string",
+			"enum": ["Read", "Write", "Read/Write"]
+		},
+		"accessLevelRequired": {
+			"Description": "A list of the access levels which get access to the file",
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"storageLocation": {
+			"Description": "Where the file is stored on the device",
+			"type": "string",
+			"enum": ["RAM", "NVM", "Extended RAM", "Extended NVM"]
+		}
+	},
+	"additionalProperties": false,
+	"required": ["name", "maxSize", "access", "storageLocation"]
+}

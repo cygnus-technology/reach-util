@@ -1,0 +1,40 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "commandDescription",
+	"title": "Command Description",
+	"description": "A description of a command which can be sent to the Reach device",
+	"type": "object",
+	"properties": {
+		"id": {
+			"Description": "A unique identifier for the command.  This will be assigned automatically if not defined.",
+			"type": "integer",
+			"minimum": 0,
+			"maximum": 4294967295
+		},
+		"name": {
+			"Description": "A unique name for the command",
+			"type": "string",
+			"maxLength": 24
+		},
+		"description": {
+			"Description": "A short description of the command",
+			"type": "string",
+			"maxLength": 32
+		},
+		"timeout": {
+			"Description": "The maximum time the command should take to execute, in seconds",
+			"type": "number",
+			"minimum": 0,
+			"maximum": 4294967.295
+		},
+		"accessLevelRequired": {
+			"Description": "A list of the access levels which get access to this command",
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		}
+	},
+	"additionalProperties": false,
+	"required": ["name"]
+}

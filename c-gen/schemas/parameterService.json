@@ -1,0 +1,53 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "parameterService",
+	"title": "Parameter Service",
+	"description": "A service which allows for reading, writing, and notifying about parameters on a device",
+	"type": "object",
+	"properties": {
+		"features": {
+			"Description": "Code-generation features to use",
+			"properties": {
+				"descriptions": {
+					"Description": "Handle generating parameter descriptions",
+					"type": "boolean"
+				},
+				"discovery": {
+					"Description": "Handle the parameter discovery process",
+					"type": "boolean"
+				},
+				"storage": {
+					"Description": "Handle storing parameter data in RAM, as well as handling reads and writes",
+					"type": "boolean"
+				},
+				"maxNotifications": {
+					"Description": "How many notifications the device can handle having enabled at once",
+					"type": "integer"
+				}
+			},
+			"required": ["descriptions", "discovery", "storage"]
+		},
+		"accessLevelRequired": {
+			"Description": "A list of the access levels which get access to the parameter service",
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"parameters": {
+			"Description": "A list of the parameters implemented",
+			"type": "array",
+			"items": {
+				"$ref": "parameterDescription"
+			}
+		},
+		"extendedLabels": {
+			"Description": "A list of the extended parameter labels (for booleans, enumerations, and bitfields) implemented",
+			"type": "array",
+			"items": {
+				"$ref": "parameterExInfoResponse"
+			}
+		}
+	},
+	"required": ["features"]
+}

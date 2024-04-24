@@ -1,0 +1,77 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "parameterExInfoResponse",
+	"title": "Parameter Extended Information Response",
+	"description": "Extended descriptions for boolean, bitfield, and enumeration labels",
+	"type": "object",
+	"properties": {
+		"name": {
+			"Description": "A human-readable name for the extended description, referenced in parameter definitions",
+			"type": "string"
+		},
+		"id": {
+			"Description": "A unique identifier for the extended description.  This will be assigned automatically if not defined.",
+			"type": "integer",
+			"minimum": 0,
+			"maximum": 4294967295
+		},
+		"dataType": {
+			"Description": "The type of parameter the labels describe",
+			"type": "string",
+			"enum": ["enumeration", "bitfield", "boolean"]
+		},
+		"dynamicDescription": {
+			"Description": "If true, this ParamExInfoResponse will be stored in RAM and can be modified by the device.  If false, this ParamExInfoResponse should not be modified, and will be stored in flash",
+			"type": "boolean"
+		}
+	},
+	"oneOf": [
+		{
+			"type": "object",
+			"properties": {
+				"dataType": {"const": "boolean"},
+				"falseLabel": {"type": "string", "maxLength": 16},
+				"trueLabel": {"type": "string", "maxLength": 16}
+			},
+			"required": ["falseLabel", "trueLabel"]
+		},
+		{
+			"type": "object",
+			"properties": {
+				"dataType": {"const": "enumeration"},
+				"enumValues": {
+					"type": "array", "maxItems": 4294967296,
+					"items": {
+						"type": "object",
+						"properties": {
+							"label": {"Description": "The human-readable label associated with the enumeration", "type": "string", "maxLength": 16},
+							"value": {"Description": "A unique enumeration value.  This will be assigned automatically if not defined.", "type": "integer", "minimum": 0, "maximum": 4294967295}
+						},
+						"required": ["label"]
+					}
+				},
+				"required": ["enumValues"]
+			}
+		},
+		{
+			"type": "object",
+			"properties": {
+				"dataType": {"const": "bitfield"},
+				"bitIndices": {
+					"type": "array", "maxItems": 64,
+					"items": {
+						"type": "object",
+						"properties": {
+							"label": {"Description": "The human-readable label associated with the bit index", "type": "string", "maxLength": 16},
+							"value": {"Description": "A unique bit index.  This will be assigned automatically if not defined.", "type": "integer", "minimum": 0, "maximum": 63}
+						},
+						"required": ["label"]
+					}
+				},
+				"required": ["bitIndices"]
+			}
+		}
+	],
+	"unevaluatedProperties": false,
+	"required": ["name", "dataType"]
+}

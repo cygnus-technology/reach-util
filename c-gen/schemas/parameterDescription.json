@@ -1,0 +1,161 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "parameterDescription",
+	"title": "Parameter Description",
+	"description": "A description of a parameter which is part of the Reach parameter repository",
+	"type": "object",
+	"properties": {
+		"id": {
+			"Description": "A unique identifier for the parameter.  This will be assigned automatically if not defined.",
+			"type": "integer",
+			"minimum": 0,
+			"maximum": 4294967295
+		},
+		"name": {
+			"Description": "A unique name for the parameter",
+			"type": "string",
+			"maxLength": 24
+		},
+		"description": {
+			"Description": "A short description of the parameter",
+			"type": "string",
+			"maxLength": 32
+		},
+		"access": {
+			"Description": "Allowed interactions with the parameter",
+			"type": "string",
+			"enum": ["None", "Read", "Write", "Read/Write"]
+		},
+		"storageLocation": {
+			"Description": "Where the parameter is stored on the device",
+			"type": "string",
+			"enum": ["RAM", "NVM", "Extended RAM", "Extended NVM"]
+		},
+		"accessLevelRequired": {
+			"Description": "A list of the access levels which get access to the parameter",
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"dataType": {
+			"Description": "What type of information the parameter will store",
+			"type": "string",
+			"enum": ["uint32", "int32", "float32", "uint64", "int64", "float64",
+			"boolean", "string", "enumeration", "bitfield", "bytearray"]
+		}
+	},
+	"oneOf": [
+		{
+			"type": "object",
+			"properties": {
+				"dataType": {"const": "uint32"},
+				"rangeMin": {"type": "integer", "minimum": 0, "maximum": 4294967295},
+				"defaultValue": {"type": "integer", "minimum": 0, "maximum": 4294967295},
+				"rangeMax": {"type": "integer", "minimum": 0, "maximum": 4294967295},
+				"units": {"type": "string", "maxLength": 16}
+			}
+		},
+		{
+			"type": "object",
+			"properties": {
+				"dataType": {"const": "int32"},
+				"rangeMin": {"type": "integer", "minimum": -2147483648, "maximum": 2147483647},
+				"defaultValue": {"type": "integer", "minimum": -2147483648, "maximum": 2147483647},
+				"rangeMax": {"type": "integer", "minimum": -2147483648, "maximum": 2147483647},
+				"units": {"type": "string", "maxLength": 16}
+			}
+		},
+		{
+			"type": "object",
+			"properties": {
+				"dataType": {"const": "float32"},
+				"rangeMin": {"type": "number"},
+				"defaultValue": {"type": "number"},
+				"rangeMax": {"type": "number"},
+				"precision": {"type": "integer", "minimum": 0, "maximum": 32},
+				"units": {"type": "string", "maxLength": 16}
+			}
+		},
+		{
+			"type": "object",
+			"properties": {
+				"dataType": {"const": "uint64"},
+				"rangeMin": {"type": "integer", "minimum": 0, "maximum": 18446744073709551615},
+				"defaultValue": {"type": "integer", "minimum": 0, "maximum": 18446744073709551615},
+				"rangeMax": {"type": "integer", "minimum": 0, "maximum": 18446744073709551615},
+				"units": {"type": "string", "maxLength": 16}
+			}
+		},
+		{
+			"type": "object",
+			"properties": {
+				"dataType": {"const": "int64"},
+				"rangeMin": {"type": "integer", "minimum": -9223372036854775808, "maximum": 9223372036854775807},
+				"defaultValue": {"type": "integer", "minimum": -9223372036854775808, "maximum": 9223372036854775807},
+				"rangeMax": {"type": "integer", "minimum": -9223372036854775808, "maximum": 9223372036854775807},
+				"units": {"type": "string", "maxLength": 16}
+			}
+		},
+		{
+			"type": "object",
+			"properties": {
+				"dataType": {"const": "float64"},
+				"rangeMin": {"type": "number"},
+				"defaultValue": {"type": "number"},
+				"rangeMax": {"type": "number"},
+				"precision": {"type": "integer", "minimum": 0, "maximum": 32},
+				"units": {"type": "string", "maxLength": 16}
+			}
+		},
+		{
+			"type": "object",
+			"properties": {
+				"dataType": {"const": "boolean"},
+				"defaultValue": {"type": "boolean"},
+				"labelName": {"type": "string"}
+			}
+		},
+		{
+			"type": "object",
+			"properties": {
+				"dataType": {"const": "string"},
+				"defaultValue": {"type": "string", "maxLength": 32},
+				"maxSize": {"type": "integer", "maximum": 32}
+			},
+			"required": ["maxSize"]
+		},
+		{
+			"type": "object",
+			"properties": {
+				"dataType": {"const": "enumeration"},
+				"rangeMin": {"type": "integer", "minimum": 0, "maximum": 4294967295},
+				"defaultValue": {"type": "integer", "minimum": 0, "maximum": 4294967295},
+				"rangeMax": {"type": "integer", "minimum": 0, "maximum": 4294967295},
+				"labelName": {"type": "string"},
+				"units": {"type": "string", "maxLength": 16}
+			}
+		},
+		{
+			"type": "object",
+			"properties": {
+				"dataType": {"const": "bitfield"},
+				"defaultValue": {"type": "integer", "minimum": 0, "maximum": 18446744073709551615},
+				"bitsAvailable": {"type": "integer", "minimum": 1, "maximum": 64},
+				"labelName": {"type": "string"}
+			},
+			"required": ["bitsAvailable"]
+		},
+		{
+			"type": "object",
+			"properties": {
+				"dataType": {"const": "bytearray"},
+				"defaultValue": {"type": "array", "maxItems": 32, "items": {"type": "integer", "minimum": 0, "maximum": 255}},
+				"maxSize": {"type": "integer", "maximum": 32}
+			},
+			"required": ["maxSize"]
+		}
+	],
+	"unevaluatedProperties": false,
+	"required": ["name", "access", "storageLocation", "dataType"]
+}

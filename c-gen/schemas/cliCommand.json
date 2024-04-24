@@ -1,0 +1,19 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "cliCommand",
+	"title": "CLI Command",
+	"description": "A definition/description of a command to be handled by the CLI",
+	"type": "object",
+	"properties": {
+		"string": {
+			"Description": "The text to be matched for the command",
+			"type": "string"
+		},
+		"description": {
+			"Description": "A brief description of how the command is used",
+			"type": "string"
+		}
+	},
+	"additionalProperties": false,
+	"required": ["string", "description"]
+}
