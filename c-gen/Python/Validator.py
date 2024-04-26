@@ -102,6 +102,11 @@ class DeviceDescriptionValidator:
                                 errors.append(f"Extended label '{param['labelName']}' was not defined")
                                 continue
 
+            # To Do: Parameter Limit Validation
+            # Check that max > min and that min <= default <= max
+            # Check that the default values of strings and byte arrays fit in their maxSize.
+            # Check that the default value of a bitfield fits within its bitsAvailable.
+
         # File list validation
         if 'files' in d['services'].get('fileService', []):
             # Assign and verify IDs, as well as making sure names don't conflict
