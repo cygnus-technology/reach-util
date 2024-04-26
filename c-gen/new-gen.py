@@ -35,4 +35,9 @@ with open(args.definition, "r") as f:
     device_description = json.load(f)
 
 # Do additional validation
-device_description = validator.validate(device_description)
+try:
+    device_description = validator.validate(device_description)
+    print("Input file validated successfully.")
+except Exception as e:
+    print(e)
+
