@@ -53,7 +53,7 @@ def copy_template_to_output(file_name, template_dir, output_dir):
                         block_name = line.split("[")[1].split("]")[0]
                         if verbose_print:
                             print("user code start, block_name ", block_name )
-                            print("copy line", line_num, line, end="")
+                            print("from template file, copy line", line_num, line, end="")
                         output_file.write(line)
                         user_code_started = True
                         # find backup_index for the start
@@ -64,26 +64,35 @@ def copy_template_to_output(file_name, template_dir, output_dir):
                         while backup_index < len(backup_lines) and backup_lines[backup_index].strip() != f"// User code end [{block_name}]":
                             output_file.write(backup_lines[backup_index])
                             if verbose_print:
-                                print("just started, wrote backup_lines[", backup_index, "]", backup_lines[backup_index], end="")
+                                print("from user file, copy line [", backup_index, "]", backup_lines[backup_index], end="")
                             backup_index += 1
 
                         user_code_started = False
                         backup_index = 0
                 if processed == False:
                     if verbose_print:
-                        print("copy line", line_num, line, end="")
+                        print("from template file, copy line", line_num, line, end="")
                     output_file.write(line)
+        print("Output file", file_name)
         print(colored(f"Output updated from template.", 'green'))
     else:
         # Copy the template file to output directory
         shutil.copy(template_file_path, output_file_path)
         print(colored(f"Initial template file is copied.", 'green'))
 
-# Example usage:
+# To Do:  
+# Call from a larger program.
+# Take the directories from command line.
 template_dir = "../../reach-c-stack/templates/template_"
 output_dir = "../../src"
     
 file_name = "device.c"
+copy_template_to_output(file_name, template_dir, output_dir)
+
+file_name = "streams.c"
+copy_template_to_output(file_name, template_dir, output_dir)
+
+file_name = "wifi.c"
 copy_template_to_output(file_name, template_dir, output_dir)
 
 file_name = "parameters.c"
@@ -95,9 +104,7 @@ copy_template_to_output(file_name, template_dir, output_dir)
 file_name = "commands.c"
 copy_template_to_output(file_name, template_dir, output_dir)
 
-file_name = "streams.c"
+file_name = "time.c"
 copy_template_to_output(file_name, template_dir, output_dir)
 
-file_name = "wifi.c"
-copy_template_to_output(file_name, template_dir, output_dir)
 
