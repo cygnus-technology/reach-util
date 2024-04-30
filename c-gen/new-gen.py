@@ -3,7 +3,7 @@ import json
 
 from Python import util
 from Python.Validator import DeviceDescriptionValidator
-
+from Python.Services.ParameterRepository import ParamRepoService
 
 parser = argparse.ArgumentParser(
                     description='A script to transform a specification file defining a Reach device into C code')
