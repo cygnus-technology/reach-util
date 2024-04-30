@@ -5,6 +5,7 @@ import os
 from Python import util
 from Python.Validator import DeviceDescriptionValidator
 from Python.Services.ParameterRepository import ParamRepoService
+from Python.Services.FileService import FileService
 
 parser = argparse.ArgumentParser(
                     description='A script to transform a specification file defining a Reach device into C code')
@@ -59,3 +60,16 @@ if 'parameterRepositoryService' in device_description['services']:
             print(line)
         print("")
 
+##############
+# File Service
+##############
+if 'fileService' in device_description['services']:
+    test = FileService.gen_definitions(device_description['services']['fileService'])
+    for line in test:
+        print(line)
+    print("")
+    test = FileService.gen_enums(device_description['services']['fileService'])
+    for enum in test:
+        for line in enum:
+            print(line)
+        print("")
