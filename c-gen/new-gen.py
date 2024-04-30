@@ -1,5 +1,6 @@
 import argparse
 import json
+import os
 
 from Python import util
 from Python.Validator import DeviceDescriptionValidator
@@ -27,7 +28,9 @@ else:
     util.init(' ' * args.spaces)
 
 # Create the schema validator, this can be reused
-validator = DeviceDescriptionValidator("schemas")
+# This assumes the scheams directory is relative to new-gen.py
+schema_dir = os.path.join(os.path.dirname(__file__), 'schemas')
+validator = DeviceDescriptionValidator(schema_dir)
 
 # Load the file, this could potentially have JSON format errors
 with open(args.definition, "r") as f:
