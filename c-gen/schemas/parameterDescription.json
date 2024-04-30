@@ -43,7 +43,19 @@
 			"type": "string",
 			"enum": ["uint32", "int32", "float32", "uint64", "int64", "float64",
 			"boolean", "string", "enumeration", "bitfield", "bytearray"]
-		}
+		},
+		"minimum_notification_period": {
+			"Description": "The fastest a notification can happen (milliseconds), 0 for none.",
+			"type": "number"
+		},
+        "maximum_notification_period": {
+            "Description": "A notification will be made at least this often (milliseconds), 0 for none.",
+            "type": "number"
+        },
+        "minimum_delta": {
+            "Description": "A notification will be made when the parameter changes by this much.",
+            "type": "number"
+        }
 	},
 	"oneOf": [
 		{
