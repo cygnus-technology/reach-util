@@ -45,13 +45,17 @@ except Exception as e:
     print(e)
 
 
-test = ParamRepoService.gen_definitions(device_description['services']['parameterRepositoryService'])
-for line in test:
-    print(line)
-print("")
-test = ParamRepoService.gen_enums(device_description['services']['parameterRepositoryService'])
-for enum in test:
-    for line in enum:
+########################
+# Parameter Repo Service
+########################
+if 'parameterRepositoryService' in device_description['services']:
+    test = ParamRepoService.gen_definitions(device_description['services']['parameterRepositoryService'])
+    for line in test:
         print(line)
     print("")
+    test = ParamRepoService.gen_enums(device_description['services']['parameterRepositoryService'])
+    for enum in test:
+        for line in enum:
+            print(line)
+        print("")
 
