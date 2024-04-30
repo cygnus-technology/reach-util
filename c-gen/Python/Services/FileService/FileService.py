@@ -19,5 +19,5 @@ def gen_enums(service: json):
         for file in service['files']:
             enums.append(File.to_enum(file))
             values.append(file['id'])
-        output.append(util.gen_enum(enums, values, "files"))
+        output.append(util.gen_enum(enums, values, "file"))
     return output
