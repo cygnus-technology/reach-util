@@ -47,6 +47,7 @@ except Exception as e:
     print(e)
 
 
+print("Generating Defines and Enums...")
 ########################
 # Parameter Repo Service
 ########################
