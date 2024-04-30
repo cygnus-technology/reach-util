@@ -6,6 +6,7 @@ from Python import util
 from Python.Validator import DeviceDescriptionValidator
 from Python.Services.ParameterRepository import ParamRepoService
 from Python.Services.FileService import FileService
+from Python.Services.CommandService import CommandService
 
 parser = argparse.ArgumentParser(
                     description='A script to transform a specification file defining a Reach device into C code')
@@ -69,6 +70,20 @@ if 'fileService' in device_description['services']:
         print(line)
     print("")
     test = FileService.gen_enums(device_description['services']['fileService'])
+    for enum in test:
+        for line in enum:
+            print(line)
+        print("")
+
+##############
+# Command Service
+##############
+if 'commandService' in device_description['services']:
+    test = CommandService.gen_definitions(device_description['services']['commandService'])
+    for line in test:
+        print(line)
+    print("")
+    test = CommandService.gen_enums(device_description['services']['commandService'])
     for enum in test:
         for line in enum:
             print(line)
