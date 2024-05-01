@@ -7,7 +7,7 @@ class Command:
 
     def to_protobuf(param: json, depth=0):
         fields = [{'field': 'id', 'value': Command.to_enum(param)}]
-        fields.append({'field': 'name', 'value': param['description']})
+        fields.append({'field': 'name', 'value': f"\"{param['description']}\""})
 
         return util.gen_c_struct(fields, depth=depth)
 
