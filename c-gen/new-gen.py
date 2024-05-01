@@ -1,6 +1,7 @@
 import argparse
 import json
 import os
+from pathlib import Path
 
 from Python import util
 from Python.Validator import DeviceDescriptionValidator
@@ -19,19 +20,44 @@ group.add_argument('--tabs', help="How many tabs to use for indent levels", type
 
 args = parser.parse_args()
 
-if args.source_location[-1] not in ["/", "\\"]:
-    args.source_location += "/"
-if args.include_location[-1] not in ["/", "\\"]:
-    args.include_location += "/"
-
 if args.tabs:
     util.init('\t' * args.tabs)
 else:
     util.init(' ' * args.spaces)
 
+# Validate the definition, source, and header paths
+def arg_to_path(arg_in):
+    new_path = Path(arg_in)
+    if not os.path.exists(new_path):
+        new_path = None
+    return new_path
+
+definition_path = arg_to_path(args.definition)
+if definition_path is None:
+    print(f'-d file not found {args.definition}')
+    print('qutting...')
+    quit(-1)
+
+include_path = arg_to_path(args.include_location)
+if include_path is None:
+    print(f'-i path not found {args.include_location}')
+    print('quitting...')
+    quit(-1)
+else:
+    print(f'saving include to {include_path}')
+
+source_path = arg_to_path(args.source_location)
+if source_path is None:
+    print(f"-s path not found {args.source_location}")
+    print('quitting...')
+    quit(-1)
+else:
+    print(f'saving source to {source_path}')
+
 # Create the schema validator, this can be reused
 # This assumes the scheams directory is relative to new-gen.py
-schema_dir = os.path.join(os.path.dirname(__file__), 'schemas')
+schema_dir = Path(__file__).parent.resolve()
+schema_dir = schema_dir.joinpath('schemas')
 validator = DeviceDescriptionValidator(schema_dir)
 
 # Load the file, this could potentially have JSON format errors
