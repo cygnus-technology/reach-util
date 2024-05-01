@@ -1,13 +1,8 @@
 import json
 from ... import util
 
-make_c_compatible = util.make_c_compatible
-gen_c_array = util.gen_c_array
-gen_protobuf_struct = util.gen_protobuf_struct
-
-
 def to_enum(param: json):
-    return make_c_compatible(f"PARAM_{param['name']}", upper=True)
+    return util.make_c_compatible(f"PARAM_{param['name']}", upper=True)
 
 
 def to_protobuf(param: json, depth=0):
@@ -82,14 +77,14 @@ def to_protobuf(param: json, depth=0):
                 if 'labelName' in param:
                     extra_desc['value'].append(
                         {"field": "pei_id", "optional": True,
-                         "value": make_c_compatible(f"PARAM_EI_{param['labelName']}", upper=True)})
+                         "value": util.make_c_compatible(f"PARAM_EI_{param['labelName']}", upper=True)})
         case "boolean":
             if 'defaultValue' in param:
                 extra_desc['value'].append(
                     {"field": "default_value", "optional": True, "value": param["defaultValue"]})
             if 'labelName' in param:
                 extra_desc['value'].append({"field": "pei_id", "optional": True,
-                                            "value": make_c_compatible(f"PARAM_EI_{param['labelName']}", upper=True)})
+                                            "value": util.make_c_compatible(f"PARAM_EI_{param['labelName']}", upper=True)})
         case "string":
             if 'defaultValue' in param:
                 extra_desc['value'].append(
@@ -103,11 +98,11 @@ def to_protobuf(param: json, depth=0):
                 {"field": "bits_available", "value": param['bitsAvailable']})
             if 'labelName' in param:
                 extra_desc['value'].append({"field": "pei_id", "optional": True,
-                                            "value": make_c_compatible(f"PARAM_EI_{param['labelName']}", upper=True)})
+                                            "value": util.make_c_compatible(f"PARAM_EI_{param['labelName']}", upper=True)})
         case "bytearray":
             if 'defaultValue' in param:
                 extra_desc['value'].append(
                     {"field": "default_value", "optional": True, "value": param['defaultValue']})
             extra_desc['value'].append({"field": "max_size", "value": param['maxSize']})
     fields.append(extra_desc)
-    return gen_protobuf_struct(fields, depth=depth)
+    return util.gen_protobuf_struct(fields, depth=depth)
