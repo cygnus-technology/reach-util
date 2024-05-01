@@ -62,7 +62,7 @@ except Exception as e:
 print("Generating Defines and Enums...")
 define_groups = []
 enum_groups = []
-gen_values = []
+values_groups = []
 ########################
 # Parameter Repo Service
 ########################
@@ -72,6 +72,7 @@ if 'parameterRepositoryService' in device_description['services']:
     gen_enums = ParamRepoService.gen_enums(device_description['services']['parameterRepositoryService'])
     enum_groups.append(gen_enums)
     gen_values = ParamRepoService.gen_variables(device_description['services']['parameterRepositoryService'])
+    values_groups.append(gen_values)
 
 ##############
 # File Service
@@ -82,6 +83,7 @@ if 'fileService' in device_description['services']:
     gen_enums = FileService.gen_enums(device_description['services']['fileService'])
     enum_groups.append(gen_enums)
     gen_values = FileService.gen_variables(device_description['services']['fileService'])
+    values_groups.append(gen_values)
 
 ##############
 # Command Service
@@ -92,6 +94,7 @@ if 'commandService' in device_description['services']:
     gen_enums = CommandService.gen_enums(device_description['services']['commandService'])
     enum_groups.append(gen_enums)
     gen_values = CommandService.gen_variables(device_description['services']['commandService'])
+    values_groups.append(gen_values)
 
 print("Writing source/header files")
 with open(include_path.joinpath('definitions.h'), "+w") as f:
@@ -116,7 +119,8 @@ with open(source_path.joinpath('definitions.c'), '+w') as f:
     f.write('#include \"definitions.h\"\n')
     f.write('\n')
 
-    for line_group in gen_values:
-        for line in line_group:
-            f.write(f'{line}\n')
+    for value_group in values_groups:
+        for value in value_group:
+            for line in value:
+                f.write(f'{line}\n')
     f.write('\n')
