@@ -20,7 +20,12 @@ class File:
         return util.make_c_compatible(f"FILE_{param['name']}", upper=True)
 
     def to_protobuf(param: json, depth=0):
-        fields = [{"field": "file_id", "value": File.to_enum(param)}, {"field": "file_name", "value": f"\"{param['name']}\""}]
+        fields = [{"field": "file_id", "value": File.to_enum(param)}]
+        fields.append({"field": "file_name", "value": f"\"{param['name']}\""})
+        fields.append({'field': 'maximum_size_bytes', 'value': param['maxSize']})
+        fields.append({'field': 'access', 'value': File.access_levels[param['access']]})
+        fields.append({'field': 'storage_location', 'value': File.storage_locations[param['storageLocation']]})
+        fields.append({'field': 'require_checksum', 'value': 'false'})
         return util.gen_c_struct(fields, depth=depth)
 
 
@@ -49,7 +54,7 @@ def gen_variables(service: json):
         for file in service['files']:
             structs.append(File.to_protobuf(file))
         lines = util.gen_c_array(structs)
-        lines[0] = f"static const cr_FileInfo file_descriptions[NUM_FILES] = {lines[0]}"
+        lines[0] = f"cr_FileInfo file_descriptions[NUM_FILES] = {lines[0]}"
         lines[-1] += ';'
         output.append(lines)
     return output
