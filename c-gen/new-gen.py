@@ -12,8 +12,8 @@ from Python.Services.CommandService import CommandService
 parser = argparse.ArgumentParser(
                     description='A script to transform a specification file defining a Reach device into C code')
 parser.add_argument('-d', '--definition', help="The .json file to parse", required=True)
-parser.add_argument('-s', '--source-location', help="Where to put the generated 'definitions.c' file", default=".")
-parser.add_argument('-i', '--include-location', help="Where to put the generated 'definitions.h' file", default=".")
+parser.add_argument('-s', '--source-location', help="Where to put the generated 'definitions.c' file", default=".", type=Path)
+parser.add_argument('-i', '--include-location', help="Where to put the generated 'definitions.h' file", default=".", type=Path)
 group = parser.add_mutually_exclusive_group()
 group.add_argument('--spaces', help="How many spaces to use for indent levels", type=int, default=4)
 group.add_argument('--tabs', help="How many tabs to use for indent levels", type=int)
@@ -26,33 +26,19 @@ else:
     util.init(' ' * args.spaces)
 
 # Validate the definition, source, and header paths
-def arg_to_path(arg_in):
-    new_path = Path(arg_in)
-    if not os.path.exists(new_path):
-        new_path = None
-    return new_path
-
-definition_path = arg_to_path(args.definition)
-if definition_path is None:
-    print(f'-d file not found {args.definition}')
-    print('qutting...')
+if not Path(args.definition).exists():
+    print(f'-d {args.definition} not found, exiting...')
     quit(-1)
 
-include_path = arg_to_path(args.include_location)
-if include_path is None:
-    print(f'-i path not found {args.include_location}')
-    print('quitting...')
-    quit(-1)
-else:
-    print(f'saving include to {include_path}')
+if not args.include_location.exists():
+    print(f'{args.include_location} not found, creating...')
+    Path.mkdir(args.include_location)
+include_path = args.include_location
 
-source_path = arg_to_path(args.source_location)
-if source_path is None:
-    print(f"-s path not found {args.source_location}")
-    print('quitting...')
-    quit(-1)
-else:
-    print(f'saving source to {source_path}')
+if not args.source_location.exists():
+    print(f'{args.source_location} not found, creating...')
+    Path.mkdir(args.source_location)
+source_path = args.source_location
 
 # Create the schema validator, this can be reused
 # This assumes the scheams directory is relative to new-gen.py
