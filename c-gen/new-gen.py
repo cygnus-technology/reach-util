@@ -81,6 +81,7 @@ if 'fileService' in device_description['services']:
     define_groups.append(gen_defines)
     gen_enums = FileService.gen_enums(device_description['services']['fileService'])
     enum_groups.append(gen_enums)
+    gen_values = FileService.gen_variables(device_description['services']['fileService'])
 
 ##############
 # Command Service
