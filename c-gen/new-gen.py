@@ -103,3 +103,31 @@ if 'commandService' in device_description['services']:
     define_groups.append(gen_defines)
     gen_enums = CommandService.gen_enums(device_description['services']['commandService'])
     enum_groups.append(gen_enums)
+
+print("Writing source/header files")
+with open(include_path.joinpath('definitions.h'), "+w") as f:
+    f.write('#ifndef __DEFINITIONS_H__\n')
+    f.write('#define __DEFINITIONS_H__\n')
+    f.write('\n')
+
+    for define_group in define_groups:
+        for line in define_group:
+            f.write(f'{line}\n')
+    f.write('\n')
+
+    for enum_group in enum_groups:
+        for enum in enum_group:
+            for line in enum:
+                f.write(f'{line}\n')
+            f.write('\n')
+
+    f.write('#endif /* __DEFINITIONS_H__ */\n')
+
+with open(source_path.joinpath('definitions.c'), '+w') as f:
+    f.write('#include \"definitions.h\"\n')
+    f.write('\n')
+
+    for line_group in gen_values:
+        for line in line_group:
+            f.write(f'{line}\n')
+    f.write('\n')
