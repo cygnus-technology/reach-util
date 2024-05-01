@@ -76,6 +76,7 @@ except Exception as e:
 print("Generating Defines and Enums...")
 define_groups = []
 enum_groups = []
+gen_values = []
 ########################
 # Parameter Repo Service
 ########################
