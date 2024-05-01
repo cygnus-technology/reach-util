@@ -91,6 +91,7 @@ if 'commandService' in device_description['services']:
     define_groups.append(gen_defines)
     gen_enums = CommandService.gen_enums(device_description['services']['commandService'])
     enum_groups.append(gen_enums)
+    gen_values = CommandService.gen_variables(device_description['services']['commandService'])
 
 print("Writing source/header files")
 with open(include_path.joinpath('definitions.h'), "+w") as f:
