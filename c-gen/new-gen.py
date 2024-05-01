@@ -74,44 +74,32 @@ except Exception as e:
 
 
 print("Generating Defines and Enums...")
+define_groups = []
+enum_groups = []
 ########################
 # Parameter Repo Service
 ########################
 if 'parameterRepositoryService' in device_description['services']:
-    test = ParamRepoService.gen_definitions(device_description['services']['parameterRepositoryService'])
-    for line in test:
-        print(line)
-    print("")
-    test = ParamRepoService.gen_enums(device_description['services']['parameterRepositoryService'])
-    for enum in test:
-        for line in enum:
-            print(line)
-        print("")
+    gen_defines = ParamRepoService.gen_definitions(device_description['services']['parameterRepositoryService'])
+    define_groups.append(gen_defines)
+    gen_enums = ParamRepoService.gen_enums(device_description['services']['parameterRepositoryService'])
+    enum_groups.append(gen_enums)
+    gen_values = ParamRepoService.gen_variables(device_description['services']['parameterRepositoryService'])
 
 ##############
 # File Service
 ##############
 if 'fileService' in device_description['services']:
-    test = FileService.gen_definitions(device_description['services']['fileService'])
-    for line in test:
-        print(line)
-    print("")
-    test = FileService.gen_enums(device_description['services']['fileService'])
-    for enum in test:
-        for line in enum:
-            print(line)
-        print("")
+    gen_defines = FileService.gen_definitions(device_description['services']['fileService'])
+    define_groups.append(gen_defines)
+    gen_enums = FileService.gen_enums(device_description['services']['fileService'])
+    enum_groups.append(gen_enums)
 
 ##############
 # Command Service
 ##############
 if 'commandService' in device_description['services']:
-    test = CommandService.gen_definitions(device_description['services']['commandService'])
-    for line in test:
-        print(line)
-    print("")
-    test = CommandService.gen_enums(device_description['services']['commandService'])
-    for enum in test:
-        for line in enum:
-            print(line)
-        print("")
+    gen_defines = CommandService.gen_definitions(device_description['services']['commandService'])
+    define_groups.append(gen_defines)
+    gen_enums = CommandService.gen_enums(device_description['services']['commandService'])
+    enum_groups.append(gen_enums)
