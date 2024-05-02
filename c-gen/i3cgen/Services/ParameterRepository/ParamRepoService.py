@@ -1,7 +1,7 @@
 import json
-from . import Parameter, ParamExInfo
-from ... import util
-
+from i3cgen.utils import util
+from i3cgen.Services.ParameterRepository import Parameter
+from i3cgen.Services.ParameterRepository import ParamExInfo
 
 def gen_definitions(service: json):
     lines = ["#define INCLUDE_PARAMETER_SERVICE"]

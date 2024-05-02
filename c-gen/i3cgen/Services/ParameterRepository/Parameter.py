@@ -1,5 +1,5 @@
 import json
-from ... import util
+from i3cgen.utils import util
 
 def to_enum(param: json):
     return util.make_c_compatible(f"PARAM_{param['name']}", upper=True)

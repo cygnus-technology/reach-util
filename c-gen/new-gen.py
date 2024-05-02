@@ -1,13 +1,12 @@
 import argparse
 import json
-import os
 from pathlib import Path
 
-from Python import util
-from Python.Validator import DeviceDescriptionValidator
-from Python.Services.ParameterRepository import ParamRepoService
-from Python.Services.FileService import FileService
-from Python.Services.CommandService import CommandService
+from i3cgen.utils import util
+from i3cgen.Validator import DeviceDescriptionValidator
+from i3cgen.Services.ParameterRepository import ParamRepoService
+from i3cgen.Services.FileService import FileService
+from i3cgen.Services.CommandService import CommandService
 
 parser = argparse.ArgumentParser(
                     description='A script to transform a specification file defining a Reach device into C code')

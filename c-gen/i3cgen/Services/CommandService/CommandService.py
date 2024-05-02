@@ -1,5 +1,5 @@
 import json
-from ... import util
+from i3cgen.utils import util
 
 class Command:
     def to_enum(param: json):

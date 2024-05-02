@@ -1,5 +1,5 @@
 import json
-from ... import util
+from i3cgen.utils import util
 
 def to_param_ei_enum(pei: json):
     return util.make_c_compatible(f"PARAM_EI_{pei['name']}", upper=True)
