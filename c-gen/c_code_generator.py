@@ -82,6 +82,24 @@ def main() -> int:
         Path.mkdir(args.source_location)
     source_path = args.source_location
 
+    # Resolve the reach-c-stack templates and source paths
+    # we are assuming their relative location
+    # templates_path = Path(__file__).joinpath('reach-c-stack', 'templates').resolve()
+    templates_path = Path(__file__).joinpath('..', '..', '..', 'reach-c-stack', 'templates').resolve()
+    src_path = Path(__file__).joinpath('..', '..', '..', 'src').resolve()
+
+    if not templates_path.exists():
+        print(f"can't find reach-c-stack templates directory\n{templates_path}\nexiting...")
+        return -1
+    else:
+        print(f"found reach-c-stack templates, {templates_path}")
+
+    if not src_path.exists():
+        print(f"can't find reach-c-stack src directory\n{src_path}\nexiting...")
+        return -1
+    else:
+        print(f"found reach-c-stack src, {src_path}")
+
     # Create the schema validator, this can be reused
     # This assumes the scheams directory is relative to new-gen.py
     schema_dir = Path(__file__).parent.resolve()
