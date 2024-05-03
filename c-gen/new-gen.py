@@ -8,8 +8,14 @@ from i3cgen.Services.ParameterRepository import ParamRepoService
 from i3cgen.Services.FileService import FileService
 from i3cgen.Services.CommandService import CommandService
 
-header_string = str(\
-'''/********************************************************************************************
+# Use a raw string to get formatting to print correctly
+header_string = r'''/********************************************************************************************
+ *    _ ____  ___             _         _     ___              _                        _
+ *   (_)__ / | _ \_ _ ___  __| |_  _ __| |_  |   \ _____ _____| |___ _ __ _ __  ___ _ _| |_
+ *   | ||_ \ |  _/ '_/ _ \/ _` | || / _|  _| | |) / -_) V / -_) / _ \ '_ \ '  \/ -_) ' \  _|
+ *   |_|___/ |_| |_| \___/\__,_|\_,_\__|\__| |___/\___|\_/\___|_\___/ .__/_|_|_\___|_||_\__|
+ *                                                                  |_|
+ *                           -----------------------------------
  *                          Copyright i3 Product Development 2024
  *
  * MIT License
@@ -42,7 +48,7 @@ header_string = str(\
  *
  ********************************************************************************************/
 
-''')
+'''
 
 parser = argparse.ArgumentParser(description='A script to transform a specification file defining a Reach device into C code')
 parser.add_argument('-d', '--definition', help="The .json file to parse", required=True)
