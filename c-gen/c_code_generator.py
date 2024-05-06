@@ -2,7 +2,6 @@ import sys
 import argparse
 import json
 from pathlib import Path
-import os
 import shutil
 from termcolor import colored
 
@@ -13,7 +12,8 @@ from i3cgen.Services.FileService import FileService
 from i3cgen.Services.CommandService import CommandService
 
 # Use a raw string to get formatting to print correctly
-header_string = r'''/********************************************************************************************
+# pylint: disable=line-too-long
+HEADER_STRING = r'''/********************************************************************************************
  *    _ ____  ___             _         _     ___              _                        _
  *   (_)__ / | _ \_ _ ___  __| |_  _ __| |_  |   \ _____ _____| |___ _ __ _ __  ___ _ _| |_
  *   | ||_ \ |  _/ '_/ _ \/ _` | || / _|  _| | |) / -_) V / -_) / _ \ '_ \ '  \/ -_) ' \  _|
@@ -119,7 +119,7 @@ def generate_output(modules: list, template_dir: Path, output_dir: Path):
 
                             user_code_started = False
                             backup_index = 0
-                    if processed == False:
+                    if processed is False:
                         if verbose_print:
                             print("from template file, copy line", line_num, line, end="")
                         output_file.write(line)
@@ -270,7 +270,7 @@ def main() -> int:
 
     print("Writing source/header files\n")
     with open(include_path.joinpath('definitions.h'), "+w") as f:
-        f.write(header_string)
+        f.write(HEADER_STRING)
         f.write('#ifndef __DEFINITIONS_H__\n')
         f.write('#define __DEFINITIONS_H__\n')
         f.write('\n')
@@ -289,7 +289,7 @@ def main() -> int:
         f.write('#endif /* __DEFINITIONS_H__ */\n')
 
     with open(source_path.joinpath('definitions.c'), '+w') as f:
-        f.write(header_string)
+        f.write(HEADER_STRING)
         f.write('#include \"definitions.h\"\n')
         f.write('\n')
 
