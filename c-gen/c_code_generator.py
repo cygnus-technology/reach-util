@@ -133,23 +133,19 @@ def generate_output(modules: list, template_dir: Path, output_dir: Path):
 
 def discover_template_module_names(template_path: Path) -> list:
     modules = []
-
     for child in template_path.iterdir():
         filename = child.stem.removeprefix('template_')
         modules.append(filename)
-
     return modules
 
 def backup_existing_src(src_path: Path, modules: list):
     for mod in modules:
-        filename = src_path.joinpath(f"{mod}")
-        filename = filename.with_suffix('.c')
-        backup_filename = filename.with_suffix('.bak')
+        filename = src_path.joinpath(f"{mod}").with_suffix('.c')
+        backup_filename = src_path.joinpath(f"{mod}").with_suffix('.bak')
         if filename.exists():
-            print(f"Backing up {filename} as {backup_filename}")
+            print(f"Backing up {filename.name} as {backup_filename.name}")
             shutil.copy2(filename, backup_filename)
-        else:
-            print(f"{filename} not found")
+    print('')
 
 def main() -> int:
     parser = argparse.ArgumentParser(description='A script to transform a specification file defining a Reach device into C code')
@@ -256,7 +252,7 @@ def main() -> int:
         gen_values = CommandService.gen_variables(device_description['services']['commandService'])
         values_groups.append(gen_values)
 
-    print("Writing source/header files")
+    print("Writing source/header files\n")
     with open(include_path.joinpath('definitions.h'), "+w") as f:
         f.write(header_string)
         f.write('#ifndef __DEFINITIONS_H__\n')
@@ -287,14 +283,17 @@ def main() -> int:
                     f.write(f'{line}\n')
         f.write('\n')
 
+    # Determine the module names from templates filenames
     module_names = discover_template_module_names(templates_path)
     if len(module_names) == 0:
         print("No template files found")
         print ("exiting...")
         return -1
     else:
-        print(f"found templates: {module_names}")
+        print(f"found templates: {module_names}\n")
 
+    # If we have existing source files
+    # Back them up before proceeding
     backup_existing_src(src_path, module_names)
 
     # Generate our ouput files
