@@ -268,63 +268,44 @@ def main() -> int:
         print(e)
 
 
-    print("Generating Defines and Enums...")
+    print("Generating defines, enums, values from enums...")
     define_groups = []
     enum_groups = []
     values_groups = []
-    ########################
-    # Parameter Repo Service
-    ########################
-    if 'parameterRepositoryService' in device_description['services']:
-        gen_defines = ParamRepoService.gen_definitions(device_description['services']['parameterRepositoryService'])
-        define_groups.append(gen_defines)
-        gen_enums = ParamRepoService.gen_enums(device_description['services']['parameterRepositoryService'])
-        enum_groups.append(gen_enums)
-        gen_values = ParamRepoService.gen_variables(device_description['services']['parameterRepositoryService'])
-        values_groups.append(gen_values)
-
-    ##############
-    # File Service
-    ##############
-    if 'fileService' in device_description['services']:
-        gen_defines = FileService.gen_definitions(device_description['services']['fileService'])
-        define_groups.append(gen_defines)
-        gen_enums = FileService.gen_enums(device_description['services']['fileService'])
-        enum_groups.append(gen_enums)
-        gen_values = FileService.gen_variables(device_description['services']['fileService'])
-        values_groups.append(gen_values)
-
-    ##############
-    # Command Service
-    ##############
-    if 'commandService' in device_description['services']:
-        gen_defines = CommandService.gen_definitions(device_description['services']['commandService'])
-        define_groups.append(gen_defines)
-        gen_enums = CommandService.gen_enums(device_description['services']['commandService'])
-        enum_groups.append(gen_enums)
-        gen_values = CommandService.gen_variables(device_description['services']['commandService'])
-        values_groups.append(gen_values)
-
-    #############
-    # CLI Service
-    #############
-    if 'cliService' in device_description['services']:
-        gen_defines = CliService.gen_definitions(device_description['services']['cliService'])
-        define_groups.append(gen_defines)
-
-    ################
-    # Stream Service
-    ################
-    if 'streamService' in device_description['services']:
-        gen_defines = StreamService.gen_definitions(device_description['services']['streamService'])
-        define_groups.append(gen_defines)
-
-    ##############
-    # WiFi Service
-    ##############
-    if 'WiFService' in device_description['services']:
-        gen_defines = WifiService.gen_definitions(device_description['services']['WiFService'])
-        define_groups.append(gen_defines)
+    for service in device_description['services']:
+        match service:
+            case 'parameterRepositoryService':
+                gen_defines = ParamRepoService.gen_definitions(device_description['services']['parameterRepositoryService'])
+                define_groups.append(gen_defines)
+                gen_enums = ParamRepoService.gen_enums(device_description['services']['parameterRepositoryService'])
+                enum_groups.append(gen_enums)
+                gen_values = ParamRepoService.gen_variables(device_description['services']['parameterRepositoryService'])
+                values_groups.append(gen_values)
+            case 'fileService':
+                gen_defines = FileService.gen_definitions(device_description['services']['fileService'])
+                define_groups.append(gen_defines)
+                gen_enums = FileService.gen_enums(device_description['services']['fileService'])
+                enum_groups.append(gen_enums)
+                gen_values = FileService.gen_variables(device_description['services']['fileService'])
+                values_groups.append(gen_values)
+            case 'commandService':
+                gen_defines = CommandService.gen_definitions(device_description['services']['commandService'])
+                define_groups.append(gen_defines)
+                gen_enums = CommandService.gen_enums(device_description['services']['commandService'])
+                enum_groups.append(gen_enums)
+                gen_values = CommandService.gen_variables(device_description['services']['commandService'])
+                values_groups.append(gen_values)
+            case 'cliService':
+                gen_defines = CliService.gen_definitions(device_description['services']['cliService'])
+                define_groups.append(gen_defines)
+            case 'streamService':
+                gen_defines = StreamService.gen_definitions(device_description['services']['streamService'])
+                define_groups.append(gen_defines)
+            case 'WiFService':
+                gen_defines = WifiService.gen_definitions(device_description['services']['WiFService'])
+                define_groups.append(gen_defines)
+            case _:
+                print(f"Service {service} is unspported")
 
     backup_definitions(source_path, include_path)
     generate_definitions(include_path, source_path, define_groups, enum_groups, values_groups)
