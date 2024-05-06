@@ -132,6 +132,15 @@ def copy_template_to_output(file_name, template_dir, output_dir):
         shutil.copy(template_file_path, output_file_path)
         print(colored(f"Initial template file is copied.", 'green'))
 
+def discover_template_module_names(template_path: Path) -> list:
+    modules = []
+
+    for child in template_path.iterdir():
+        filename = child.stem.removeprefix('template_')
+        modules.append(filename)
+
+    return modules
+
 def main() -> int:
     parser = argparse.ArgumentParser(description='A script to transform a specification file defining a Reach device into C code')
     parser.add_argument('-d', '--definition', help="The .json file to parse", required=True)
@@ -268,6 +277,13 @@ def main() -> int:
                     f.write(f'{line}\n')
         f.write('\n')
 
+    module_names = discover_template_module_names(templates_path)
+    if len(module_names) == 0:
+        print("No template files found")
+        print ("exiting...")
+        return -1
+    else:
+        print(f"found templates: {module_names}")
 
     template_dir = "../../reach-c-stack/templates/template_"
     output_dir = "../../src"
