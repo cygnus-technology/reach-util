@@ -131,6 +131,19 @@ def generate_output(modules: list, template_dir: Path, output_dir: Path):
 
     return
 
+def backup_definitions(src_path: Path, inc_path: Path):
+    '''Backup the definitions.c/.h files'''
+    original_src = src_path.joinpath('definitions').with_suffix('.c')
+    original_inc = inc_path.joinpath('definitions').with_suffix('.h')
+    backup = str(original_src) + '.bak'
+    if original_src.exists():
+        print(f"Backing up {original_src} as {backup}")
+        shutil.copy2(original_src, backup)
+    backup = str(original_inc) + '.bak'
+    if original_inc.exists():
+        print(f"Backing up {original_inc} as {backup}")
+        shutil.copy2(original_inc, backup)
+
 def discover_template_module_names(template_path: Path) -> list:
     modules = []
     for child in template_path.iterdir():
@@ -248,6 +261,8 @@ def main() -> int:
         enum_groups.append(gen_enums)
         gen_values = CommandService.gen_variables(device_description['services']['commandService'])
         values_groups.append(gen_values)
+
+    backup_definitions(source_path, include_path)
 
     print("Writing source/header files\n")
     with open(include_path.joinpath('definitions.h'), "+w") as f:
