@@ -60,7 +60,7 @@ def generate_output(modules: list, template_dir: Path, output_dir: Path):
     for module in modules:
         t_in = template_dir.joinpath(f"template_{module}").with_suffix('.c')
         f_out = output_dir.joinpath(f"{module}").with_suffix('.c')
-        f_bak = output_dir.joinpath(f"{module}").with_suffix('.bak')
+        f_bak = str(f_out) + '.bak'
         print(f"Generating {f_out}")
 
         if f_out.exists():
@@ -154,9 +154,9 @@ def discover_template_module_names(template_path: Path) -> list:
 def backup_existing_src(src_path: Path, modules: list):
     for mod in modules:
         filename = src_path.joinpath(f"{mod}").with_suffix('.c')
-        backup_filename = src_path.joinpath(f"{mod}").with_suffix('.bak')
+        backup_filename = str(filename) + '.bak'
         if filename.exists():
-            print(f"Backing up {filename.name} as {backup_filename.name}")
+            print(f"Backing up {filename.name} as {backup_filename}")
             shutil.copy2(filename, backup_filename)
     print('')
 
