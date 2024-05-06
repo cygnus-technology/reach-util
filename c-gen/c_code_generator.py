@@ -141,6 +141,17 @@ def discover_template_module_names(template_path: Path) -> list:
 
     return modules
 
+def backup_existing_src(src_path: Path, modules: list):
+    for mod in modules:
+        filename = src_path.joinpath(f"{mod}")
+        filename = filename.with_suffix('.c')
+        backup_filename = filename.with_suffix('.bak')
+        if filename.exists():
+            print(f"Backing up {filename} as {backup_filename}")
+            shutil.copy2(filename, backup_filename)
+        else:
+            print(f"{filename} not found")
+
 def main() -> int:
     parser = argparse.ArgumentParser(description='A script to transform a specification file defining a Reach device into C code')
     parser.add_argument('-d', '--definition', help="The .json file to parse", required=True)
@@ -285,8 +296,7 @@ def main() -> int:
     else:
         print(f"found templates: {module_names}")
 
-    template_dir = "../../reach-c-stack/templates/template_"
-    output_dir = "../../src"
+    backup_existing_src(src_path, module_names)
 
     module_name = "device.c"
     copy_template_to_output(module_name, template_path, src_path)
