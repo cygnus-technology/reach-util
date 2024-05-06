@@ -10,6 +10,9 @@ from i3cgen.Validator import DeviceDescriptionValidator
 from i3cgen.Services.ParameterRepository import ParamRepoService
 from i3cgen.Services.FileService import FileService
 from i3cgen.Services.CommandService import CommandService
+from i3cgen.Services.CliService import CliService
+from i3cgen.Services.StreamService import StreamService
+from i3cgen.Services.WiFiService import WifiService
 
 # Use a raw string to get formatting to print correctly
 # pylint: disable=line-too-long
@@ -302,38 +305,29 @@ def main() -> int:
         gen_values = CommandService.gen_variables(device_description['services']['commandService'])
         values_groups.append(gen_values)
 
+    #############
+    # CLI Service
+    #############
+    if 'cliService' in device_description['services']:
+        gen_defines = CliService.gen_definitions(device_description['services']['cliService'])
+        define_groups.append(gen_defines)
+
+    ################
+    # Stream Service
+    ################
+    if 'streamService' in device_description['services']:
+        gen_defines = StreamService.gen_definitions(device_description['services']['streamService'])
+        define_groups.append(gen_defines)
+
+    ##############
+    # WiFi Service
+    ##############
+    if 'WiFService' in device_description['services']:
+        gen_defines = WifiService.gen_definitions(device_description['services']['WiFService'])
+        define_groups.append(gen_defines)
+
     backup_definitions(source_path, include_path)
-
-    print("Writing source/header files\n")
-    with open(include_path.joinpath('definitions.h'), "+w") as f:
-        f.write(HEADER_STRING)
-        f.write('#ifndef __DEFINITIONS_H__\n')
-        f.write('#define __DEFINITIONS_H__\n')
-        f.write('\n')
-
-        for define_group in define_groups:
-            for line in define_group:
-                f.write(f'{line}\n')
-        f.write('\n')
-
-        for enum_group in enum_groups:
-            for enum in enum_group:
-                for line in enum:
-                    f.write(f'{line}\n')
-                f.write('\n')
-
-        f.write('#endif /* __DEFINITIONS_H__ */\n')
-
-    with open(source_path.joinpath('definitions.c'), '+w') as f:
-        f.write(HEADER_STRING)
-        f.write('#include \"definitions.h\"\n')
-        f.write('\n')
-
-        for value_group in values_groups:
-            for value in value_group:
-                for line in value:
-                    f.write(f'{line}\n')
-        f.write('\n')
+    generate_definitions(include_path, source_path, define_groups, enum_groups, values_groups)
 
     # Determine the module names from templates filenames
     module_names = discover_template_module_names(args.template_location)
