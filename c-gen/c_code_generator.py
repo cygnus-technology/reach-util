@@ -145,6 +145,42 @@ def backup_definitions(src_path: Path, inc_path: Path):
         print(f"Backing up {original_inc} as {backup}")
         shutil.copy2(original_inc, backup)
 
+def generate_definitions(inc_path: Path, src_path: Path, defines: list, enums: list, values: list):
+    print("Generating definitions.h\n")
+    filename = inc_path.joinpath('definitions')
+    with open(filename.with_suffix('.h'), "+w") as f:
+        f.write(HEADER_STRING)
+        f.write('#ifndef __DEFINITIONS_H__\n')
+        f.write('#define __DEFINITIONS_H__\n')
+        f.write('\n#include reach.pb.h\n\n')
+
+        for group in defines:
+            for line in group:
+                f.write(f'{line}\n')
+            f.write('\n')
+
+        for group in enums:
+            for enum in group:
+                for line in enum:
+                    f.write(f'{line}\n')
+                f.write('\n')
+
+        f.write('#endif /* __DEFINITIONS_H__ */\n')
+
+    print("Generating definitions.c\n")
+    filename = src_path.joinpath('defintions')
+    with open(filename.with_suffix('.c'), '+w') as f:
+        f.write(HEADER_STRING)
+        f.write('#include \"definitions.h\"\n')
+        f.write('\n')
+
+        for group in values:
+            for value in group:
+                for line in value:
+                    f.write(f'{line}\n')
+
+        f.write('\n')
+
 def discover_template_module_names(template_path: Path) -> list:
     '''Discover supported modules from the template directory'''
     modules = []
