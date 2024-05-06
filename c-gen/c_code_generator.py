@@ -272,26 +272,27 @@ def main() -> int:
     template_dir = "../../reach-c-stack/templates/template_"
     output_dir = "../../src"
 
-    file_name = "device.c"
-    copy_template_to_output(file_name, template_dir, output_dir)
+    module_name = "device.c"
+    copy_template_to_output(module_name, template_path, src_path)
+    quit()
 
-    file_name = "streams.c"
-    copy_template_to_output(file_name, template_dir, output_dir)
+    module_name = "streams.c"
+    copy_template_to_output(module_name, template_dir, output_dir)
 
-    file_name = "wifi.c"
-    copy_template_to_output(file_name, template_dir, output_dir)
+    module_name = "wifi.c"
+    copy_template_to_output(module_name, template_dir, output_dir)
 
-    file_name = "parameters.c"
-    copy_template_to_output(file_name, template_dir, output_dir)
+    module_name = "parameters.c"
+    copy_template_to_output(module_name, template_dir, output_dir)
 
-    file_name = "files.c"
-    copy_template_to_output(file_name, template_dir, output_dir)
+    module_name = "files.c"
+    copy_template_to_output(module_name, template_dir, output_dir)
 
-    file_name = "commands.c"
-    copy_template_to_output(file_name, template_dir, output_dir)
+    module_name = "commands.c"
+    copy_template_to_output(module_name, template_dir, output_dir)
 
-    file_name = "time.c"
-    copy_template_to_output(file_name, template_dir, output_dir)
+    module_name = "time.c"
+    copy_template_to_output(module_name, template_dir, output_dir)
 
     return 0
 
