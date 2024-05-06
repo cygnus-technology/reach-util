@@ -150,8 +150,11 @@ def backup_existing_src(src_path: Path, modules: list):
 def main() -> int:
     parser = argparse.ArgumentParser(description='A script to transform a specification file defining a Reach device into C code')
     parser.add_argument('-d', '--definition', help="The .json file to parse", required=True)
-    parser.add_argument('-s', '--source-location', help="Where to put the generated 'definitions.c' file", default=".", type=Path)
-    parser.add_argument('-i', '--include-location', help="Where to put the generated 'definitions.h' file", default=".", type=Path)
+    parser.add_argument('-s', '--source-location', help="Where to put the generated 'definitions.c' file", required=True, type=Path)
+    parser.add_argument('-i', '--include-location', help="Where to put the generated 'definitions.h' file", required=True, type=Path)
+    parser.add_argument('-t', '--template-location', help="Where to draw C code template files from",
+                        default=Path(__file__).joinpath('..', '..', '..', 'reach-c-stack', 'templates').resolve(),
+                        type=Path)
     group = parser.add_mutually_exclusive_group()
     group.add_argument('--spaces', help="How many spaces to use for indent levels", type=int, default=4)
     group.add_argument('--tabs', help="How many tabs to use for indent levels", type=int)
@@ -165,39 +168,33 @@ def main() -> int:
 
     # Validate the definition, source, and header paths
     if not Path(args.definition).exists():
-        print(f'-d {args.definition} not found, exiting...')
+        print(f'{args.definition} not found, exiting...')
         return -1
+    else:
+        print(f"found definition file {args.definition}")
 
     if not args.include_location.exists():
-        print(f'{args.include_location} not found, creating...')
-        Path.mkdir(args.include_location)
+        print(f'{args.include_location} not found, exiting...')
+        return -2
+    else:
+        print(f"found include location, {args.include_location}")
     include_path = args.include_location
 
     if not args.source_location.exists():
-        print(f'{args.source_location} not found, creating...')
-        Path.mkdir(args.source_location)
+        print(f'{args.source_location} not found, exiting...')
+        return -3
+    else:
+        print(f"found source location, {args.source_location}")
     source_path = args.source_location
 
-    # Resolve the reach-c-stack templates and source paths
-    # we are assuming their relative location
-    # templates_path = Path(__file__).joinpath('reach-c-stack', 'templates').resolve()
-    templates_path = Path(__file__).joinpath('..', '..', '..', 'reach-c-stack', 'templates').resolve()
-    src_path = Path(__file__).joinpath('..', '..', '..', 'src').resolve()
-
-    if not templates_path.exists():
-        print(f"can't find reach-c-stack templates directory\n{templates_path}\nexiting...")
+    if not args.template_location.exists():
+        print(f"can't find reach-c-stack templates directory\n{args.template_location}\nexiting...")
         return -1
     else:
-        print(f"found reach-c-stack templates, {templates_path}")
-
-    if not src_path.exists():
-        print(f"can't find reach-c-stack src directory\n{src_path}\nexiting...")
-        return -1
-    else:
-        print(f"found reach-c-stack src, {src_path}")
+        print(f"found reach-c-stack templates, {args.template_location}")
 
     # Create the schema validator, this can be reused
-    # This assumes the scheams directory is relative to new-gen.py
+    # This assumes the schemas directory is relative to new-gen.py
     schema_dir = Path(__file__).parent.resolve()
     schema_dir = schema_dir.joinpath('schemas')
     validator = DeviceDescriptionValidator(schema_dir)
@@ -284,7 +281,7 @@ def main() -> int:
         f.write('\n')
 
     # Determine the module names from templates filenames
-    module_names = discover_template_module_names(templates_path)
+    module_names = discover_template_module_names(args.template_location)
     if len(module_names) == 0:
         print("No template files found")
         print ("exiting...")
@@ -294,10 +291,10 @@ def main() -> int:
 
     # If we have existing source files
     # Back them up before proceeding
-    backup_existing_src(src_path, module_names)
+    backup_existing_src(args.source_location, module_names)
 
     # Generate our ouput files
-    generate_output(module_names, templates_path, src_path)
+    generate_output(module_names, args.template_location, args.source_location)
 
     return 0
 
