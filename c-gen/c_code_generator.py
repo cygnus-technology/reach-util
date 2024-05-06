@@ -55,6 +55,7 @@ header_string = r'''/***********************************************************
 '''
 
 def generate_output(modules: list, template_dir: Path, output_dir: Path):
+    '''Generate output using existing backup content and templates'''
     verbose_print = False
 
     for module in modules:
@@ -122,11 +123,11 @@ def generate_output(modules: list, template_dir: Path, output_dir: Path):
                         if verbose_print:
                             print("from template file, copy line", line_num, line, end="")
                         output_file.write(line)
-            print(colored(f"\tOutput updated from template.", 'green'))
+            print(colored("\tOutput updated from template.", 'green'))
         else:
             # Copy the template file to output directory
             shutil.copy(t_in, f_out)
-            print(colored(f"\tInitial template file is copied", 'green'))
+            print(colored("\tInitial template file is copied", 'green'))
             print(colored(f"\t{f_out}", 'green'))
 
     return
@@ -145,6 +146,7 @@ def backup_definitions(src_path: Path, inc_path: Path):
         shutil.copy2(original_inc, backup)
 
 def discover_template_module_names(template_path: Path) -> list:
+    '''Discover supported modules from the template directory'''
     modules = []
     for child in template_path.iterdir():
         filename = child.stem.removeprefix('template_')
@@ -152,6 +154,7 @@ def discover_template_module_names(template_path: Path) -> list:
     return modules
 
 def backup_existing_src(src_path: Path, modules: list):
+    '''Back up the existing module src files'''
     for mod in modules:
         filename = src_path.joinpath(f"{mod}").with_suffix('.c')
         backup_filename = str(filename) + '.bak'
@@ -161,10 +164,11 @@ def backup_existing_src(src_path: Path, modules: list):
     print('')
 
 def main() -> int:
+    '''Main function for the generator'''
     parser = argparse.ArgumentParser(description='A script to transform a specification file defining a Reach device into C code')
     parser.add_argument('-d', '--definition', help="The .json file to parse", required=True)
-    parser.add_argument('-s', '--source-location', help="Where to put the generated 'definitions.c' file", required=True, type=Path)
-    parser.add_argument('-i', '--include-location', help="Where to put the generated 'definitions.h' file", required=True, type=Path)
+    parser.add_argument('-s', '--source-location', help="Where to put the generated *.c files", required=True, type=Path)
+    parser.add_argument('-i', '--include-location', help="Where to put the generated *.h files", required=True, type=Path)
     parser.add_argument('-t', '--template-location', help="Where to draw C code template files from",
                         default=Path(__file__).joinpath('..', '..', '..', 'reach-c-stack', 'templates').resolve(),
                         type=Path)
@@ -306,10 +310,10 @@ def main() -> int:
 
     # If we have existing source files
     # Back them up before proceeding
-    backup_existing_src(args.source_location, module_names)
+    backup_existing_src(source_path, module_names)
 
     # Generate our ouput files
-    generate_output(module_names, args.template_location, args.source_location)
+    generate_output(module_names, args.template_location, source_path)
 
     return 0
 
