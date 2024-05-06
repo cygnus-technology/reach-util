@@ -147,9 +147,11 @@ def backup_definitions(src_path: Path, inc_path: Path):
     if original_inc.exists():
         print(f"Backing up {original_inc} as {backup}")
         shutil.copy2(original_inc, backup)
+    print('')
 
 def generate_definitions(inc_path: Path, src_path: Path, defines: list, enums: list, values: list):
-    print("Generating definitions.h\n")
+    '''Generate new definitions.c and definitions.h files'''
+    print("Generating new definitions.h")
     filename = inc_path.joinpath('definitions')
     with open(filename.with_suffix('.h'), "+w") as f:
         f.write(HEADER_STRING)
@@ -170,7 +172,7 @@ def generate_definitions(inc_path: Path, src_path: Path, defines: list, enums: l
 
         f.write('#endif /* __DEFINITIONS_H__ */\n')
 
-    print("Generating definitions.c\n")
+    print("Generating new definitions.c")
     filename = src_path.joinpath('defintions')
     with open(filename.with_suffix('.c'), '+w') as f:
         f.write(HEADER_STRING)
@@ -183,6 +185,7 @@ def generate_definitions(inc_path: Path, src_path: Path, defines: list, enums: l
                     f.write(f'{line}\n')
 
         f.write('\n')
+    print('')
 
 def discover_template_module_names(template_path: Path) -> list:
     '''Discover supported modules from the template directory'''
@@ -226,28 +229,24 @@ def main() -> int:
     if not Path(args.definition).exists():
         print(f'{args.definition} not found, exiting...')
         return -1
-    else:
-        print(f"found definition file {args.definition}")
+    print(f"Found definition file {args.definition}")
 
     if not args.include_location.exists():
         print(f'{args.include_location} not found, exiting...')
         return -2
-    else:
-        print(f"found include location, {args.include_location}")
+    print(f"Found include location, {args.include_location}")
     include_path = args.include_location
 
     if not args.source_location.exists():
         print(f'{args.source_location} not found, exiting...')
         return -3
-    else:
-        print(f"found source location, {args.source_location}")
+    print(f"Found source location, {args.source_location}")
     source_path = args.source_location
 
     if not args.template_location.exists():
-        print(f"can't find reach-c-stack templates directory\n{args.template_location}\nexiting...")
+        print(f"Can't find reach-c-stack templates directory\n{args.template_location}\nexiting...")
         return -1
-    else:
-        print(f"found reach-c-stack templates, {args.template_location}")
+    print(f"Found reach-c-stack templates, {args.template_location}")
 
     # Create the schema validator, this can be reused
     # This assumes the schemas directory is relative to new-gen.py
@@ -263,7 +262,7 @@ def main() -> int:
     # Do additional validation
     try:
         device_description = validator.validate(device_description)
-        print("Input file validated successfully.")
+        print("Input file validated successfully.\n")
     except Exception as e:
         print(e)
 
@@ -314,10 +313,9 @@ def main() -> int:
     module_names = discover_template_module_names(args.template_location)
     if len(module_names) == 0:
         print("No template files found")
-        print ("exiting...")
+        print ("Exiting...")
         return -1
-    else:
-        print(f"found templates: {module_names}\n")
+    print(f"found templates: {module_names}\n")
 
     # If we have existing source files
     # Back them up before proceeding
