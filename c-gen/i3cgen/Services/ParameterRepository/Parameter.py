@@ -21,17 +21,17 @@ def to_protobuf(param: json, depth=0):
     }
 
     oneof_types = {
-        "uint32": "uint32",
-        "int32": "int32",
-        "float32": "float32",
-        "uint64": "uint64",
-        "int64": "int64",
-        "float64": "float64",
-        "boolean": "bool",
-        "string": "string",
-        "enumeration": "enum",
-        "bitfield": "bitfield",
-        "bytearray": "bytearray"
+        "uint32": "uint32_desc",
+        "int32": "int32_desc",
+        "float32": "float32_desc",
+        "uint64": "uint64_desc",
+        "int64": "int64_desc",
+        "float64": "float64_desc",
+        "boolean": "bool_desc",
+        "string": "string_desc",
+        "enumeration": "enum_desc",
+        "bitfield": "bitfield_desc",
+        "bytearray": "bytearray_desc"
     }
 
     access_levels = {
