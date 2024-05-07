@@ -39,7 +39,7 @@ def gen_variables(service: json):
         for param in service['parameters']:
             structs.append(Parameter.to_protobuf(param))
         lines = util.gen_c_array(structs)
-        lines[0] = f"static const cr_ParameterInfo param_desc[NUM_PARAMS] = {lines[0]}"
+        lines[0] = f"const cr_ParameterInfo param_desc[NUM_PARAMS] = {lines[0]}"
         lines[-1] += ";"
         output.append(lines)
     if len(service['extendedLabels']) > 0:
@@ -49,7 +49,7 @@ def gen_variables(service: json):
         for label in service['extendedLabels']:
             structs.append(ParamExInfo.to_struct(label))
         lines = util.gen_c_array(structs)
-        lines[0] = f"static const cr_gen_param_ex_t param_ex_desc[NUM_EX_PARAMS] = {lines[0]}"
+        lines[0] = f"const cr_gen_param_ex_t param_ex_desc[NUM_EX_PARAMS] = {lines[0]}"
         lines[-1] += ";"
         output.append(lines)
     return output
