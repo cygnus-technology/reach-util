@@ -25,6 +25,12 @@ def gen_enums(service: json):
             values.append(param['id'])
         output.append(util.gen_enum(enums, values, "param"))
     if len(service['extendedLabels']) > 0:
+        enums = []
+        values = []
+        for param in service['extendedLabels']:
+            enums.append(ParamExInfo.to_param_ei_enum(param))
+            values.append(param['id'])
+        output.append(util.gen_enum(enums, values, "param_ei"))
         for label in service['extendedLabels']:
             temp = ParamExInfo.to_label_enums(label)
             if temp is not None:

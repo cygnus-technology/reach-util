@@ -1,0 +1,18 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "wifiService",
+	"title": "WiFi Service",
+	"description": "A service for configuring and interacting with WiFi connections",
+	"type": "object",
+	"properties": {
+		"accessLevelRequired": {
+			"Description": "A list of the access levels which get access to the WiFi service",
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		}
+	},
+	"additionalProperties": false,
+	"required": []
+}

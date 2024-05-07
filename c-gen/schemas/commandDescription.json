@@ -19,7 +19,7 @@
 		"description": {
 			"Description": "A short description of the command",
 			"type": "string",
-			"maxLength": 32
+			"maxLength": 48
 		},
 		"timeout": {
 			"Description": "The maximum time the command should take to execute, in seconds",

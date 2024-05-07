@@ -7,9 +7,13 @@ class Command:
 
     def to_protobuf(param: json, depth=0):
         fields = [{'field': 'id', 'value': Command.to_enum(param)}]
-        fields.append({'field': 'name', 'value': f"\"{param['description']}\""})
+        fields.append({'field': 'name', 'value': f"\"{param['name']}\""})
+        if 'description' in param:
+            fields.append({'field': 'description', 'value': f"\"{param['description']}\"", 'optional': True})
+        if 'timeout' in param:
+            fields.append({'field': 'timeout', 'value': param['timeout'], 'optional': True})
 
-        return util.gen_c_struct(fields, depth=depth)
+        return util.gen_protobuf_struct(fields, depth=depth)
 
 def gen_definitions(service: json):
     lines = ["#define INCLUDE_COMMAND_SERVICE"]
@@ -36,7 +40,7 @@ def gen_variables(service: json):
         for command in service['commands']:
             structs.append(Command.to_protobuf(command))
         lines = util.gen_c_array(structs)
-        lines[0] = f'cr_CommandInfo command_desc[NUM_COMMANDS] = {lines[0]}'
+        lines[0] = f'const cr_CommandInfo command_desc[NUM_COMMANDS] = {lines[0]}'
         lines[-1] += ';'
         output.append(lines)
 

@@ -1,0 +1,39 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "streamDescription",
+	"title": "Stream Description",
+	"description": "A description of a stream for sending continuous data to and from the device",
+	"type": "object",
+	"properties": {
+		"id": {
+			"Description": "A unique identifier for the stream.  This will be assigned automatically if not defined.",
+			"type": "integer",
+			"minimum": 0,
+			"maximum": 4294967295
+		},
+		"name": {
+			"Description": "A unique name for the stream",
+			"type": "string",
+			"maxLength": 24
+		},
+		"description": {
+			"Description": "A short description of the stream",
+			"type": "string",
+			"maxLength": 48
+		},
+		"access": {
+			"Description": "Allowed interactions with the stream",
+			"type": "string",
+			"enum": ["Read", "Write", "Read/Write"]
+		},
+		"accessLevelRequired": {
+			"Description": "A list of the access levels which get access to this stream",
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		}
+	},
+	"additionalProperties": false,
+	"required": ["name", "description", "access"]
+}

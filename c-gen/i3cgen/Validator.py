@@ -13,6 +13,7 @@ class DeviceDescriptionValidator:
         root = None
         for file in Path(path).iterdir():
             f = open(file)
+            print(f"{file}")
             json_data = json.load(f)
             if file.name == "reachDevice.json":
                 root = json_data

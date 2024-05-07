@@ -27,8 +27,11 @@
 				"parameterRepositoryService": {"$ref": "parameterService"},
 				"fileService": {"$ref": "fileService"},
 				"commandService": {"$ref": "commandService"},
-				"cliService": {"$ref": "cliService"}
-			}
+				"cliService": {"$ref": "cliService"},
+				"wifiService": {"$ref": "wifiService"},
+				"streamService": {"$ref": "streamService"}
+			},
+			"additionalProperties": false
 		},
 		"accessLevels": {
 			"Description": "A list of the access levels supported",
