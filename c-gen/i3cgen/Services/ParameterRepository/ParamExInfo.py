@@ -57,7 +57,7 @@ def to_local_array(pei: json, depth=0):
         case _:
             raise ValueError(f"Unexpected dataType {pei['dataType']}")
     output = util.gen_c_array(elements, 0)
-    output[0] = f"static const cr_ParamExKey __cr_gen_pei_{util.make_c_compatible(pei['name']).lower()}_labels = {output[0]}"
+    output[0] = f"static const cr_ParamExKey __cr_gen_pei_{util.make_c_compatible(pei['name']).lower()}_labels[] = {output[0]}"
     output[-1] += ";"
     return output
 

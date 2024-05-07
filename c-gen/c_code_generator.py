@@ -172,10 +172,17 @@ def generate_definitions(inc_path: Path, src_path: Path, defines: list, enums: l
             f.write('\n')
 
         print(colored('using hardcoded struct declarations', 'red'))
-        extern_decl = ['extern cr_ParameterValue sCr_param_val[NUM_PARAMS];',
+        extern_decl = ['typedef struct {',
+                       '  uint32_t pei_id;',
+                       '  uint8_t data_type;',
+                       '  uint8_t num_labels;',
+                       '  const cr_ParamExKey *labels;',
+                       '} cr_gen_param_ex_t;',
+                       '',
+                       'extern cr_ParameterValue sCr_param_val[NUM_PARAMS];',
                        'extern const cr_DeviceInfoResponse device_info;',
                        'extern const cr_ParameterInfo param_desc[NUM_PARAMS];',
-                       'extern const cr_ParamExInfoResponse param_ex_desc[NUM_EX_PARAMS];',
+                       'extern const cr_gen_param_ex_t param_ex_desc[NUM_EX_PARAMS];',
                        'extern const cr_ParameterNotifyConfig sParamNotifyInit[NUM_INIT_NOTIFICATIONS];',
                        'extern cr_FileInfo file_descriptions[NUM_FILES];',
                        'extern const cr_CommandInfo command_desc[NUM_COMMANDS];',
