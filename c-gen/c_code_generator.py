@@ -160,8 +160,11 @@ def generate_definitions(inc_path: Path, src_path: Path, defines: list, enums: l
     with open(filename.with_suffix('.h'), "+w") as f:
         f.write(HEADER_STRING)
         f.write('#ifndef __DEFINITIONS_H__\n')
-        f.write('#define __DEFINITIONS_H__\n')
-        f.write('\n#include reach.pb.h\n\n')
+        f.write('#define __DEFINITIONS_H__\n\n')
+        f.write('#include \"reach.pb.h\"\n\n')
+
+        print(colored('Using hard coded value for NUM_INIT_NOTIFICATIONS', 'red'))
+        f.write('#define NUM_INIT_NOTIFICATIONS 10\n\n')
 
         for group in defines:
             for line in group:
@@ -180,7 +183,7 @@ def generate_definitions(inc_path: Path, src_path: Path, defines: list, enums: l
     # definitions.c
     ###############
     print("Generating new definitions.c")
-    filename = src_path.joinpath('defintions')
+    filename = src_path.joinpath('definitions')
     with open(filename.with_suffix('.c'), '+w') as f:
         f.write(HEADER_STRING)
         f.write('#include \"definitions.h\"\n')
@@ -221,7 +224,7 @@ def backup_existing_src(src_path: Path, modules: list):
 def main() -> int:
     '''Main function for the generator'''
     parser = argparse.ArgumentParser(description='A script to transform a specification file defining a Reach device into C code')
-    parser.add_argument('-d', '--definition', help="The .json file to parse", required=True)
+    parser.add_argument('-d', '--definition', help="The .json file to parse", required=True, type=Path)
     parser.add_argument('-s', '--source-location', help="Where to put the generated *.c files", required=True, type=Path)
     parser.add_argument('-i', '--include-location', help="Where to put the generated *.h files", required=True, type=Path)
     parser.add_argument('-t', '--template-location', help="Where to draw C code template files from",
@@ -242,24 +245,24 @@ def main() -> int:
     if not Path(args.definition).exists():
         print(f'{args.definition} not found, exiting...')
         return -1
-    print(f"Found definition file {args.definition}")
+    print(f"Found definition file {args.definition.resolve()}")
 
     if not args.include_location.exists():
         print(f'{args.include_location} not found, exiting...')
         return -2
-    print(f"Found include location, {args.include_location}")
+    print(f"Found include location, {args.include_location.resolve()}")
     include_path = args.include_location
 
     if not args.source_location.exists():
         print(f'{args.source_location} not found, exiting...')
         return -3
-    print(f"Found source location, {args.source_location}")
+    print(f"Found source location, {args.source_location.resolve()}")
     source_path = args.source_location
 
     if not args.template_location.exists():
         print(f"Can't find reach-c-stack templates directory\n{args.template_location}\nexiting...")
         return -1
-    print(f"Found reach-c-stack templates, {args.template_location}")
+    print(f"Found reach-c-stack templates, {args.template_location.resolve()}")
 
     # Create the schema validator, this can be reused
     # This assumes the schemas directory is relative to new-gen.py
