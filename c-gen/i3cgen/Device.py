@@ -1,6 +1,16 @@
 import json
 from i3cgen.utils import util
-from termcolor import colored
+
+# From reach.h
+# TODO: Make this use the actual reach.h from reach-c-stack to parse these values
+service_ids = {'': 'cr_ServiceIds_NO_SVC_ID',
+               'parameterRepositoryService': 'cr_ServiceIds_PARAMETER_REPO',
+               'fileService': 'cr_ServiceIds_FILES',
+               'streamService': 'cr_ServiceIds_STREAMS',
+               'commandService': 'cr_ServiceIds_COMMANDS',
+               'cliService': 'cr_ServiceIds_CLI',
+               'timeService': 'cr_ServiceIds_TIME',
+               'WiFService': 'cr_ServiceIds_WIFI'}
 
 def gen_device_info(device: json):
     # build the fields for the device info json
@@ -8,10 +18,11 @@ def gen_device_info(device: json):
     fields.append({"field": "device_name", "value": f"\"{device['name']}\""})
     fields.append({"field": "manufacturer", "value": f"\"{device['manufacturer']}\""})
     fields.append({"field": "device_description", "value": f"\"{device['description']}\""})
-    print(colored('Using hard coded device service IDs in Device.py', 'red'))
-    serviceIds = ['PARAMETER_REPO', 'FILES', 'COMMANDS', 'CLI', 'TIME']
-    serviceIds = ['cr_ServiceIds_' + sid for sid in serviceIds]
-    service_string = " | ".join(serviceIds)
+
+    parsed_ids = []
+    for service in device['services']:
+        parsed_ids.append(service_ids[service])
+    service_string = " | ".join(parsed_ids)
     fields.append({"field": "services", "value": service_string})
 
     # Place into a struct and format so it may be placed into a c file
