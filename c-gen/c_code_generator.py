@@ -13,6 +13,7 @@ from i3cgen.Services.CommandService import CommandService
 from i3cgen.Services.CliService import CliService
 from i3cgen.Services.StreamService import StreamService
 from i3cgen.Services.WiFiService import WifiService
+from i3cgen import Device
 
 # Use a raw string to get formatting to print correctly
 # pylint: disable=line-too-long
@@ -283,6 +284,10 @@ def main() -> int:
     define_groups = []
     enum_groups = []
     values_groups = []
+
+    gen_values = Device.gen_device_info(device_description)
+    values_groups.append(gen_values)
+
     for service in device_description['services']:
         match service:
             case 'parameterRepositoryService':
