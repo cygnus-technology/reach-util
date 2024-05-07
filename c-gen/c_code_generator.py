@@ -151,6 +151,9 @@ def backup_definitions(src_path: Path, inc_path: Path):
 
 def generate_definitions(inc_path: Path, src_path: Path, defines: list, enums: list, values: list):
     '''Generate new definitions.c and definitions.h files'''
+    ###############
+    # definitions.h
+    ###############
     print("Generating new definitions.h")
     filename = inc_path.joinpath('definitions')
     with open(filename.with_suffix('.h'), "+w") as f:
@@ -172,11 +175,20 @@ def generate_definitions(inc_path: Path, src_path: Path, defines: list, enums: l
 
         f.write('#endif /* __DEFINITIONS_H__ */\n')
 
+    ###############
+    # definitions.c
+    ###############
     print("Generating new definitions.c")
     filename = src_path.joinpath('defintions')
     with open(filename.with_suffix('.c'), '+w') as f:
         f.write(HEADER_STRING)
         f.write('#include \"definitions.h\"\n')
+        f.write('#include <stdio.h>\n')
+        f.write('#include <string.h>\n')
+        f.write('#include <assert.h>\n')
+        f.write('#include \"i3_log.h\"\n')
+        f.write('#include \"app_version.h\"\n')
+        f.write('#include \"cr_stack.h\"\n')
         f.write('\n')
 
         for group in values:
