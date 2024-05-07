@@ -34,6 +34,7 @@ def gen_enums(service: json):
 
 def gen_variables(service: json):
     output = []
+    output.append(['cr_ParameterValue sCr_param_val[NUM_PARAMS];'])
     if len(service['parameters']) > 0:
         structs = []
         for param in service['parameters']:
