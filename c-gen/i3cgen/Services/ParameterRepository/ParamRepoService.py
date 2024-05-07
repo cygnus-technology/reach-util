@@ -6,7 +6,6 @@ from i3cgen.Services.ParameterRepository import ParamExInfo
 def gen_definitions(service: json):
     lines = ["#define INCLUDE_PARAMETER_SERVICE"]
     if service['features']['descriptions']:
-        lines.append(f"#define NUM_PARAMS")
         if service['parameters']:
             lines.append(f"#define NUM_PARAMS    {len(service['parameters'])}")
         if service['extendedLabels']:
