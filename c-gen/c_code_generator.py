@@ -275,8 +275,9 @@ def main() -> int:
     # Do additional validation
     try:
         device_description = validator.validate(device_description)
-        print("Input file validated successfully.\n")
+        print(colored(f"Input file validated successfully.", 'green'))
     except Exception as e:
+        print(colored(f"Input file validation FAILED.", 'red'))
         print(e)
 
 
@@ -291,6 +292,7 @@ def main() -> int:
     for service in device_description['services']:
         match service:
             case 'parameterRepositoryService':
+                print("Installing parameter repo.")
                 gen_defines = ParamRepoService.gen_definitions(device_description['services']['parameterRepositoryService'])
                 define_groups.append(gen_defines)
                 gen_enums = ParamRepoService.gen_enums(device_description['services']['parameterRepositoryService'])
@@ -298,6 +300,7 @@ def main() -> int:
                 gen_values = ParamRepoService.gen_variables(device_description['services']['parameterRepositoryService'])
                 values_groups.append(gen_values)
             case 'fileService':
+                print("Installing file service.")
                 gen_defines = FileService.gen_definitions(device_description['services']['fileService'])
                 define_groups.append(gen_defines)
                 gen_enums = FileService.gen_enums(device_description['services']['fileService'])
@@ -305,6 +308,7 @@ def main() -> int:
                 gen_values = FileService.gen_variables(device_description['services']['fileService'])
                 values_groups.append(gen_values)
             case 'commandService':
+                print("Installing command service.")
                 gen_defines = CommandService.gen_definitions(device_description['services']['commandService'])
                 define_groups.append(gen_defines)
                 gen_enums = CommandService.gen_enums(device_description['services']['commandService'])
@@ -312,12 +316,15 @@ def main() -> int:
                 gen_values = CommandService.gen_variables(device_description['services']['commandService'])
                 values_groups.append(gen_values)
             case 'cliService':
+                print("Installing CLI service.")
                 gen_defines = CliService.gen_definitions(device_description['services']['cliService'])
                 define_groups.append(gen_defines)
             case 'streamService':
+                print("Installing stream service.")
                 gen_defines = StreamService.gen_definitions(device_description['services']['streamService'])
                 define_groups.append(gen_defines)
             case 'WiFService':
+                print("WiFi stream service.")
                 gen_defines = WifiService.gen_definitions(device_description['services']['WiFService'])
                 define_groups.append(gen_defines)
             case _:

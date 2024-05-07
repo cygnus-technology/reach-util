@@ -6,6 +6,8 @@ dist/
 # PyCharm folders
 .idea/
 
+c-gen/.vscode/
+
 # Temporary Excel files
 c-gen/~$Template.xlsx
 
