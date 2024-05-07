@@ -180,7 +180,7 @@ def generate_definitions(inc_path: Path, src_path: Path, defines: list, enums: l
     # definitions.c
     ###############
     print("Generating new definitions.c")
-    filename = src_path.joinpath('defintions')
+    filename = src_path.joinpath('definitions')
     with open(filename.with_suffix('.c'), '+w') as f:
         f.write(HEADER_STRING)
         f.write('#include \"definitions.h\"\n')
