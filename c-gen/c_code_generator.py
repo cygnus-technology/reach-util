@@ -160,8 +160,11 @@ def generate_definitions(inc_path: Path, src_path: Path, defines: list, enums: l
     with open(filename.with_suffix('.h'), "+w") as f:
         f.write(HEADER_STRING)
         f.write('#ifndef __DEFINITIONS_H__\n')
-        f.write('#define __DEFINITIONS_H__\n')
-        f.write('\n#include reach.pb.h\n\n')
+        f.write('#define __DEFINITIONS_H__\n\n')
+        f.write('#include \"reach.pb.h\"\n\n')
+
+        print(colored('Using hard coded value for NUM_INIT_NOTIFICATIONS', 'red'))
+        f.write('#define NUM_INIT_NOTIFICATIONS 10\n\n')
 
         for group in defines:
             for line in group:
