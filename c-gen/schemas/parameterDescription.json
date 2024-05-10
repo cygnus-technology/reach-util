@@ -44,17 +44,30 @@
 			"enum": ["uint32", "int32", "float32", "uint64", "int64", "float64",
 			"boolean", "string", "enumeration", "bitfield", "bytearray"]
 		},
-		"minimum_notification_period": {
-			"Description": "The fastest a notification can happen (milliseconds), 0 for none.",
-			"type": "number"
-		},
-        "maximum_notification_period": {
-            "Description": "A notification will be made at least this often (milliseconds), 0 for none.",
-            "type": "number"
-        },
-        "minimum_delta": {
-            "Description": "A notification will be made when the parameter changes by this much.",
-            "type": "number"
+		"defaultNotifications": {
+			"Description": "Parameter notifications which can be enabled by the device (typically with a command or on BLE connection)",
+			"type": "object",
+			"properties": {
+				"minInterval": {
+					"Description": "The shortest allowed time between notifications (in milliseconds).  If undefined, notifications may be generated as quickly as the device allows",
+					"type": "integer",
+					"minimum": 0,
+					"maximum": 4294967295
+				},
+				"maxInterval": {
+					"Description": "If defined, a notification will be sent at least this often (in milliseconds)",
+					"type": "integer",
+					"minimum": 0,
+					"maximum": 4294967295
+				},
+				"minDelta": {
+					"Description": "A notification will be made when the parameter changes by this much.  This should be set to 1 for boolean",
+					"type": "number",
+					"exclusiveMinimum": 0
+				}
+			},
+			"minProperties": 1,
+			"additionalProperties": false
         }
 	},
 	"oneOf": [

@@ -27,19 +27,23 @@
 			"type": "string",
 			"enum": ["Read", "Write", "Read/Write"]
 		},
+		"storageLocation": {
+			"Description": "Where the file is stored on the device",
+			"type": "string",
+			"enum": ["RAM", "NVM", "Extended RAM", "Extended NVM"]
+		},
+		"requireChecksum": {
+			"Description": "Whether to require the use of checksums when transferring files, which reduces the risk of data corruption",
+			"type": "boolean"
+		},
 		"accessLevelRequired": {
 			"Description": "A list of the access levels which get access to the file",
 			"type": "array",
 			"items": {
 				"type": "string"
 			}
-		},
-		"storageLocation": {
-			"Description": "Where the file is stored on the device",
-			"type": "string",
-			"enum": ["RAM", "NVM", "Extended RAM", "Extended NVM"]
 		}
 	},
 	"additionalProperties": false,
-	"required": ["name", "maxSize", "access", "storageLocation"]
+	"required": ["name", "access", "storageLocation", "requireChecksum"]
 }

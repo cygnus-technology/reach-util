@@ -1,6 +1,7 @@
 import json
 from i3cgen.utils import util
 
+
 class File:
     access_levels = {
         "None": "cr_AccessLevel_NO_ACCESS",
@@ -22,11 +23,12 @@ class File:
     def to_protobuf(param: json, depth=0):
         fields = [{"field": "file_id", "value": File.to_enum(param)}]
         fields.append({"field": "file_name", "value": f"\"{param['name']}\""})
-        fields.append({'field': 'maximum_size_bytes', 'value': param['maxSize']})
         fields.append({'field': 'access', 'value': File.access_levels[param['access']]})
         fields.append({'field': 'storage_location', 'value': File.storage_locations[param['storageLocation']]})
-        fields.append({'field': 'require_checksum', 'value': 'false'})
-        return util.gen_c_struct(fields, depth=depth)
+        fields.append({'field': 'require_checksum', 'value': param['requireChecksum']})
+        if 'maxSize' in param:
+            fields.append({'field': 'maximum_size_bytes', 'value': param['maxSize'], 'optional': True})
+        return util.gen_protobuf_struct(fields, depth=depth)
 
 
 
