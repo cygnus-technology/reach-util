@@ -106,3 +106,20 @@ def to_protobuf(param: json, depth=0):
             extra_desc['value'].append({"field": "max_size", "value": param['maxSize']})
     fields.append(extra_desc)
     return util.gen_protobuf_struct(fields, depth=depth)
+
+
+def to_notify_struct(param: json, depth=0):
+    if "defaultNotifications" in param:
+        fields = [{"field": "parameter_id", "value": to_enum(param)}]
+        if "minInterval" in param["defaultNotifications"]:
+            fields.append({"field": "minimum_notification_period",
+                           "value": param["defaultNotifications"]["minInterval"]})
+        if "maxInterval" in param["defaultNotifications"]:
+            fields.append({"field": "maximum_notification_period",
+                           "value": param["defaultNotifications"]["maxInterval"]})
+        if "minDelta" in param["defaultNotifications"]:
+            fields.append({"field": "minimum_delta",
+                           "value": param["defaultNotifications"]["minDelta"]})
+        return util.gen_c_struct(fields, depth=depth)
+    else:
+        return None

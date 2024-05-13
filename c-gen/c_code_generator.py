@@ -183,7 +183,7 @@ def generate_definitions(inc_path: Path, src_path: Path, defines: list, enums: l
                        'extern const cr_DeviceInfoResponse device_info;',
                        'extern const cr_ParameterInfo param_desc[NUM_PARAMS];',
                        'extern const cr_gen_param_ex_t param_ex_desc[NUM_EX_PARAMS];',
-                       #'extern const cr_ParameterNotifyConfig sParamNotifyInit[NUM_INIT_NOTIFICATIONS];',
+                       'extern const cr_ParameterNotifyConfig sParamNotifyInit[NUM_INIT_NOTIFICATIONS];',
                        'extern cr_FileInfo file_descriptions[NUM_FILES];',
                        'extern const cr_CommandInfo command_desc[NUM_COMMANDS];'# ,
                        # 'extern const cr_StreamInfo streams_desc[NUM_STREAMS];',

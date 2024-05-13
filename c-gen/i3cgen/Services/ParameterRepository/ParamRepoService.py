@@ -7,7 +7,13 @@ def gen_definitions(service: json):
     lines = ["#define INCLUDE_PARAMETER_SERVICE"]
     if service['features']['descriptions']:
         if service['parameters']:
-            lines.append(f"#define NUM_PARAMS    {len(service['parameters'])}")
+            lines.append(f"#define NUM_PARAMS {len(service['parameters'])}")
+            num_default_notifications = 0
+            for param in service['parameters']:
+                if "defaultNotifications" in param:
+                    num_default_notifications += 1
+            if num_default_notifications > 0:
+                lines.append(f"#define NUM_INIT_NOTIFICATIONS {num_default_notifications}")
         if service['extendedLabels']:
             lines.append(f"#define NUM_EX_PARAMS {len(service['extendedLabels'])}")
     return lines
@@ -43,12 +49,21 @@ def gen_variables(service: json):
     output.append(['cr_ParameterValue sCr_param_val[NUM_PARAMS];'])
     if len(service['parameters']) > 0:
         structs = []
+        notification_structs = []
         for param in service['parameters']:
             structs.append(Parameter.to_protobuf(param))
+            notify_data = Parameter.to_notify_struct(param)
+            if notify_data:
+                notification_structs.append(Parameter.to_notify_struct(param))
         lines = util.gen_c_array(structs)
         lines[0] = f"const cr_ParameterInfo param_desc[NUM_PARAMS] = {lines[0]}"
         lines[-1] += ";"
         output.append(lines)
+        if len(notification_structs) > 0:
+            lines = util.gen_c_array(notification_structs)
+            lines[0] = f"const cr_ParameterNotifyConfig sParamNotifyInit[NUM_INIT_NOTIFICATIONS] = {lines[0]}"
+            lines[-1] += ";"
+            output.append(lines)
     if len(service['extendedLabels']) > 0:
         for label in service['extendedLabels']:
             output.append(ParamExInfo.to_local_array(label))

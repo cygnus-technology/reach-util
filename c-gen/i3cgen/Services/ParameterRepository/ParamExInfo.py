@@ -28,7 +28,7 @@ def to_label_enums(pei: json):
                 enums.append(enum['label'])
                 index_values.append(enum['id'])
                 temp = util.make_c_compatible(f"{name} indices {enum['label']}", upper=True)
-                bit_values.append(f"0b1 << {temp}")
+                bit_values.append(f"(0b1 << {temp})")
             output = util.gen_enum(enums, index_values, f"{name} indices", transform_enum_names=True)
             output.append("")
             output += util.gen_enum(enums, bit_values, name, transform_enum_names=True)
