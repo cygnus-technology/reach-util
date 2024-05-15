@@ -73,60 +73,15 @@ def generate_output(modules: list, template_dir: Path, output_dir: Path):
             print(colored(f"\tBackup:\t\t{f_bak}", 'yellow'))
 
             with open(f_bak, 'r') as backup_file:
-                backup_lines = backup_file.readlines()
+                existing_code = backup_file.read()
             with open(t_in, 'r') as template_file:
-                template_lines = template_file.readlines()
+                template_code = template_file.read()
 
-            line_num = 0
-            processed = False
+            user_code = util.get_user_code(existing_code)
+            updated_code = util.update_file_with_user_code(template_code, user_code)
             # Open the output file for writing
             with open(f_out, 'w') as output_file:
-                block_name = None
-                user_code_started = False
-                backup_index = 0
-                for line in template_lines:
-                    processed = False
-                    line_num = line_num+1
-                    #print("process line", line_num, "line", line, end="")
-                    if user_code_started:
-                        processed = True
-                        if line.strip() == f"// User code end {block_name}":
-                            user_code_started = False
-                            if verbose_print:
-                                print("user code end")
-                        else:
-                            if backup_index < len(backup_lines):
-                                output_file.write(backup_lines[backup_index])
-                                if verbose_print:
-                                    print("wrote backup_lines[", backup_index, "]", backup_lines[backup_index], end="")
-                            backup_index += 1
-                            print("backup_index to", backup_index)
-                    else:
-                        if line.strip().startswith("// User code start"):
-                            processed = True
-                            block_name = line.split("[")[1].split("]")[0]
-                            if verbose_print:
-                                print("user code start, block_name ", block_name )
-                                print("from template file, copy line", line_num, line, end="")
-                            output_file.write(line)
-                            user_code_started = True
-                            # find backup_index for the start
-                            backup_index = 0
-                            while backup_index < len(backup_lines) and backup_lines[backup_index].strip() != f"// User code start [{block_name}]":
-                                backup_index += 1
-                            backup_index += 1  # step over the start
-                            while backup_index < len(backup_lines) and backup_lines[backup_index].strip() != f"// User code end [{block_name}]":
-                                output_file.write(backup_lines[backup_index])
-                                if verbose_print:
-                                    print("from user file, copy line [", backup_index, "]", backup_lines[backup_index], end="")
-                                backup_index += 1
-
-                            user_code_started = False
-                            backup_index = 0
-                    if processed is False:
-                        if verbose_print:
-                            print("from template file, copy line", line_num, line, end="")
-                        output_file.write(line)
+                output_file.write(updated_code)
             print(colored("\tOutput updated from template.", 'green'))
         else:
             # Copy the template file to output directory
