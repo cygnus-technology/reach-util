@@ -81,7 +81,16 @@ class CString:
         self.text = text
 
     def __repr__(self):
-        out = self.text.replace("\n", r"\n")
+        # Replace special characters with their C string representations
+        replacement_map = [
+            ["\r", r"\r"],
+            ["\n", r"\n"],
+            ["\t", r"\t"],
+            ["°", r"\xC2\xB0"],
+        ]
+        out = self.text
+        for repl in replacement_map:
+            out = out.replace(repl[0], repl[1])
         return f'"{out}"'
 
 
