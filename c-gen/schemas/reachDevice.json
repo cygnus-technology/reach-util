@@ -28,6 +28,7 @@
 				"fileService": {"$ref": "fileService"},
 				"commandService": {"$ref": "commandService"},
 				"cliService": {"$ref": "cliService"},
+				"timeService": {"$ref": "timeService"},
 				"wifiService": {"$ref": "wifiService"},
 				"streamService": {"$ref": "streamService"}
 			},

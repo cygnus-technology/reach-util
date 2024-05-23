@@ -5,6 +5,10 @@
 	"description": "A service for configuring and interacting with WiFi connections",
 	"type": "object",
 	"properties": {
+		"maxAccessPoints": {
+			"Description": "The maximum number of access points the device can keep track of at a given time",
+			"type": "integer"
+		},
 		"accessLevelRequired": {
 			"Description": "A list of the access levels which get access to the WiFi service",
 			"type": "array",
@@ -14,5 +18,5 @@
 		}
 	},
 	"additionalProperties": false,
-	"required": []
+	"required": ["maxAccessPoints"]
 }

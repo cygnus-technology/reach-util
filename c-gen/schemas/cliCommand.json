@@ -10,10 +10,10 @@
 			"type": "string"
 		},
 		"description": {
-			"Description": "A brief description of how the command is used",
+			"Description": "A brief description of how the command is used.  Omitting this will hide the command when 'help' is used",
 			"type": "string"
 		}
 	},
 	"additionalProperties": false,
-	"required": ["string", "description"]
+	"required": ["string"]
 }
