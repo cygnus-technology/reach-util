@@ -65,6 +65,7 @@ def main() -> int:
     except Exception as e:
         print(colored(f"Input file validation FAILED.", 'red'))
         print(e)
+        return -1
 
     new_device = Device.ReachDevice(device_description)
     generated_files = new_device.get_all_files()
