@@ -11,5 +11,6 @@ class WiFiService:
         output = ccu.CFile("wifi",
                            "A minimal implementation of Wi-Fi discovery and access",
                            ucu.get_template("wifi.c"))
-        output.contents[".c Defines"].append(ccu.CSnippet(f"#define MAX_NUM_WIFI_ACCESS_POINTS {self.max_access_points}"))
+        output.contents[".c Defines"].append(
+            ccu.CSnippet(f"#define MAX_NUM_WIFI_ACCESS_POINTS {self.max_access_points}"))
         return output

@@ -37,14 +37,3 @@ class CommandService:
         output.contents[".c Local/Extern Variables"].append(
             ccu.CArray(descriptions, name="static const cr_CommandInfo command_desc"))
         return output
-
-# with open("../reach-silabs/Reach_silabs.json", "r") as f:
-#     test = json.load(f)
-# import Validator
-# validator = Validator.DeviceDescriptionValidator("schemas")
-# test = validator.validate(test)
-#
-# test_pr = CommandService(test["services"]["commandService"])
-#
-# test_file = test_pr.get_file()
-# print(test_file.gen_c_file())

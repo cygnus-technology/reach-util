@@ -59,12 +59,12 @@ class ReachDevice:
                            ucu.get_template("device.c"))
         output.contents[".c Local/Extern Variables"].append(self.description.as_struct())
         define_map = {'parameterRepositoryService': "PARAMETER",
-                     'fileService': "FILE",
-                     'commandService': "COMMAND",
-                     'cliService': "CLI",
-                     'timeService': "TIME",
-                     'wifiService': "WIFI",
-                     'streamService': "STREAM"}
+                      'fileService': "FILE",
+                      'commandService': "COMMAND",
+                      'cliService': "CLI",
+                      'timeService': "TIME",
+                      'wifiService': "WIFI",
+                      'streamService': "STREAM"}
         for svc in self.services.keys():
             if svc in define_map:
                 output.contents['.h Defines'].append(ccu.CSnippet(f"#define INCLUDE_{define_map[svc]}_SERVICE"))
@@ -72,16 +72,3 @@ class ReachDevice:
 
     def get_all_files(self):
         return [self.get_file()] + [svc.get_file() for svc in self.services.values()]
-
-# with open("test.json", "r") as f:
-#     test = json.load(f)
-# import Validator
-# validator = Validator.DeviceDescriptionValidator("schemas")
-# test = validator.validate(test)
-#
-# test_pr = ReachDevice(test)
-#
-# print(test_pr.get_all_files())
-#
-# # test_file = test_pr.services['fileService'].get_file()
-# # print(test_file.gen_c_file())

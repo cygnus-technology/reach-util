@@ -2,6 +2,7 @@
 /* Template code end [.h Includes] */
 
 /* Template code start [.c Includes] */
+#include "cr_stack.h"
 /* Template code end [.c Includes] */
 
 /* Template code start [.h Defines] */
@@ -20,9 +21,9 @@
 /* Template code end [.h Global Variables] */
 
 /* Template code start [.c Local/Extern Variables] */
-static int sWiFi_index = 0;
-static int sWiFi_count = 0;
-static cr_WiFiDescription wifi_desc[MAX_NUM_WIFI_ACCESS_POINTS];
+static uint32_t sWiFi_index = 0;
+static uint32_t sWiFi_count = 0;
+static cr_ConnectionDescription wifi_desc[MAX_NUM_WIFI_ACCESS_POINTS];
 /* Template code end [.c Local/Extern Variables] */
 
 /* Template code start [.h Global Functions] */
@@ -43,8 +44,7 @@ static cr_WiFiDescription wifi_desc[MAX_NUM_WIFI_ACCESS_POINTS];
 * @return  returns cr_ErrorCodes_NO_ERROR or
 *          cr_ErrorCodes_INCOMPLETE.
 */
-int crcb_discover_wifi(const cr_DiscoverWiFi *request,
-                             cr_DiscoverWiFiResponse *response)
+int crcb_discover_wifi(const cr_DiscoverWiFi *request, cr_DiscoverWiFiResponse *response)
 {
     (void)request;
     response->result = cr_ErrorCodes_NOT_IMPLEMENTED;
@@ -88,7 +88,7 @@ int crcb_wifi_discover_reset(const uint32_t cid)
 {
     if (cid >= sWiFi_count)
     {
-        sWiFi_index = NUM_WIFI_AP;
+        sWiFi_index = MAX_NUM_WIFI_ACCESS_POINTS;
         return cr_ErrorCodes_INVALID_ID;
     }
     sWiFi_index = cid;
@@ -107,7 +107,7 @@ int crcb_wifi_discover_reset(const uint32_t cid)
 */
 int crcb_wifi_discover_next(cr_ConnectionDescription *conn_desc)
 {
-    if (sWiFi_index >= NUM_WIFI_AP)
+    if (sWiFi_index >= MAX_NUM_WIFI_ACCESS_POINTS)
         return cr_ErrorCodes_INVALID_ID;
 
     if (sWiFi_index >= sWiFi_count)
@@ -125,8 +125,7 @@ int crcb_wifi_discover_next(cr_ConnectionDescription *conn_desc)
 * @param   response (output) result
 * @return  returns zero or an error code
 */
-int crcb_wifi_connection(const cr_WiFiConnectionRequest *request,
-                               cr_WiFiConnectionResponse *response)
+int crcb_wifi_connection(const cr_WiFiConnectionRequest *request, cr_WiFiConnectionResponse *response)
 {
     affirm(request);
     affirm(response);

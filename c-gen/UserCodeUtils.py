@@ -50,7 +50,7 @@ def get_user_code(contents: str) -> dict:
             raise ValueError(f"Found reused user code block name \"{n}\"")
         # Only add to the dictionary if the code block has something in it
         if c:
-            user_code[n] = c
+            user_code[n] = c.strip('\n')
     return user_code
 
 
@@ -95,18 +95,6 @@ def get_template_code_blocks(template: str):
 
 
 def update_file_with_user_code(template: str, code_blocks: dict) -> str:
-    # matches = re.findall(USER_CODE_BLOCK_REGEX, template)
-    # new_keys = []
-    # for code in matches:
-    #     new_keys.append(code[1])
-    # # Check that all of the code blocks in the old code are still present in the new code
-    # # Otherwise the user will lose the code in this section
-    # for key in code_blocks.keys():
-    #     # Allowing the removal of code blocks as long as they were unused in the old code
-    #     if key not in new_keys and code_blocks[key] != '':
-    #         raise ValueError(f"Found user code block \"{key}\" which is being used in the old code but "
-    #                          f"no longer exists in the new code")
-
     output = template
     # Put the old code back into the template
     for elem in re.finditer(USER_CODE_BLOCK_REGEX, template):
@@ -116,16 +104,13 @@ def update_file_with_user_code(template: str, code_blocks: dict) -> str:
             if groups[2] != '':
                 # Code block with an additional description
                 replacement = f"{groups[0]}/* User code start [{groups[1]}]\n" \
-                              f"{groups[2]}*/" \
-                              f"{code_blocks[groups[1]]}\n" \
+                              f"{groups[2]}*/\n\n" \
+                              f"{code_blocks[groups[1]]}\n\n" \
                               f"{groups[0]}/* User code end [{groups[1]}] */"
             else:
                 # Basic code block with no description
-                replacement = f"{groups[0]}/* User code start [{groups[1]}] */" \
-                              f"{code_blocks[groups[1]]}\n" \
+                replacement = f"{groups[0]}/* User code start [{groups[1]}] */\n\n" \
+                              f"{code_blocks[groups[1]]}\n\n" \
                               f"{groups[0]}/* User code end [{groups[1]}] */"
             output = output.replace(existing, replacement)
     return output
-
-
-# print_all_user_code(get_all_user_code(Path("../reach-silabs/src"), Path("../reach-silabs/include")))

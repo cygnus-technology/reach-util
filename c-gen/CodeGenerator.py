@@ -11,11 +11,14 @@ from Validator import DeviceDescriptionValidator
 
 
 def main() -> int:
-    '''Main function for the generator'''
-    parser = argparse.ArgumentParser(description='A script to transform a specification file defining a Reach device into C code')
+    """Main function for the generator"""
+    parser = argparse.ArgumentParser(
+        description='A script to transform a specification file defining a Reach device into C code')
     parser.add_argument('-d', '--definition', help="The .json file to parse", required=True, type=Path)
-    parser.add_argument('-s', '--source-location', help="Where to put the generated *.c files", required=True, type=Path)
-    parser.add_argument('-i', '--include-location', help="Where to put the generated *.h files", required=True, type=Path)
+    parser.add_argument('-s', '--source-location', help="Where to put the generated *.c files",
+                        required=True, type=Path)
+    parser.add_argument('-i', '--include-location', help="Where to put the generated *.h files",
+                        required=True, type=Path)
     parser.add_argument('-t', '--template-location', help="Where to draw user code templates from", type=Path)
     group = parser.add_mutually_exclusive_group()
     group.add_argument('--spaces', help="How many spaces to use for indent levels", type=int, default=4)
@@ -51,7 +54,7 @@ def main() -> int:
     # This assumes the schemas directory is relative to new-gen.py
     schema_dir = Path(__file__).parent.resolve()
     schema_dir = schema_dir.joinpath('schemas')
-    validator = DeviceDescriptionValidator(schema_dir)
+    validator = DeviceDescriptionValidator(str(schema_dir))
 
     # Load the file, this could potentially have JSON format errors
     with open(args.definition, "r") as f:
@@ -99,6 +102,7 @@ def main() -> int:
             updated_code = ucu.update_file_with_user_code(file.gen_h_file(), existing_user_code)
             with open(args.include_location.joinpath(f"{file.filename}.h"), "w") as f:
                 f.write(updated_code)
+
 
 if __name__ == '__main__':
     sys.exit(main())

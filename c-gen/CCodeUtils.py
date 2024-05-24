@@ -298,7 +298,8 @@ class CFunction:
         if raw:
             pattern = r'(.*)\n?\{\n?([\S\s]*)\}'
             match = re.search(pattern, raw)
-            # If there's no blank line between the start of the function and the other content, assume it's a doc comment
+            # If there's no blank line between the start of the function and the other content,
+            # assume it's a doc comment
             if match.start() > 1 and not (raw[match.start() - 1] == raw[match.start() - 2] == "\n"):
                 self.comment = raw[:match.start()].strip()
             else:
@@ -356,10 +357,9 @@ class CFile:
  * \brief ''' + f"{brief}" + r'''
  *
  * Original Author: Chuck Peplinski
- * Script Author: Joseph Peplinski
+ * Script Authors: Joseph Peplinski and Andrew Carlson
  *
- * Generated with version ''' + \
-        f"{ScriptVersion.SCRIPT_VERSION}" + ''' of the C code generator
+ * Generated with version ''' + f"{ScriptVersion.SCRIPT_VERSION}" + ''' of the C code generator
  *
  ********************************************************************************************/'''
 
@@ -375,7 +375,9 @@ class CFile:
                 right = int(asterisk_width) + 1
             else:
                 left = right = int(asterisk_width)
-            return f"/{'*' * (HEADER_WIDTH - 1)}\n {'*' * (left - 1)}{centered_text}{'*' * right}\n {'*' * (HEADER_WIDTH - 2)}/\n"
+            return f"/{'*' * (HEADER_WIDTH - 1)}\n" \
+                   f" {'*' * (left - 1)}{centered_text}{'*' * right}\n" \
+                   f" {'*' * (HEADER_WIDTH - 2)}/\n"
 
     @staticmethod
     def gen_user_code_section(filename: str, section: str):

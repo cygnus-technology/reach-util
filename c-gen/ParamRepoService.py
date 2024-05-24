@@ -26,13 +26,17 @@ class ParamRepoService:
                 "bitfield": "bitfield_desc",
                 "bytearray": "bytearray_desc"
             }
-            fields = [{"field": "id", "value": self.as_enum()}, {"field": "name", "value": ccu.CString(self.json['name'])}]
+            fields = [{"field": "id", "value": self.as_enum()},
+                      {"field": "name", "value": ccu.CString(self.json['name'])}]
             if "description" in self.json:
-                fields.append({"field": "description", "value": ccu.CString(self.json['description']), "optional": True})
+                fields.append({"field": "description",
+                               "value": ccu.CString(self.json['description']), "optional": True})
             fields.append({"field": "access", "value": ccu.get_access_enum(self.json['access'])})
-            fields.append({"field": "storage_location", "value": ccu.get_storage_location_enum(self.json['storageLocation'])})
+            fields.append({"field": "storage_location",
+                           "value": ccu.get_storage_location_enum(self.json['storageLocation'])})
             extra_desc = {"oneOf": "desc",
-                          "which": f"{ccu.get_param_type_enum(self.json['dataType'])} + cr_ParameterInfo_uint32_desc_tag",
+                          "which":
+                              f"{ccu.get_param_type_enum(self.json['dataType'])} + cr_ParameterInfo_uint32_desc_tag",
                           "field": oneof_types[self.json['dataType']],
                           "value": []}
             match self.json['dataType']:
@@ -65,11 +69,12 @@ class ParamRepoService:
                     if 'labelName' in self.json:
                         extra_desc['value'].append({"field": "pei_id", "optional": True,
                                                     "value": ccu.make_c_compatible(f"PARAM_EI_{self.json['labelName']}",
-                                                                                    upper=True)})
+                                                                                   upper=True)})
                 case "string":
                     if 'defaultValue' in self.json:
                         extra_desc['value'].append(
-                            {"field": "default_value", "optional": True, "value": ccu.CString(self.json['defaultValue'])})
+                            {"field": "default_value", "optional": True,
+                             "value": ccu.CString(self.json['defaultValue'])})
                     extra_desc['value'].append({"field": "max_size", "value": self.json['maxSize']})
                 case "bitfield":
                     if 'defaultValue' in self.json:
@@ -80,7 +85,7 @@ class ParamRepoService:
                     if 'labelName' in self.json:
                         extra_desc['value'].append({"field": "pei_id", "optional": True,
                                                     "value": ccu.make_c_compatible(f"PARAM_EI_{self.json['labelName']}",
-                                                                                    upper=True)})
+                                                                                   upper=True)})
                 case "bytearray":
                     if 'defaultValue' in self.json:
                         extra_desc['value'].append(
@@ -136,9 +141,9 @@ class ParamRepoService:
             match self.json['dataType']:
                 case "boolean":
                     elements = [ccu.CStruct([{"field": "id", "value": 0},
-                                                   {"field": "name", "value": f"\"{self.json['falseLabel']}\""}]),
+                                             {"field": "name", "value": f"\"{self.json['falseLabel']}\""}]),
                                 ccu.CStruct([{"field": "id", "value": 1},
-                                                   {"field": "name", "value": f"\"{self.json['trueLabel']}\""}])]
+                                             {"field": "name", "value": f"\"{self.json['trueLabel']}\""}])]
                 case "enumeration":
                     elements = []
                     for enum in self.json['enumValues']:
@@ -152,8 +157,8 @@ class ParamRepoService:
                 case _:
                     raise ValueError(f"Unexpected dataType {self.json['dataType']}")
             return ccu.CArray(elements,
-                                name=f"static const cr_ParamExKey __cr_gen_pei_"
-                                     f"{ccu.make_c_compatible(self.json['name']).lower()}_labels")
+                              name=f"static const cr_ParamExKey __cr_gen_pei_"
+                                   f"{ccu.make_c_compatible(self.json['name']).lower()}_labels")
 
         def as_struct(self):
             fields = [{"field": "pei_id", "value": self.as_enum()},
@@ -181,18 +186,23 @@ class ParamRepoService:
     def get_file(self):
         sub_files = []
         if self.parameters:
-            enums = [ccu.CEnum([x.as_enum() for x in self.parameters], [x.json["id"] for x in self.parameters], "param")]
+            enums = [ccu.CEnum([x.as_enum() for x in self.parameters],
+                               [x.json["id"] for x in self.parameters], "param")]
             param_desc_structs = [x.as_protobuf() for x in self.parameters]
             default_notification_structs = [x.as_notify_init_struct()
                                             for x in self.parameters if x.has_default_notifications]
             sub_files.append(ccu.CFile("pr_parameters", "", ucu.get_template("pr_parameters.c")))
             sub_files[-1].contents[".h Defines"].append(ccu.CSnippet(f"#define NUM_PARAMS {len(self.parameters)}"))
             sub_files[-1].contents[".h Data Types"] += enums
-            sub_files[-1].contents[".c Local/Extern Variables"].append(ccu.CArray(param_desc_structs, name="static const cr_ParameterInfo param_desc"))
+            sub_files[-1].contents[".c Local/Extern Variables"].append(
+                ccu.CArray(param_desc_structs, name="static const cr_ParameterInfo param_desc"))
             if default_notification_structs:
-                sub_files.append(ccu.CFile("pr_default_notifications", "", ucu.get_template("pr_default_notifications.c")))
-                sub_files[-1].contents[".h Defines"].append(ccu.CSnippet(f"#define NUM_INIT_PARAMETER_NOTIFICATIONS {len(default_notification_structs)}"))
-                sub_files[-1].contents[".c Local/Extern Variables"].append(ccu.CArray(default_notification_structs, name="static cr_ParameterNotifyConfig sParamNotifyInit"))
+                sub_files.append(ccu.CFile("pr_default_notifications", "",
+                                           ucu.get_template("pr_default_notifications.c")))
+                sub_files[-1].contents[".h Defines"].append(
+                    ccu.CSnippet(f"#define NUM_INIT_PARAMETER_NOTIFICATIONS {len(default_notification_structs)}"))
+                sub_files[-1].contents[".c Local/Extern Variables"].append(
+                    ccu.CArray(default_notification_structs, name="static cr_ParameterNotifyConfig sParamNotifyInit"))
 
         if self.labels:
             typedefs = [ccu.CEnum([x.as_enum() for x in self.labels], [x.json["id"] for x in self.labels], "param_ei")]
@@ -205,20 +215,3 @@ class ParamRepoService:
             sub_files[-1].contents[".h Data Types"] += typedefs
             sub_files[-1].contents[".c Local/Extern Variables"] += arrays
         return ccu.CFile.combine(sub_files, "parameters", "A minimal implementation of Reach data access.")
-
-
-# with open("../reach-silabs/Reach_silabs.json", "r") as f:
-#     test = json.load(f)
-# import Validator
-# validator = Validator.DeviceDescriptionValidator("schemas")
-# test = validator.validate(test)
-#
-# test_pr = ParamRepoService(test["services"]["parameterRepositoryService"])
-#
-# test_file = test_pr.get_file()
-# print(test_file.gen_c_file())
-
-
-
-
-

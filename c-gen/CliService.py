@@ -48,14 +48,3 @@ class CliService:
                            ucu.get_template("cli.c"))
         output.contents[".c Cygnus Reach Callback Functions"].append(generate_cli_handler())
         return output
-
-# with open("../reach-silabs/Reach_silabs.json", "r") as f:
-#     test = json.load(f)
-# import Validator
-# validator = Validator.DeviceDescriptionValidator("schemas")
-# test = validator.validate(test)
-#
-# test_pr = CliService(test["services"]["cliService"])
-#
-# test_file = test_pr.get_file()
-# print(test_file.gen_c_file())
