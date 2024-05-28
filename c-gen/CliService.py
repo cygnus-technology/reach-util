@@ -7,6 +7,7 @@ class CliService:
     class Command:
         def __init__(self, cmd: json):
             self.string = cmd['string']
+            self.arg_description = cmd.get('argDescription', None)
             self.description = cmd.get('description', None)
 
     def __init__(self, service: json):
@@ -23,7 +24,8 @@ class CliService:
             end = '''\n\t/* User code start [CLI: Custom command handling] */\n''' \
                   '''\t/* User code end [CLI: Custom command handling] */\n\telse\n''' \
                   '''\t\ti3_log(LOG_MASK_WARN, "CLI command '%s' not recognized.", ins, *ins);\n\treturn 0;'''
-            help_text_lines = [f'\t\ti3_log(LOG_MASK_ALWAYS, "  {cmd.string}: {cmd.description}");'
+            help_text_lines = [f'\t\ti3_log(LOG_MASK_ALWAYS, "  {cmd.string}'
+                               f'{" " + cmd.arg_description if cmd.arg_description else ""}: {cmd.description}");'
                                for cmd in self.commands if cmd.description]
             help_text_lines = "\n".join(help_text_lines)
             cmd_handler_lines = []

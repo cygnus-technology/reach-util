@@ -9,6 +9,10 @@
 			"Description": "The text to be matched for the command",
 			"type": "string"
 		},
+		"argDescription": {
+			"Description": "A description of the required/optional arguments (provided in the help command)",
+			"type": "string"
+		},
 		"description": {
 			"Description": "A brief description of how the command is used.  Omitting this will hide the command when 'help' is used",
 			"type": "string"
