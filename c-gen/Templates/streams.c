@@ -42,7 +42,7 @@ int crcb_stream_get_count()
     int numAvailable = 0;
     for (i = 0; i < NUM_STREAMS; i++)
     {
-        if (crcb_access_granted(cr_ServiceIds_STREAMS, streams_desc[i].stream_id)) numAvailable++;
+        if (crcb_access_granted(cr_ServiceIds_STREAMS, stream_descriptions[i].stream_id)) numAvailable++;
     }
     return numAvailable;
 }
@@ -59,7 +59,6 @@ int crcb_stream_get_count()
 */
 int crcb_stream_discover_reset(const uint8_t sid)
 {
-
     int rval = 0;
     uint8_t idx;
     rval = sFindIndexFromSid(sid, &idx);
@@ -69,7 +68,7 @@ int crcb_stream_discover_reset(const uint8_t sid)
         sSid_index = NUM_STREAMS;
         return cr_ErrorCodes_INVALID_ID;
     }
-    if (!crcb_access_granted(cr_ServiceIds_FILES, file_descriptions[sSid_index].file_id))
+    if (!crcb_access_granted(cr_ServiceIds_FILES, stream_descriptions[sSid_index].stream_id))
     {
         I3_LOG(LOG_MASK_ERROR, "%s(%d): Access not granted, using NUM_STREAMS.", __FUNCTION__, sid);
         sSid_index = NUM_STREAMS;
@@ -95,19 +94,19 @@ int crcb_stream_discover_next(cr_StreamInfo *stream_desc)
     if (sSid_index >= NUM_STREAMS) // end of search
         return cr_ErrorCodes_NO_DATA;
 
-    while (!crcb_access_granted(cr_ServiceIds_STREAMS, streams_desc[sSid_index].stream_id))
+    while (!crcb_access_granted(cr_ServiceIds_STREAMS, stream_descriptions[sSid_index].stream_id))
     {
-        I3_LOG(LOG_MASK_FILES, "%s: sSid_index (%d) skip, access not granted",
+        I3_LOG(LOG_MASK_WARN, "%s: sSid_index (%d) skip, access not granted",
                __FUNCTION__, sSid_index);
         sSid_index++;
         if (sSid_index >= NUM_STREAMS)
         {
-            I3_LOG(LOG_MASK_PARAMS, "%s: skipped to sSid_index (%d) >= NUM_STREAMS (%d)",
+            I3_LOG(LOG_MASK_WARN, "%s: skipped to sSid_index (%d) >= NUM_STREAMS (%d)",
                    __FUNCTION__, sSid_index, NUM_STREAMS);
             return cr_ErrorCodes_NO_DATA;
         }
     }
-    *stream_desc = streams_desc[sSid_index++];
+    *stream_desc = stream_descriptions[sSid_index++];
     return 0;
 }
 
@@ -127,7 +126,7 @@ int crcb_stream_get_description(uint32_t sid, cr_StreamInfo *stream_desc)
     uint8_t idx;
     rval = sFindIndexFromSid(sid, &idx);
     if (rval != 0) return rval;
-    *stream_desc = streams_desc[idx];
+    *stream_desc = stream_descriptions[idx];
     /* User code start [Streams: Get Description] */
     /* User code end [Streams: Get Description] */
     return 0;
@@ -147,15 +146,15 @@ int crcb_stream_get_description(uint32_t sid, cr_StreamInfo *stream_desc)
 */
 int crcb_stream_read(uint32_t sid, cr_StreamData *data)
 {
-    int rval = 0;
+    int rval = cr_ErrorCodes_NO_DATA;
     affirm(data != NULL);
     uint8_t idx;
     rval = sFindIndexFromSid(sid, &idx);
-    if (rval != 0) return rval;
+    if (rval != 0) return cr_ErrorCodes_NO_DATA;
 
     /* User code start [Streams: Read] */
     /* User code end [Streams: Read] */
-    return 0;
+    // return cr_ErrorCodes_NO_ERROR;
 }
 
 /**
@@ -227,7 +226,7 @@ static int sFindIndexFromSid(uint32_t sid, uint8_t *index)
 {
     uint8_t idx;
     for (idx=0; idx<NUM_STREAMS; idx++) {
-        if (streams_desc[idx].stream_id == sid) {
+        if (stream_descriptions[idx].stream_id == sid) {
             *index = idx;
             return 0;
         }
