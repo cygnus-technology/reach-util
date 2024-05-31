@@ -3,7 +3,7 @@ from pathlib import Path
 import shutil
 
 USER_CODE_BLOCK_REGEX = r"([ \t]*)\/\* User code start \[(.+)\]" \
-                        r"[ \n]([\S\s]*)\*\/" \
+                        r"((?:\n\1 \* [^\n]*)*) \*\/" \
                         r"([\S\s]*)\n" \
                         r"\1\/\* User code end \[\2\] \*\/"
 
@@ -103,8 +103,9 @@ def update_file_with_user_code(template: str, code_blocks: dict) -> str:
             existing = elem.group(0)
             if groups[2] != '':
                 # Code block with an additional description
+                temp_desc = groups[2].lstrip('\n')
                 replacement = f"{groups[0]}/* User code start [{groups[1]}]\n" \
-                              f"{groups[2]}*/\n\n" \
+                              f"{temp_desc} */\n\n" \
                               f"{code_blocks[groups[1]]}\n\n" \
                               f"{groups[0]}/* User code end [{groups[1]}] */"
             else:
