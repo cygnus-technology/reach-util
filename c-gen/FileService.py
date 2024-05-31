@@ -37,6 +37,6 @@ class FileService:
         descriptions = [cmd.as_struct() for cmd in self.files]
         output.contents[".h Defines"].append(ccu.CSnippet(f"#define NUM_FILES {len(self.files)}"))
         output.contents[".h Data Types"] += enums
-        output.contents[".c Local/Extern Variables"].append(
-            ccu.CArray(descriptions, name="static cr_FileInfo file_descriptions"))
+        output.contents[".h Global Variables"].append(
+            ccu.CArray(descriptions, name="cr_FileInfo file_descriptions"))
         return output

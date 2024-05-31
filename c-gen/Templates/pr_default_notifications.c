@@ -31,9 +31,9 @@
 /* Template code start [.c Cygnus Reach Callback Functions] */
 int crcb_parameter_notification_init(const cr_ParameterNotifyConfig **pNoteArray, size_t *pNum)
 {
-    *pNum = NUM_INIT_PARAMETER_NOTIFICATIONS;
-    *pNoteArray = sParamNotifyInit;
-    return 0;
+	*pNum = NUM_INIT_PARAMETER_NOTIFICATIONS;
+	*pNoteArray = sParamNotifyInit;
+	return 0;
 }
 /* Template code end [.c Cygnus Reach Callback Functions] */
 

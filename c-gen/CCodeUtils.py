@@ -499,7 +499,7 @@ class CFile:
             if self.contents[key]:
                 for elem in self.contents[key]:
                     if type(elem) in [CVariable, CArray, CStruct]:
-                        output += f"{elem.crepr(extern=True)}"
+                        output += f"{elem.crepr(outer=True, extern=True)}"
                     elif type(elem) is CFunction:
                         output += f"{elem.crepr(decl_only=True)}"
                     else:
@@ -507,7 +507,7 @@ class CFile:
                     output += "\n"
             output += self.gen_user_code_section(self.filename + ".h", key[3:])
         output += f"\n#endif // {guard_define}"
-        return output
+        return output.replace("\t", indent)
 
     def gen_c_file(self):
         output = f"{self.gen_header(self.brief)}\n\n"
@@ -548,4 +548,4 @@ class CFile:
             output += self.gen_user_code_section(self.filename + ".c", key[3:])
             output += "\n"
 
-        return output
+        return output.replace("\t", indent)

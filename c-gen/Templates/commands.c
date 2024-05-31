@@ -32,81 +32,77 @@ static int sCommandIndex = 0;
 /* Template code start [.c Cygnus Reach Callback Functions] */
 int crcb_get_command_count()
 {
-    int i;
-    int numAvailable = 0;
-    for (i=0; i<NUM_COMMANDS; i++)
-    {
-        if (crcb_access_granted(cr_ServiceIds_COMMANDS, command_desc[i].id))
-            numAvailable++;
-    }
-    return numAvailable;
+	int i;
+	int numAvailable = 0;
+	for (i=0; i<NUM_COMMANDS; i++)
+	{
+		if (crcb_access_granted(cr_ServiceIds_COMMANDS, command_desc[i].id))
+			numAvailable++;
+	}
+	return numAvailable;
 }
 
 int crcb_command_discover_next(cr_CommandInfo *cmd_desc)
 {
-    if (sCommandIndex >= NUM_COMMANDS)
-    {
-        I3_LOG(LOG_MASK_REACH, "%s: Command index %d indicates discovery complete.",
-               __FUNCTION__, sCommandIndex);
-        return cr_ErrorCodes_NO_DATA;
-    }
+	if (sCommandIndex >= NUM_COMMANDS)
+	{
+		I3_LOG(LOG_MASK_REACH, "%s: Command index %d indicates discovery complete.", __FUNCTION__, sCommandIndex);
+		return cr_ErrorCodes_NO_DATA;
+	}
 
-    while (!crcb_access_granted(cr_ServiceIds_COMMANDS, command_desc[sCommandIndex].id))
-    {
-        I3_LOG(LOG_MASK_FILES, "%s: sCommandIndex (%d) skip, access not granted",
-                   __FUNCTION__, sCommandIndex);
-        sCommandIndex++;
-        if (sCommandIndex >= NUM_COMMANDS)
-        {
-            I3_LOG(LOG_MASK_PARAMS, "%s: skipped to sCommandIndex (%d) >= NUM_COMMANDS (%d)",
-                   __FUNCTION__, sCommandIndex, NUM_COMMANDS);
-            return cr_ErrorCodes_NO_DATA;
-        }
-    }
-    *cmd_desc = command_desc[sCommandIndex++];
-    return 0;
+	while (!crcb_access_granted(cr_ServiceIds_COMMANDS, command_desc[sCommandIndex].id))
+	{
+		I3_LOG(LOG_MASK_FILES, "%s: sCommandIndex (%d) skip, access not granted", __FUNCTION__, sCommandIndex);
+		sCommandIndex++;
+		if (sCommandIndex >= NUM_COMMANDS)
+		{
+			I3_LOG(LOG_MASK_PARAMS, "%s: skipped to sCommandIndex (%d) >= NUM_COMMANDS (%d)", __FUNCTION__, sCommandIndex, NUM_COMMANDS);
+			return cr_ErrorCodes_NO_DATA;
+		}
+	}
+	*cmd_desc = command_desc[sCommandIndex++];
+	return 0;
 }
 
 int crcb_command_discover_reset(const uint32_t cid)
 {
-    if (cid >= NUM_COMMANDS)
-    {
-        i3_log(LOG_MASK_ERROR, "%s: Command ID %d does not exist.",
-               __FUNCTION__, cid);
-        return cr_ErrorCodes_INVALID_ID;
-    }
+	if (cid >= NUM_COMMANDS)
+	{
+		i3_log(LOG_MASK_ERROR, "%s: Command ID %d does not exist.", __FUNCTION__, cid);
+		return cr_ErrorCodes_INVALID_ID;
+	}
 
-    for (sCommandIndex = 0; sCommandIndex < NUM_COMMANDS; sCommandIndex++)
-    {
-        if (command_desc[sCommandIndex].id == cid) {
-            if (!crcb_access_granted(cr_ServiceIds_COMMANDS, command_desc[sCommandIndex].id))
-            {
-                sCommandIndex = 0;
-                break;
-            }
-            I3_LOG(LOG_MASK_PARAMS, "discover command reset (%d) reset to %d", cid, sCommandIndex);
-            return 0;
-        }
-    }
-    sCommandIndex = crcb_get_command_count();
-    I3_LOG(LOG_MASK_PARAMS, "discover command reset (%d) reset defaults to %d", cid, sCommandIndex);
-    return cr_ErrorCodes_INVALID_ID;
+	for (sCommandIndex = 0; sCommandIndex < NUM_COMMANDS; sCommandIndex++)
+	{
+		if (command_desc[sCommandIndex].id == cid) {
+			if (!crcb_access_granted(cr_ServiceIds_COMMANDS, command_desc[sCommandIndex].id))
+			{
+				sCommandIndex = 0;
+				break;
+			}
+			I3_LOG(LOG_MASK_PARAMS, "discover command reset (%d) reset to %d", cid, sCommandIndex);
+			return 0;
+		}
+	}
+	sCommandIndex = crcb_get_command_count();
+	I3_LOG(LOG_MASK_PARAMS, "discover command reset (%d) reset defaults to %d", cid, sCommandIndex);
+	return cr_ErrorCodes_INVALID_ID;
 }
 
 int crcb_command_execute(const uint8_t cid)
 {
-    int rval = 0;
-    switch (cid)
-    {
-        /* User code start [Commands: Command Handler] */
-        /* User code end [Commands: Command Handler] */
-        default:
-            rval = cr_ErrorCodes_INVALID_ID;
-            break;
-    }
-    /* User code start [Commands: Command Handler Post-Switch] */
-    /* User code end [Commands: Command Handler Post-Switch] */
-    return rval;
+	int rval = 0;
+	switch (cid)
+	{
+		/* User code start [Commands: Command Handler] */
+		/* User code end [Commands: Command Handler] */
+		default:
+			rval = cr_ErrorCodes_INVALID_ID;
+			break;
+	}
+	/* User code start [Commands: Command Handler Post-Switch] */
+	/* User code end [Commands: Command Handler Post-Switch] */
+	return rval;
 }
 /* Template code end [.c Cygnus Reach Callback Functions] */
 
