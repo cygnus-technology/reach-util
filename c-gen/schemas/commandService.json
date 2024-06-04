@@ -5,20 +5,6 @@
 	"description": "A service which allows for sending commands to a device",
 	"type": "object",
 	"properties": {
-		"features": {
-			"Description": "Code-generation features to use",
-			"properties": {
-				"descriptions": {
-					"Description": "Handle generating command descriptions",
-					"type": "boolean"
-				},
-				"discovery": {
-					"Description": "Handle the command discovery process",
-					"type": "boolean"
-				}
-			},
-			"required": ["descriptions", "discovery"]
-		},
 		"accessLevelRequired": {
 			"Description": "A list of the access levels which get access to the command service",
 			"type": "array",
@@ -34,6 +20,5 @@
 			}
 		}
 	},
-	"additionalProperties": false,
-	"required": ["features"]
+	"additionalProperties": false
 }

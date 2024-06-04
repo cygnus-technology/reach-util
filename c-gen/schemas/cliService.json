@@ -5,20 +5,6 @@
 	"description": "",
 	"type": "object",
 	"properties": {
-		"features": {
-			"Description": "Code-generation features to use",
-			"properties": {
-				"ble": {
-					"Description": "Handle incoming CLI commands via BLE",
-					"type": "boolean"
-				},
-				"uart": {
-					"Description": "CLIs are usually implemented through a UART.  This will handle generating a platform-agnostic framework for watching for and parsing UART inputs",
-					"type": "boolean"
-				}
-			},
-			"required": ["ble", "uart"]
-		},
 		"accessLevelRequired": {
 			"Description": "A list of the access levels which get access to the CLI service",
 			"type": "array",
@@ -34,6 +20,5 @@
 			}
 		}
 	},
-	"additionalProperties": false,
-	"required": ["features"]
+	"additionalProperties": false
 }
