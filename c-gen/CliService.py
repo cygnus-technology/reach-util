@@ -19,7 +19,9 @@ class CliService:
             # and for all other command handlers
             start = '''\tif (*ins == '\\r' || *ins == '\\n')\n\t{\n\t\treturn 0;\n\t}\n\n''' \
                     '''\tif ((*ins == '?') || (!strncmp("help", ins, 4)))\n\t\t{\n'''
-            middle = '\n\t\treturn 0;\n\t}\n\n\tcrcb_set_command_line(ins);\n' \
+            middle = '\n\t\t/* User code start [CLI: Custom help handling] */' \
+                     '\n\t\t/* User code end [CLI: Custom help handling] */' \
+                     '\n\t\treturn 0;\n\t}\n\n\tcrcb_set_command_line(ins);\n' \
                      '\t// step through remote_command_table and execute if matching\n'''
             end = '''\n\t/* User code start [CLI: Custom command handling] */\n''' \
                   '''\t/* User code end [CLI: Custom command handling] */\n\telse\n''' \
