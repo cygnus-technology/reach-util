@@ -37,7 +37,7 @@ static const char sAppVersion[] = TOSTRING(APP_MAJOR_VERSION) "." TOSTRING(APP_M
 /* Template code start [.h Global Functions] */
 const char *get_app_version()
 {
-    return sAppVersion;
+	return sAppVersion;
 }
 /* Template code end [.h Global Functions] */
 
@@ -47,17 +47,17 @@ const char *get_app_version()
 // can overwrite varying data like SN and hash.
 int crcb_device_get_info(const cr_DeviceInfoRequest *request, cr_DeviceInfoResponse *pDi)
 {
-    (void) request;
-    memcpy(pDi, &device_info, sizeof(cr_DeviceInfoResponse));
-    I3_LOG(LOG_MASK_REACH, "%s: %s\n", __FUNCTION__, device_info.device_name);
+	(void) request;
+	memcpy(pDi, &device_info, sizeof(cr_DeviceInfoResponse));
+	I3_LOG(LOG_MASK_REACH, "%s: %s\n", __FUNCTION__, device_info.device_name);
 
-    sprintf(pDi->firmware_version, "%s", sAppVersion);
+	sprintf(pDi->firmware_version, "%s", sAppVersion);
 
-    /* User code start [Device: Get Info]
-     * Here, further modifications can be made to the contents of pDi if needed */
-    /* User code end [Device: Get Info] */
+	/* User code start [Device: Get Info]
+	 * Here, further modifications can be made to the contents of pDi if needed */
+	/* User code end [Device: Get Info] */
 
-    return 0;
+	return 0;
 }
 /* Template code end [.c Cygnus Reach Callback Functions] */
 

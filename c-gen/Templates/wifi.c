@@ -46,17 +46,17 @@ static cr_ConnectionDescription wifi_desc[MAX_NUM_WIFI_ACCESS_POINTS];
 */
 int crcb_discover_wifi(const cr_DiscoverWiFi *request, cr_DiscoverWiFiResponse *response)
 {
-    (void)request;
-    response->result = cr_ErrorCodes_NOT_IMPLEMENTED;
-    int rval = cr_ErrorCodes_INCOMPLETE;
+	(void)request;
+	response->result = cr_ErrorCodes_NOT_IMPLEMENTED;
+	int rval = cr_ErrorCodes_INCOMPLETE;
 
-    /* User code start [WiFi: Discover]
-     * If you have not just launched a scan, launch one.
-     * If you don't yet have data, return cr_ErrorCodes_INCOMPLETE.
-     * The wifi_desc variable should be filled with available access points,
-     * and sWiFi_count should be updated appropriately */
-    /* User code end [WiFi: Discover] */
-    return rval;
+	/* User code start [WiFi: Discover]
+	 * If you have not just launched a scan, launch one.
+	 * If you don't yet have data, return cr_ErrorCodes_INCOMPLETE.
+	 * The wifi_desc variable should be filled with available access points,
+	 * and sWiFi_count should be updated appropriately */
+	/* User code end [WiFi: Discover] */
+	return rval;
 }
 
 /**
@@ -66,10 +66,10 @@ int crcb_discover_wifi(const cr_DiscoverWiFi *request, cr_DiscoverWiFiResponse *
 */
 int crcb_get_wifi_count()
 {
-    /* User code start [WiFi: Get Count] */
-    /* User code end [WiFi: Get Count] */
+	/* User code start [WiFi: Get Count] */
+	/* User code end [WiFi: Get Count] */
 
-    return sWiFi_count;
+	return sWiFi_count;
 }
 
 /**
@@ -86,13 +86,13 @@ int crcb_get_wifi_count()
 */
 int crcb_wifi_discover_reset(const uint32_t cid)
 {
-    if (cid >= sWiFi_count)
-    {
-        sWiFi_index = MAX_NUM_WIFI_ACCESS_POINTS;
-        return cr_ErrorCodes_INVALID_ID;
-    }
-    sWiFi_index = cid;
-    return 0;
+	if (cid >= sWiFi_count)
+	{
+		sWiFi_index = MAX_NUM_WIFI_ACCESS_POINTS;
+		return cr_ErrorCodes_INVALID_ID;
+	}
+	sWiFi_index = cid;
+	return 0;
 }
 
 /**
@@ -107,15 +107,15 @@ int crcb_wifi_discover_reset(const uint32_t cid)
 */
 int crcb_wifi_discover_next(cr_ConnectionDescription *conn_desc)
 {
-    if (sWiFi_index >= MAX_NUM_WIFI_ACCESS_POINTS)
-        return cr_ErrorCodes_INVALID_ID;
+	if (sWiFi_index >= MAX_NUM_WIFI_ACCESS_POINTS)
+		return cr_ErrorCodes_INVALID_ID;
 
-    if (sWiFi_index >= sWiFi_count)
-        return cr_ErrorCodes_INVALID_PARAMETER;
+	if (sWiFi_index >= sWiFi_count)
+		return cr_ErrorCodes_INVALID_PARAMETER;
 
-    *conn_desc = wifi_desc[sWiFi_index];
-    sWiFi_index++;
-    return 0;
+	*conn_desc = wifi_desc[sWiFi_index];
+	sWiFi_index++;
+	return 0;
 }
 
 /**
@@ -127,13 +127,13 @@ int crcb_wifi_discover_next(cr_ConnectionDescription *conn_desc)
 */
 int crcb_wifi_connection(const cr_WiFiConnectionRequest *request, cr_WiFiConnectionResponse *response)
 {
-    affirm(request);
-    affirm(response);
+	affirm(request);
+	affirm(response);
 
-    /* User code start [WiFi: Connect/Disconnect] */
-    /* User code end [WiFi: Connect/Disconnect] */
+	/* User code start [WiFi: Connect/Disconnect] */
+	/* User code end [WiFi: Connect/Disconnect] */
 
-    return 0;
+	return 0;
 }
 /* Template code end [.c Cygnus Reach Callback Functions] */
 

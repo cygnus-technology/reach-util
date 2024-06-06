@@ -20,10 +20,10 @@
 
 /* Template code start [.c Data Types] */
 typedef struct {
-    uint32_t pei_id;
-    uint8_t data_type;
-    uint8_t num_labels;
-    const cr_ParamExKey *labels;
+	uint32_t pei_id;
+	uint8_t data_type;
+	uint8_t num_labels;
+	const cr_ParamExKey *labels;
 } cr_gen_param_ex_t;
 /* Template code end [.c Data Types] */
 
@@ -39,35 +39,35 @@ static int current_pei_key_index = 0;
 /* Template code start [.h Global Functions] */
 const char *parameters_get_ei_label(int32_t pei_id, uint32_t enum_bit_position)
 {
-    uint32_t index = 0;
-    if (sFindIndexFromPeiId(pei_id, &index) != 0)
-        return 0;
-    for (int i = 0; i < param_ex_desc[index].num_labels; i++)
-    {
-        if (enum_bit_position == param_ex_desc[index].labels[i].id)
-            return param_ex_desc[index].labels[i].name;
-    }
-    return 0;
+	uint32_t index = 0;
+	if (sFindIndexFromPeiId(pei_id, &index) != 0)
+		return 0;
+	for (int i = 0; i < param_ex_desc[index].num_labels; i++)
+	{
+		if (enum_bit_position == param_ex_desc[index].labels[i].id)
+			return param_ex_desc[index].labels[i].name;
+	}
+	return 0;
 }
 /* Template code end [.h Global Functions] */
 
 /* Template code start [.c Cygnus Reach Callback Functions] */
 int crcb_parameter_ex_get_count(const int32_t pid)
 {
-    if (pid < 0)  // all
+	if (pid < 0)  // all
 	{
 		int rval = 0;
-        for (int i = 0; i < NUM_EX_PARAMS; i++)
+		for (int i = 0; i < NUM_EX_PARAMS; i++)
 			rval += PARAM_EI_TO_NUM_PEI_RESPONSES(param_ex_desc[i]);
 		return rval;
 	}
 
-    for (int i=0; i<NUM_EX_PARAMS; i++)
+	for (int i=0; i<NUM_EX_PARAMS; i++)
 	{
-        if (param_ex_desc[i].pei_id == (param_ei_t) pid)
-            return PARAM_EI_TO_NUM_PEI_RESPONSES(param_ex_desc[i]);
-    }
-    return 0;
+		if (param_ex_desc[i].pei_id == (param_ei_t) pid)
+			return PARAM_EI_TO_NUM_PEI_RESPONSES(param_ex_desc[i]);
+	}
+	return 0;
 }
 
 int crcb_parameter_ex_discover_reset(const int32_t pid)
@@ -93,12 +93,12 @@ int crcb_parameter_ex_discover_reset(const int32_t pid)
 
 int crcb_parameter_ex_discover_next(cr_ParamExInfoResponse *pDesc)
 {
-    affirm(pDesc);
+	affirm(pDesc);
 
 	if (current_pei_index < 0)
 	{
 		I3_LOG(LOG_MASK_PARAMS, "%s: No more ex params.", __FUNCTION__);
-        return cr_ErrorCodes_INVALID_ID;
+		return cr_ErrorCodes_INVALID_ID;
 	}
 	else
 	{
@@ -133,13 +133,13 @@ int crcb_parameter_ex_discover_next(cr_ParamExInfoResponse *pDesc)
 /* Template code start [.c Local Functions] */
 static int sFindIndexFromPeiId(uint32_t pei_id, uint32_t *index)
 {
-    uint32_t idx;
-    for (idx=0; idx<NUM_EX_PARAMS; idx++) {
-        if (param_ex_desc[idx].pei_id == pei_id) {
-            *index = idx;
-            return 0;
-        }
-    }
-    return cr_ErrorCodes_INVALID_ID;
+	uint32_t idx;
+	for (idx=0; idx<NUM_EX_PARAMS; idx++) {
+		if (param_ex_desc[idx].pei_id == pei_id) {
+			*index = idx;
+			return 0;
+		}
+	}
+	return cr_ErrorCodes_INVALID_ID;
 }
 /* Template code end [.c Local Functions] */

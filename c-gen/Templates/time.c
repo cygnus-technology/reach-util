@@ -29,16 +29,16 @@
 /* Template code start [.c Cygnus Reach Callback Functions] */
 int crcb_time_get(cr_TimeGetResponse *response)
 {
-  /* User code start [Time: Get] */
-  /* User code end [Time: Get] */
-  return 0;
+	/* User code start [Time: Get] */
+	/* User code end [Time: Get] */
+	return 0;
 }
 
 int crcb_time_set(const cr_TimeSetRequest *request)
 {
-  /* User code start [Time: Set] */
-  /* User code end [Time: Set] */
-  return 0;
+	/* User code start [Time: Set] */
+	/* User code end [Time: Set] */
+	return 0;
 }
 /* Template code end [.c Cygnus Reach Callback Functions] */
 
