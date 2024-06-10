@@ -1,15 +1,11 @@
 # Python files
-*/__pycache__/
-*/dist/
+__pycache__/
+dist/
 *.spec
 
 # PyCharm folders
-*/.idea/
+.idea/
 
-# Temporary Excel files
-c-gen/~$Template.xlsx
-
-# Generated files
-c-gen/*.c
-c-gen/*.h
+c-gen/.vscode/
+c-gen/.idea/
 

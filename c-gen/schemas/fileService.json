@@ -1,0 +1,24 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "fileService",
+	"title": "File Service",
+	"description": "A service which allows for reading and writing files on a device",
+	"type": "object",
+	"properties": {
+		"accessLevelRequired": {
+			"Description": "A list of the access levels which get access to the file service",
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"files": {
+			"Description": "A list of the files implemented",
+			"type": "array",
+			"items": {
+				"$ref": "fileDescription"
+			}
+		}
+	},
+	"additionalProperties": false
+}

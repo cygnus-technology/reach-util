@@ -1,0 +1,24 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "streamService",
+	"title": "Stream Service",
+	"description": "A service which allows for transferring continuous streams of data",
+	"type": "object",
+	"properties": {
+		"accessLevelRequired": {
+			"Description": "A list of the access levels which get access to the file service",
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"streams": {
+			"Description": "A list of the streams available",
+			"type": "array",
+			"items": {
+				"$ref": "streamDescription"
+			}
+		}
+	},
+	"additionalProperties": false
+}

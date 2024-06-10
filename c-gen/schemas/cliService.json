@@ -1,0 +1,24 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "cliService",
+	"title": "CLI Service",
+	"description": "",
+	"type": "object",
+	"properties": {
+		"accessLevelRequired": {
+			"Description": "A list of the access levels which get access to the CLI service",
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"commands": {
+			"Description": "A list of the commands implemented",
+			"type": "array",
+			"items": {
+				"$ref": "cliCommand"
+			}
+		}
+	},
+	"additionalProperties": false
+}

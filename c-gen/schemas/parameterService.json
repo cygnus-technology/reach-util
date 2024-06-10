@@ -1,0 +1,31 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "parameterService",
+	"title": "Parameter Service",
+	"description": "A service which allows for reading, writing, and notifying about parameters on a device",
+	"type": "object",
+	"properties": {
+		"accessLevelRequired": {
+			"Description": "A list of the access levels which get access to the parameter service",
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"parameters": {
+			"Description": "A list of the parameters implemented",
+			"type": "array",
+			"items": {
+				"$ref": "parameterDescription"
+			}
+		},
+		"extendedLabels": {
+			"Description": "A list of the extended parameter labels (for booleans, enumerations, and bitfields) implemented",
+			"type": "array",
+			"items": {
+				"$ref": "parameterExInfoResponse"
+			}
+		}
+	},
+	"additionalProperties": false
+}

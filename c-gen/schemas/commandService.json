@@ -1,0 +1,24 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "commandService",
+	"title": "Command Service",
+	"description": "A service which allows for sending commands to a device",
+	"type": "object",
+	"properties": {
+		"accessLevelRequired": {
+			"Description": "A list of the access levels which get access to the command service",
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"commands": {
+			"Description": "A list of the commands implemented",
+			"type": "array",
+			"items": {
+				"$ref": "commandDescription"
+			}
+		}
+	},
+	"additionalProperties": false
+}

@@ -1,0 +1,47 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "reachDevice",
+	"title": "Reach Device",
+	"description": "A definition of features implemented on a Reach device",
+	"type": "object",
+	"properties": {
+		"name": {
+			"Description": "The name of the device",
+			"type": "string",
+			"maxLength": 24
+		},
+		"manufacturer": {
+			"Description": "The manufacturer of the device",
+			"type": "string",
+			"maxLength": 24
+		},
+		"description": {
+			"Description": "A short description of what the device does",
+			"type": "string",
+			"maxLength": 48
+		},
+		"services": {
+			"Description": "Reach services to support on the device",
+			"type": "object",
+			"properties": {
+				"parameterRepositoryService": {"$ref": "parameterService"},
+				"fileService": {"$ref": "fileService"},
+				"commandService": {"$ref": "commandService"},
+				"cliService": {"$ref": "cliService"},
+				"timeService": {"$ref": "timeService"},
+				"wifiService": {"$ref": "wifiService"},
+				"streamService": {"$ref": "streamService"}
+			},
+			"additionalProperties": false
+		},
+		"accessLevels": {
+			"Description": "A list of the access levels supported",
+			"type": "array",
+			"items": {
+				"$ref": "accessLevel"
+			}
+		}
+	},
+	"additionalProperties": false,
+	"required": ["name", "manufacturer", "description", "services"]
+}
