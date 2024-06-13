@@ -313,13 +313,14 @@ class CFunction:
 
     def crepr(self, decl_only=False):
         if decl_only:
-            # Include the declaration and doc comment, but not the body
-            output = f"{self.decl};"
-            if self.comment:
-                output = f"\n{self.comment}\n" + output
-            return output
+            # Include the declaration only
+            return f"{self.decl};"
         else:
-            return f"{self.decl}\n{{\n{self.body}\n}}"
+            # Include the comment and body as well
+            output = f"{self.decl}\n{{\n{self.body}\n}}"
+            if self.comment:
+                output = f"{self.comment}\n" + output
+            return output
 
 
 class CFile:
@@ -369,14 +370,15 @@ class CFile:
             return f"// {section}\n"
         else:
             centered_text = f"{section:^{len(section) + 10}}"
-            asterisk_width = (HEADER_WIDTH - len(centered_text)) / 2
+            asterisk_width = (HEADER_WIDTH - len(centered_text))
             if asterisk_width % 2 == 1:
-                left = int(asterisk_width)
-                right = int(asterisk_width) + 1
+                left = int(asterisk_width / 2)
+                right = int(asterisk_width / 2)
             else:
-                left = right = int(asterisk_width)
+                left = int(asterisk_width / 2) - 1
+                right = int(asterisk_width / 2)
             return f"/{'*' * (HEADER_WIDTH - 1)}\n" \
-                   f" {'*' * (left - 1)}{centered_text}{'*' * right}\n" \
+                   f" {'*' * left}{centered_text}{'*' * right}\n" \
                    f" {'*' * (HEADER_WIDTH - 2)}/\n"
 
     @staticmethod
@@ -495,17 +497,26 @@ class CFile:
         for key in self.contents.keys():
             if key[:3] != ".h ":
                 continue
-            output += f"{self.gen_code_section_header(key[3:], lightweight=True)}\n"
+            output += f"{self.gen_code_section_header(key[3:], lightweight=True)}"
+            section_output = ""
             if self.contents[key]:
                 for elem in self.contents[key]:
                     if type(elem) in [CVariable, CArray, CStruct]:
-                        output += f"{elem.crepr(outer=True, extern=True)}"
+                        section_output += f"{elem.crepr(outer=True, extern=True)}"
+                    elif type(elem) in [CEnum]:
+                        section_output += f"{elem.crepr()}\n"
                     elif type(elem) is CFunction:
-                        output += f"{elem.crepr(decl_only=True)}"
+                        section_output += f"{elem.crepr(decl_only=True)}"
                     else:
-                        output += f"{elem.crepr()}"
-                    output += "\n"
+                        section_output += f"{elem.crepr()}"
+                    section_output += "\n"
+                section_output = section_output.strip("\n")
+                section_output += "\n"
+            if section_output:
+                output += section_output
+                output += "\n"
             output += self.gen_user_code_section(self.filename + ".h", key[3:])
+            output += "\n"
         output += f"\n#endif // {guard_define}"
         return output.replace("\t", indent)
 
@@ -518,7 +529,7 @@ class CFile:
         temp_contents = {}
         for key in self.contents.keys():
             temp_contents[key] = self.contents[key]
-            if key == ".c Local/Extern Variables":
+            if key == ".h Global Variables":
                 temp_contents[".c Local Function Declarations"] = self.contents[".c Local Functions"]
         if self.h_file_needed():
             if f"{self.filename}.h" in self.contents[".c Includes"]:

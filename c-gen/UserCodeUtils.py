@@ -50,7 +50,8 @@ def get_user_code(contents: str) -> dict:
             raise ValueError(f"Found reused user code block name \"{n}\"")
         # Only add to the dictionary if the code block has something in it
         if c:
-            user_code[n] = c.strip('\n')
+            # Remove extra leading newline
+            user_code[n] = c[1:]
     return user_code
 
 
@@ -105,13 +106,13 @@ def update_file_with_user_code(template: str, code_blocks: dict) -> str:
                 # Code block with an additional description
                 temp_desc = groups[2].lstrip('\n')
                 replacement = f"{groups[0]}/* User code start [{groups[1]}]\n" \
-                              f"{temp_desc} */\n\n" \
-                              f"{code_blocks[groups[1]]}\n\n" \
+                              f"{temp_desc} */\n" \
+                              f"{code_blocks[groups[1]]}\n" \
                               f"{groups[0]}/* User code end [{groups[1]}] */"
             else:
                 # Basic code block with no description
-                replacement = f"{groups[0]}/* User code start [{groups[1]}] */\n\n" \
-                              f"{code_blocks[groups[1]]}\n\n" \
+                replacement = f"{groups[0]}/* User code start [{groups[1]}] */\n" \
+                              f"{code_blocks[groups[1]]}\n" \
                               f"{groups[0]}/* User code end [{groups[1]}] */"
             output = output.replace(existing, replacement)
     return output

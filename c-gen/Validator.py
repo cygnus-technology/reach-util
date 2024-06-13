@@ -39,8 +39,6 @@ class DeviceDescriptionValidator:
                         local_error_found = True
                         break
                     current_id = j[i][id_key]
-                else:
-                    j[i][id_key] = current_id
                 if current_id > max_value:
                     errors.append(
                         f"{desc} '{j[i][name_key]}' has an ID greater than the supported limit of {max_value}")
@@ -80,7 +78,6 @@ class DeviceDescriptionValidator:
                                 label['bitIndices'] = update_name_id_list(
                                     label['bitIndices'], f"{label['name']} bitfield label",
                                     name_key='label', max_value=63)
-
                     d['services']['parameterRepositoryService']['extendedLabels'] = new_labels
 
             # Parameter description validation
@@ -91,9 +88,9 @@ class DeviceDescriptionValidator:
                     "Parameter")
                 if new_parameter_descriptions is not None:
                     d['services']['parameterRepositoryService']['parameters'] = new_parameter_descriptions
-                    # Verify that referenced labels actually exist
                     for param in d['services']['parameterRepositoryService']['parameters']:
                         if 'labelName' in param:
+                            # Verify that referenced labels actually exist
                             found = False
                             for label_set in d['services']['parameterRepositoryService']['extendedLabels']:
                                 if label_set['name'] == param['labelName']:
@@ -102,11 +99,38 @@ class DeviceDescriptionValidator:
                             if not found:
                                 errors.append(f"Extended label '{param['labelName']}' was not defined")
                                 continue
-
-            # To Do: Parameter Limit Validation
-            # Check that max > min and that min <= default <= max
-            # Check that the default values of strings and byte arrays fit in their maxSize.
-            # Check that the default value of a bitfield fits within its bitsAvailable.
+                        if "rangeMin" in param and "rangeMax" in param:
+                            # Verify that minimum and maximum values make sense
+                            if param["rangeMax"] < param["rangeMin"]:
+                                errors.append(f"Parameter '{param['name']}' has a maximum value ({param['rangeMax']}) "
+                                              f"which is smaller than its minimum value ({param['rangeMin']})")
+                                continue
+                        if "defaultValue" in param:
+                            # Make sure that default values are possible within the other constraints which were defined
+                            if param["dataType"] in ["uint32", "uint64", "int32", "int64",
+                                                     "float32", "float64", "enumeration"]:
+                                if "rangeMin" in param and param["defaultValue"] < param["rangeMin"]:
+                                    errors.append(f"Parameter '{param['name']}' has a default value "
+                                                  f"({param['defaultValue']}) which is smaller than its minimum value "
+                                                  f"({param['rangeMin']})")
+                                    continue
+                                if "rangeMax" in param and param["defaultValue"] > param["rangeMax"]:
+                                    errors.append(f"Parameter '{param['name']}' has a default value "
+                                                  f"({param['defaultValue']}) which is larger than its maximum value "
+                                                  f"({param['rangeMax']})")
+                                    continue
+                            elif param["dataType"] == "bitfield":
+                                if param["defaultValue"] > 2 ** param["bitsAvailable"]:
+                                    errors.append(f"Parameter '{param['name']}' has a default value "
+                                                  f"({param['defaultValue']}) which is larger than fits in "
+                                                  f"{param['bitsAvailable']} bits")
+                                    continue
+                            elif param["dataType"] in ["string", "bytearray"]:
+                                if len(param["defaultValue"]) > param["maxSize"]:
+                                    errors.append(f"Parameter '{param['name']}' has a default value "
+                                                  f"({param['defaultValue']}) which is longer than fits in "
+                                                  f"{param['maxSize']} bytes")
+                                    continue
 
         # File list validation
         if 'files' in d['services'].get('fileService', []):

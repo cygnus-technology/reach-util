@@ -125,12 +125,12 @@ class ParamRepoService:
                 case "enumeration":
                     # Just one enumeration to generate
                     enums = [x['label'] for x in self.json["enumValues"]]
-                    values = [x['id'] for x in self.json["enumValues"]]
+                    values = [x.get("id", None) for x in self.json["enumValues"]]
                     return [ccu.CEnum(enums, values, self.json['name'], transform_enum_names=True)]
                 case "bitfield":
                     # Generate both the index and the value enumerations
                     enums = [x['label'] for x in self.json['bitIndices']]
-                    index_values = [x['id'] for x in self.json['bitIndices']]
+                    index_values = [x.get("id", None) for x in self.json['bitIndices']]
                     name = self.json['name']
                     bit_values = [f"""(0b1 << {ccu.make_c_compatible(f"{name} indices {x['label']}", upper=True)})"""
                                   for x in self.json['bitIndices']]
@@ -141,18 +141,22 @@ class ParamRepoService:
             match self.json['dataType']:
                 case "boolean":
                     elements = [ccu.CStruct([{"field": "id", "value": 0},
-                                             {"field": "name", "value": f"\"{self.json['falseLabel']}\""}]),
+                                             {"field": "name", "value": ccu.CString(self.json['falseLabel'])}]),
                                 ccu.CStruct([{"field": "id", "value": 1},
-                                             {"field": "name", "value": f"\"{self.json['trueLabel']}\""}])]
+                                             {"field": "name", "value": ccu.CString(self.json['trueLabel'])}])]
                 case "enumeration":
                     elements = []
                     for enum in self.json['enumValues']:
-                        elements.append(ccu.CStruct([{"field": "id", "value": enum['id']},
+                        elements.append(ccu.CStruct([{"field": "id",
+                                                      "value": ccu.make_c_compatible(
+                                                          f"{self.json['name']} {enum['label']}", upper=True)},
                                                      {"field": "name", "value": f"\"{enum['label']}\""}]))
                 case "bitfield":
                     elements = []
                     for bit in self.json['bitIndices']:
-                        elements.append(ccu.CStruct([{"field": "id", "value": bit['id']},
+                        elements.append(ccu.CStruct([{"field": "id",
+                                                      "value": ccu.make_c_compatible(
+                                                          f"{self.json['name']} indices {bit['label']}", upper=True)},
                                                      {"field": "name", "value": f"\"{bit['label']}\""}]))
                 case _:
                     raise ValueError(f"Unexpected dataType {self.json['dataType']}")
@@ -187,7 +191,7 @@ class ParamRepoService:
         sub_files = []
         if self.parameters:
             enums = [ccu.CEnum([x.as_enum() for x in self.parameters],
-                               [x.json["id"] for x in self.parameters], "param")]
+                               [x.json.get("id", None) for x in self.parameters], "param")]
             param_desc_structs = [x.as_protobuf() for x in self.parameters]
             default_notification_structs = [x.as_notify_init_struct()
                                             for x in self.parameters if x.has_default_notifications]
@@ -205,7 +209,8 @@ class ParamRepoService:
                     ccu.CArray(default_notification_structs, name="static cr_ParameterNotifyConfig sParamNotifyInit"))
 
         if self.labels:
-            typedefs = [ccu.CEnum([x.as_enum() for x in self.labels], [x.json["id"] for x in self.labels], "param_ei")]
+            typedefs = [ccu.CEnum([x.as_enum() for x in self.labels],
+                                  [x.json.get("id", None) for x in self.labels], "param_ei")]
             typedefs += [x for y in self.labels for x in y.as_label_enums()]
             arrays = [x.as_local_key_array() for x in self.labels]
             arrays.append(
