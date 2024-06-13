@@ -199,14 +199,14 @@ class ParamRepoService:
             sub_files[-1].contents[".h Defines"].append(ccu.CSnippet(f"#define NUM_PARAMS {len(self.parameters)}"))
             sub_files[-1].contents[".h Data Types"] += enums
             sub_files[-1].contents[".c Local/Extern Variables"].append(
-                ccu.CArray(param_desc_structs, name="static const cr_ParameterInfo param_desc"))
+                ccu.CArray(param_desc_structs, name="static const cr_ParameterInfo sParameterDescriptions"))
             if default_notification_structs:
                 sub_files.append(ccu.CFile("pr_default_notifications", "",
                                            ucu.get_template("pr_default_notifications.c")))
                 sub_files[-1].contents[".h Defines"].append(
-                    ccu.CSnippet(f"#define NUM_INIT_PARAMETER_NOTIFICATIONS {len(default_notification_structs)}"))
+                    ccu.CSnippet(f"#define NUM_DEFAULT_PARAMETER_NOTIFICATIONS {len(default_notification_structs)}"))
                 sub_files[-1].contents[".c Local/Extern Variables"].append(
-                    ccu.CArray(default_notification_structs, name="static cr_ParameterNotifyConfig sParamNotifyInit"))
+                    ccu.CArray(default_notification_structs, name="static cr_ParameterNotifyConfig sParameterDefaultNotifications"))
 
         if self.labels:
             typedefs = [ccu.CEnum([x.as_enum() for x in self.labels],
@@ -214,7 +214,7 @@ class ParamRepoService:
             typedefs += [x for y in self.labels for x in y.as_label_enums()]
             arrays = [x.as_local_key_array() for x in self.labels]
             arrays.append(
-                ccu.CArray([x.as_struct() for x in self.labels], name="static const cr_gen_param_ex_t param_ex_desc"))
+                ccu.CArray([x.as_struct() for x in self.labels], name="static const cr_gen_param_ex_t sParameterLabelDescriptions"))
             sub_files.append(ccu.CFile("pr_labels", "", ucu.get_template("pr_labels.c")))
             sub_files[-1].contents[".h Defines"].append(ccu.CSnippet(f"#define NUM_EX_PARAMS {len(self.labels)}"))
             sub_files[-1].contents[".h Data Types"] += typedefs

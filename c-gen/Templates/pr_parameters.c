@@ -25,7 +25,7 @@
 
 /* Template code start [.c Local/Extern Variables] */
 static int sCurrentParameter = 0;
-static cr_ParameterValue sCr_param_val[NUM_PARAMS];
+static cr_ParameterValue sParameterValues[NUM_PARAMS];
 /* Template code end [.c Local/Extern Variables] */
 
 /* Template code start [.h Global Functions] */
@@ -34,14 +34,14 @@ void parameters_init(void)
 	/* User code start [Parameter Repository: Pre-Init]
 	 * Here is the place to do any initialization required before individual parameters are initialized */
 	/* User code end [Parameter Repository: Pre-Init] */
-	memset(sCr_param_val, 0, sizeof(sCr_param_val));
+	memset(sParameterValues, 0, sizeof(sParameterValues));
 	for (int i = 0; i < NUM_PARAMS; i++)
 	{
-		sCr_param_val[i].parameter_id = param_desc[i].id;
+		sParameterValues[i].parameter_id = sParameterDescriptions[i].id;
 		// Convert from description type identifier to value type identifier
-		sCr_param_val[i].which_value = (param_desc[i].which_desc - cr_ParameterInfo_uint32_desc_tag) + cr_ParameterValue_uint32_value_tag;
+		sParameterValues[i].which_value = (sParameterDescriptions[i].which_desc - cr_ParameterInfo_uint32_desc_tag) + cr_ParameterValue_uint32_value_tag;
 
-		parameters_reset_param(sCr_param_val[i].parameter_id, false, 0);
+		parameters_reset_param(sParameterValues[i].parameter_id, false, 0);
 
 		/* User code start [Parameter Repository: Parameter Init]
 		 * Here is the place to do any initialization specific to a certain parameter */
@@ -62,63 +62,63 @@ int parameters_reset_param(param_t pid, bool write, uint32_t write_timestamp)
 		return rval;
 	
 	cr_ParameterValue param = {
-		.parameter_id = sCr_param_val[idx].parameter_id,
-		.which_value = sCr_param_val[idx].which_value
+		.parameter_id = sParameterValues[idx].parameter_id,
+		.which_value = sParameterValues[idx].which_value
 	};
 	
 	switch (param.which_value - cr_ParameterValue_uint32_value_tag)
 	{
 		case cr_ParameterDataType_UINT32:
-			if (param_desc[idx].desc.uint32_desc.has_default_value)
-				param.value.uint32_value = param_desc[idx].desc.uint32_desc.default_value;
+			if (sParameterDescriptions[idx].desc.uint32_desc.has_default_value)
+				param.value.uint32_value = sParameterDescriptions[idx].desc.uint32_desc.default_value;
 			break;
 		case cr_ParameterDataType_INT32:
-			if (param_desc[idx].desc.int32_desc.has_default_value)
-				param.value.int32_value = param_desc[idx].desc.int32_desc.default_value;
+			if (sParameterDescriptions[idx].desc.int32_desc.has_default_value)
+				param.value.int32_value = sParameterDescriptions[idx].desc.int32_desc.default_value;
 			break;
 		case cr_ParameterDataType_FLOAT32:
-			if (param_desc[idx].desc.float32_desc.has_default_value)
-				param.value.float32_value = param_desc[idx].desc.float32_desc.default_value;
+			if (sParameterDescriptions[idx].desc.float32_desc.has_default_value)
+				param.value.float32_value = sParameterDescriptions[idx].desc.float32_desc.default_value;
 			break;
 		case cr_ParameterDataType_UINT64:
-			if (param_desc[idx].desc.uint64_desc.has_default_value)
-				param.value.uint64_value = param_desc[idx].desc.uint64_desc.default_value;
+			if (sParameterDescriptions[idx].desc.uint64_desc.has_default_value)
+				param.value.uint64_value = sParameterDescriptions[idx].desc.uint64_desc.default_value;
 			break;
 		case cr_ParameterDataType_INT64:
-			if (param_desc[idx].desc.int64_desc.has_default_value)
-				param.value.int64_value = param_desc[idx].desc.int64_desc.default_value;
+			if (sParameterDescriptions[idx].desc.int64_desc.has_default_value)
+				param.value.int64_value = sParameterDescriptions[idx].desc.int64_desc.default_value;
 			break;
 		case cr_ParameterDataType_FLOAT64:
-			if (param_desc[idx].desc.float64_desc.has_default_value)
-				param.value.float64_value = param_desc[idx].desc.float64_desc.default_value;
+			if (sParameterDescriptions[idx].desc.float64_desc.has_default_value)
+				param.value.float64_value = sParameterDescriptions[idx].desc.float64_desc.default_value;
 			break;
 		case cr_ParameterDataType_BOOL:
-			if (param_desc[idx].desc.bool_desc.has_default_value)
-				param.value.bool_value = param_desc[idx].desc.bool_desc.default_value;
+			if (sParameterDescriptions[idx].desc.bool_desc.has_default_value)
+				param.value.bool_value = sParameterDescriptions[idx].desc.bool_desc.default_value;
 			break;
 		case cr_ParameterDataType_STRING:
-			if (param_desc[idx].desc.string_desc.has_default_value)
+			if (sParameterDescriptions[idx].desc.string_desc.has_default_value)
 			{
-				memcpy(param.value.string_value, param_desc[idx].desc.string_desc.default_value, sizeof(param_desc[idx].desc.string_desc.default_value));
+				memcpy(param.value.string_value, sParameterDescriptions[idx].desc.string_desc.default_value, sizeof(sParameterDescriptions[idx].desc.string_desc.default_value));
 			}
 			break;
 		case cr_ParameterDataType_ENUMERATION:
-			if (param_desc[idx].desc.enum_desc.has_default_value)
-				param.value.enum_value = param_desc[idx].desc.enum_desc.default_value;
+			if (sParameterDescriptions[idx].desc.enum_desc.has_default_value)
+				param.value.enum_value = sParameterDescriptions[idx].desc.enum_desc.default_value;
 			break;
 		case cr_ParameterDataType_BIT_FIELD:
-			if (param_desc[idx].desc.bitfield_desc.has_default_value)
-				param.value.bitfield_value = param_desc[idx].desc.bitfield_desc.default_value;
+			if (sParameterDescriptions[idx].desc.bitfield_desc.has_default_value)
+				param.value.bitfield_value = sParameterDescriptions[idx].desc.bitfield_desc.default_value;
 			break;
 		case cr_ParameterDataType_BYTE_ARRAY:
-			if (param_desc[idx].desc.bytearray_desc.has_default_value)
+			if (sParameterDescriptions[idx].desc.bytearray_desc.has_default_value)
 			{
-				param.value.bytes_value.size = param_desc[idx].desc.bytearray_desc.default_value.size;
-				memcpy(param.value.bytes_value.bytes, param_desc[idx].desc.bytearray_desc.default_value.bytes, sizeof(param_desc[idx].desc.bytearray_desc.default_value.bytes));
+				param.value.bytes_value.size = sParameterDescriptions[idx].desc.bytearray_desc.default_value.size;
+				memcpy(param.value.bytes_value.bytes, sParameterDescriptions[idx].desc.bytearray_desc.default_value.bytes, sizeof(sParameterDescriptions[idx].desc.bytearray_desc.default_value.bytes));
 			}
 			else
 			{
-				param.value.bytes_value.size = param_desc[idx].desc.bytearray_desc.max_size;
+				param.value.bytes_value.size = sParameterDescriptions[idx].desc.bytearray_desc.max_size;
 			}
 			break;
 		default:
@@ -137,8 +137,8 @@ int parameters_reset_param(param_t pid, bool write, uint32_t write_timestamp)
 	}
 	else
 	{
-		param.timestamp = sCr_param_val[idx].timestamp;
-		sCr_param_val[idx] = param;
+		param.timestamp = sParameterValues[idx].timestamp;
+		sParameterValues[idx] = param;
 	}
 	return rval;
 }
@@ -174,7 +174,7 @@ int crcb_parameter_discover_next(cr_ParameterInfo *ppDesc)
 		I3_LOG(LOG_MASK_PARAMS, "%s: sCurrentParameter (%d) >= NUM_PARAMS (%d)", __FUNCTION__, sCurrentParameter, NUM_PARAMS);
 		return cr_ErrorCodes_NO_DATA;
 	}
-	while (!crcb_access_granted(cr_ServiceIds_PARAMETER_REPO, param_desc[sCurrentParameter].id))
+	while (!crcb_access_granted(cr_ServiceIds_PARAMETER_REPO, sParameterDescriptions[sCurrentParameter].id))
 	{
 		I3_LOG(LOG_MASK_PARAMS, "%s: sCurrentParameter (%d) skip, access not granted", __FUNCTION__, sCurrentParameter);
 		sCurrentParameter++;
@@ -184,7 +184,7 @@ int crcb_parameter_discover_next(cr_ParameterInfo *ppDesc)
 			return cr_ErrorCodes_NO_DATA;
 		}
 	}
-	*ppDesc = param_desc[sCurrentParameter];
+	*ppDesc = sParameterDescriptions[sCurrentParameter];
 	sCurrentParameter++;
 	return 0;
 }
@@ -203,7 +203,7 @@ int crcb_parameter_read(const uint32_t pid, cr_ParameterValue *data)
 	 * Here is the place to update the data from an external source, and update the return value if necessary */
 	/* User code end [Parameter Repository: Parameter Read] */
 
-	*data = sCr_param_val[idx];
+	*data = sParameterValues[idx];
 	return rval;
 }
 
@@ -222,55 +222,55 @@ int crcb_parameter_write(const uint32_t pid, const cr_ParameterValue *data)
 	 * Here is the place to apply this change externally, and return an error if necessary */
 	/* User code end [Parameter Repository: Parameter Write] */
 
-	sCr_param_val[idx].timestamp = data->timestamp;
-	sCr_param_val[idx].which_value = data->which_value;
+	sParameterValues[idx].timestamp = data->timestamp;
+	sParameterValues[idx].which_value = data->which_value;
 
 	switch ((data->which_value - cr_ParameterValue_uint32_value_tag))
 	{
 	case cr_ParameterDataType_UINT32:
-		sCr_param_val[idx].value.uint32_value = data->value.uint32_value;
+		sParameterValues[idx].value.uint32_value = data->value.uint32_value;
 		break;
 	case cr_ParameterDataType_INT32:
-		sCr_param_val[idx].value.int32_value = data->value.int32_value;
+		sParameterValues[idx].value.int32_value = data->value.int32_value;
 		break;
 	case cr_ParameterDataType_FLOAT32:
-		sCr_param_val[idx].value.float32_value = data->value.float32_value;
+		sParameterValues[idx].value.float32_value = data->value.float32_value;
 		break;
 	case cr_ParameterDataType_UINT64:
-		sCr_param_val[idx].value.uint64_value = data->value.uint64_value;
+		sParameterValues[idx].value.uint64_value = data->value.uint64_value;
 		break;
 	case cr_ParameterDataType_INT64:
-		sCr_param_val[idx].value.int64_value = data->value.int64_value;
+		sParameterValues[idx].value.int64_value = data->value.int64_value;
 		break;
 	case cr_ParameterDataType_FLOAT64:
-		sCr_param_val[idx].value.float64_value = data->value.float64_value;
+		sParameterValues[idx].value.float64_value = data->value.float64_value;
 		break;
 	case cr_ParameterDataType_BOOL:
-		sCr_param_val[idx].value.bool_value = data->value.bool_value;
+		sParameterValues[idx].value.bool_value = data->value.bool_value;
 		break;
 	case cr_ParameterDataType_STRING:
-		memcpy(sCr_param_val[idx].value.string_value, data->value.string_value, REACH_PVAL_STRING_LEN);
-		sCr_param_val[idx].value.string_value[REACH_PVAL_STRING_LEN - 1] = 0;
-		I3_LOG(LOG_MASK_PARAMS, "String value: %s", sCr_param_val[idx].value.string_value);
+		memcpy(sParameterValues[idx].value.string_value, data->value.string_value, REACH_PVAL_STRING_LEN);
+		sParameterValues[idx].value.string_value[REACH_PVAL_STRING_LEN - 1] = 0;
+		I3_LOG(LOG_MASK_PARAMS, "String value: %s", sParameterValues[idx].value.string_value);
 		break;
 	case cr_ParameterDataType_BIT_FIELD:
-		sCr_param_val[idx].value.bitfield_value = data->value.bitfield_value;
+		sParameterValues[idx].value.bitfield_value = data->value.bitfield_value;
 		break;
 	case cr_ParameterDataType_ENUMERATION:
-		sCr_param_val[idx].value.enum_value = data->value.enum_value;
+		sParameterValues[idx].value.enum_value = data->value.enum_value;
 		break;
 	case cr_ParameterDataType_BYTE_ARRAY:
-		memcpy(sCr_param_val[idx].value.bytes_value.bytes, data->value.bytes_value.bytes, REACH_PVAL_BYTES_LEN);
+		memcpy(sParameterValues[idx].value.bytes_value.bytes, data->value.bytes_value.bytes, REACH_PVAL_BYTES_LEN);
 		if (data->value.bytes_value.size > REACH_PVAL_BYTES_LEN)
 		{
 			LOG_ERROR("Parameter write of bytes has invalid size %d > %d", data->value.bytes_value.size, REACH_PVAL_BYTES_LEN);
-			sCr_param_val[idx].value.bytes_value.size = REACH_PVAL_BYTES_LEN;
+			sParameterValues[idx].value.bytes_value.size = REACH_PVAL_BYTES_LEN;
 		}
 		else
 		{
-			sCr_param_val[idx].value.bytes_value.size = data->value.bytes_value.size;
+			sParameterValues[idx].value.bytes_value.size = data->value.bytes_value.size;
 		}
-		LOG_DUMP_MASK(LOG_MASK_PARAMS, "bytes value", sCr_param_val[idx].value.bytes_value.bytes, sCr_param_val[idx].value.bytes_value.size);
+		LOG_DUMP_MASK(LOG_MASK_PARAMS, "bytes value", sParameterValues[idx].value.bytes_value.bytes, sParameterValues[idx].value.bytes_value.size);
 		break;
 	default:
 		LOG_ERROR("Parameter write which_value %d not recognized.", data->which_value);
@@ -286,7 +286,7 @@ int crcb_parameter_get_count()
 	int numAvailable = 0;
 	for (i = 0; i < NUM_PARAMS; i++)
 	{
-		if (crcb_access_granted(cr_ServiceIds_PARAMETER_REPO, param_desc[i].id))
+		if (crcb_access_granted(cr_ServiceIds_PARAMETER_REPO, sParameterDescriptions[i].id))
 			numAvailable++;
 	}
 	return numAvailable;
@@ -295,10 +295,10 @@ int crcb_parameter_get_count()
 // return a number that changes if the parameter descriptions have changed.
 uint32_t crcb_compute_parameter_hash(void)
 {
-	// Note that the layout of the structure param_desc differs by compiler.
+	// Note that the layout of the structure sParameterDescriptions differs by compiler.
 	// The hash computed on windows won't match that computed on SiLabs.
-	uint32_t *ptr = (uint32_t *)param_desc;
-	// LOG_DUMP_MASK(LOG_MASK_PARAMS, "Raw Params", cptr, sizeof(param_desc));
+	uint32_t *ptr = (uint32_t *)sParameterDescriptions;
+	// LOG_DUMP_MASK(LOG_MASK_PARAMS, "Raw Params", cptr, sizeof(sParameterDescriptions));
 
 	// The hash should be different based on access permission
 	uint32_t hash = 0;
@@ -314,12 +314,12 @@ uint32_t crcb_compute_parameter_hash(void)
 #ifdef NUM_EX_PARAMS
 	for (int i = 0; i < NUM_EX_PARAMS; i++)
 	{
-		hash ^= param_ex_desc[i].pei_id;
-		hash ^= (uint32_t)param_ex_desc[i].data_type;
-		hash ^= (uint32_t)param_ex_desc[i].num_labels;
-		for (int j = 0; j < param_ex_desc[i].num_labels; j++)
+		hash ^= sParameterLabelDescriptions[i].pei_id;
+		hash ^= (uint32_t)sParameterLabelDescriptions[i].data_type;
+		hash ^= (uint32_t)sParameterLabelDescriptions[i].num_labels;
+		for (int j = 0; j < sParameterLabelDescriptions[i].num_labels; j++)
 		{
-			ptr = (uint32_t *)&param_ex_desc[i].labels[j];
+			ptr = (uint32_t *)&sParameterLabelDescriptions[i].labels[j];
 			for (size_t k = 0; k < (sizeof(cr_ParamExKey) / sizeof(uint32_t)); k++)
 				hash ^= ptr[i];
 		}
@@ -340,7 +340,7 @@ static int sFindIndexFromPid(uint32_t pid, uint32_t *index)
 	uint32_t idx;
 	for (idx = 0; idx < NUM_PARAMS; idx++)
 	{
-		if (param_desc[idx].id == pid)
+		if (sParameterDescriptions[idx].id == pid)
 		{
 			*index = idx;
 			return 0;

@@ -11,6 +11,9 @@
 /* Template code end [.h Defines] */
 
 /* Template code start [.c Defines] */
+#ifndef CLI_MAX_LINE_LENGTH
+#define CLI_MAX_LINE_LENGTH 64
+#endif // CLI_MAX_LINE_LENGTH
 /* Template code end [.c Defines] */
 
 /* Template code start [.h Data Types] */
@@ -23,8 +26,8 @@
 /* Template code end [.h Global Variables] */
 
 /* Template code start [.c Local/Extern Variables] */
-static char input[64];
-static uint8_t input_length = 0;
+static char sInput[CLI_MAX_LINE_LENGTH];
+static uint8_t sInputLength = 0;
 /* Template code end [.c Local/Extern Variables] */
 
 /* Template code start [.h Global Functions] */
@@ -33,7 +36,6 @@ void cli_init(void)
 {
 	/* User code start [CLI: Init] */
 	/* User code end [CLI: Init] */
-	cli_write_prompt();
 }
 
 /**
@@ -42,45 +44,45 @@ void cli_init(void)
  */
 bool cli_poll(void)
 {
-	if (input_length == sizeof(input))
+	if (sInputLength == sizeof(sInput))
 	{
 		i3_log(LOG_MASK_WARN, "CLI input too long, clearing");
-		memset(input, 0, sizeof(input));
-		input_length = 0;
+		memset(sInput, 0, sizeof(sInput));
+		sInputLength = 0;
 		cli_write_prompt();
 	}
-	if (cli_read_char(&input[input_length]))
+	if (cli_read_char(&sInput[sInputLength]))
 	{
-		switch (input[input_length])
+		switch (sInput[sInputLength])
 		{
 			case '\r':
 				cli_write("\r\n");
-				if (input_length == 0)
+				if (sInputLength == 0)
 				{
 					cli_write_prompt();
 					break; // No data, no need to call anything
 				}
-				input[input_length] = 0; // Null-terminate the string
-				crcb_cli_enter((const char*) input);
-				input_length = 0;
-				memset(input, 0, sizeof(input));
+				sInput[sInputLength] = 0; // Null-terminate the string
+				crcb_cli_enter((const char*) sInput);
+				sInputLength = 0;
+				memset(sInput, 0, sizeof(sInput));
 				cli_write_prompt();
 				break;
 			case '\n':
 				break; // Ignore, only expect '\r' for command execution
 			case '\b':
 				// Received a backspace
-				if (input_length > 0)
+				if (sInputLength > 0)
 				{
-					input[--input_length] = 0;
+					sInput[--sInputLength] = 0;
 					cli_write("\b \b");
 				}
 				break;
 			default:
 				// Still waiting for an input
-				cli_write_char(input[input_length]);
-				if (input_length < sizeof(input))
-					input_length++;
+				cli_write_char(sInput[sInputLength]);
+				if (sInputLength < sizeof(sInput))
+					sInputLength++;
 				break;
 		}
 	return true;

@@ -33,5 +33,5 @@ class StreamService:
         output.contents[".h Defines"].append(ccu.CSnippet(f"#define NUM_STREAMS {len(self.streams)}"))
         output.contents[".h Data Types"] += enums
         output.contents[".c Local/Extern Variables"].append(
-            ccu.CArray(descriptions, name="static cr_StreamInfo stream_descriptions"))
+            ccu.CArray(descriptions, name="static cr_StreamInfo sStreamDescriptions"))
         return output

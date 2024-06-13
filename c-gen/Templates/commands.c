@@ -36,7 +36,7 @@ int crcb_get_command_count()
 	int numAvailable = 0;
 	for (i=0; i<NUM_COMMANDS; i++)
 	{
-		if (crcb_access_granted(cr_ServiceIds_COMMANDS, command_desc[i].id))
+		if (crcb_access_granted(cr_ServiceIds_COMMANDS, sCommandDescriptions[i].id))
 			numAvailable++;
 	}
 	return numAvailable;
@@ -50,7 +50,7 @@ int crcb_command_discover_next(cr_CommandInfo *cmd_desc)
 		return cr_ErrorCodes_NO_DATA;
 	}
 
-	while (!crcb_access_granted(cr_ServiceIds_COMMANDS, command_desc[sCommandIndex].id))
+	while (!crcb_access_granted(cr_ServiceIds_COMMANDS, sCommandDescriptions[sCommandIndex].id))
 	{
 		I3_LOG(LOG_MASK_FILES, "%s: sCommandIndex (%d) skip, access not granted", __FUNCTION__, sCommandIndex);
 		sCommandIndex++;
@@ -60,7 +60,7 @@ int crcb_command_discover_next(cr_CommandInfo *cmd_desc)
 			return cr_ErrorCodes_NO_DATA;
 		}
 	}
-	*cmd_desc = command_desc[sCommandIndex++];
+	*cmd_desc = sCommandDescriptions[sCommandIndex++];
 	return 0;
 }
 
@@ -74,8 +74,8 @@ int crcb_command_discover_reset(const uint32_t cid)
 
 	for (sCommandIndex = 0; sCommandIndex < NUM_COMMANDS; sCommandIndex++)
 	{
-		if (command_desc[sCommandIndex].id == cid) {
-			if (!crcb_access_granted(cr_ServiceIds_COMMANDS, command_desc[sCommandIndex].id))
+		if (sCommandDescriptions[sCommandIndex].id == cid) {
+			if (!crcb_access_granted(cr_ServiceIds_COMMANDS, sCommandDescriptions[sCommandIndex].id))
 			{
 				sCommandIndex = 0;
 				break;

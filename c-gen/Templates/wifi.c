@@ -129,11 +129,12 @@ int crcb_wifi_connection(const cr_WiFiConnectionRequest *request, cr_WiFiConnect
 {
 	affirm(request);
 	affirm(response);
-
+	int rval = 0;
+	
 	/* User code start [WiFi: Connect/Disconnect] */
 	/* User code end [WiFi: Connect/Disconnect] */
 
-	return 0;
+	return rval;
 }
 /* Template code end [.c Cygnus Reach Callback Functions] */
 

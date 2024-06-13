@@ -24,7 +24,7 @@
 /* Template code end [.h Global Variables] */
 
 /* Template code start [.c Local/Extern Variables] */
-static int sSid_index = 0;
+static int sSidIndex = 0;
 /* Template code end [.c Local/Extern Variables] */
 
 /* Template code start [.h Global Functions] */
@@ -42,7 +42,7 @@ int crcb_stream_get_count()
     int numAvailable = 0;
     for (i = 0; i < NUM_STREAMS; i++)
     {
-        if (crcb_access_granted(cr_ServiceIds_STREAMS, stream_descriptions[i].stream_id)) numAvailable++;
+        if (crcb_access_granted(cr_ServiceIds_STREAMS, sStreamDescriptions[i].stream_id)) numAvailable++;
     }
     return numAvailable;
 }
@@ -65,16 +65,16 @@ int crcb_stream_discover_reset(const uint8_t sid)
     if (0 != rval)
     {
         I3_LOG(LOG_MASK_ERROR, "%s(%d): invalid SID, using NUM_STREAMS.", __FUNCTION__, sid);
-        sSid_index = NUM_STREAMS;
+        sSidIndex = NUM_STREAMS;
         return cr_ErrorCodes_INVALID_ID;
     }
-    if (!crcb_access_granted(cr_ServiceIds_FILES, stream_descriptions[sSid_index].stream_id))
+    if (!crcb_access_granted(cr_ServiceIds_FILES, sStreamDescriptions[sSidIndex].stream_id))
     {
         I3_LOG(LOG_MASK_ERROR, "%s(%d): Access not granted, using NUM_STREAMS.", __FUNCTION__, sid);
-        sSid_index = NUM_STREAMS;
+        sSidIndex = NUM_STREAMS;
         return cr_ErrorCodes_INVALID_ID;
     }
-    sSid_index = idx;
+    sSidIndex = idx;
 
     return 0;
 }
@@ -91,22 +91,22 @@ int crcb_stream_discover_reset(const uint8_t sid)
 */
 int crcb_stream_discover_next(cr_StreamInfo *stream_desc)
 {
-    if (sSid_index >= NUM_STREAMS) // end of search
+    if (sSidIndex >= NUM_STREAMS) // end of search
         return cr_ErrorCodes_NO_DATA;
 
-    while (!crcb_access_granted(cr_ServiceIds_STREAMS, stream_descriptions[sSid_index].stream_id))
+    while (!crcb_access_granted(cr_ServiceIds_STREAMS, sStreamDescriptions[sSidIndex].stream_id))
     {
-        I3_LOG(LOG_MASK_WARN, "%s: sSid_index (%d) skip, access not granted",
-               __FUNCTION__, sSid_index);
-        sSid_index++;
-        if (sSid_index >= NUM_STREAMS)
+        I3_LOG(LOG_MASK_WARN, "%s: sSidIndex (%d) skip, access not granted",
+               __FUNCTION__, sSidIndex);
+        sSidIndex++;
+        if (sSidIndex >= NUM_STREAMS)
         {
-            I3_LOG(LOG_MASK_WARN, "%s: skipped to sSid_index (%d) >= NUM_STREAMS (%d)",
-                   __FUNCTION__, sSid_index, NUM_STREAMS);
+            I3_LOG(LOG_MASK_WARN, "%s: skipped to sSidIndex (%d) >= NUM_STREAMS (%d)",
+                   __FUNCTION__, sSidIndex, NUM_STREAMS);
             return cr_ErrorCodes_NO_DATA;
         }
     }
-    *stream_desc = stream_descriptions[sSid_index++];
+    *stream_desc = sStreamDescriptions[sSidIndex++];
     return 0;
 }
 
@@ -126,7 +126,7 @@ int crcb_stream_get_description(uint32_t sid, cr_StreamInfo *stream_desc)
     uint8_t idx;
     rval = sFindIndexFromSid(sid, &idx);
     if (rval != 0) return rval;
-    *stream_desc = stream_descriptions[idx];
+    *stream_desc = sStreamDescriptions[idx];
     /* User code start [Streams: Get Description] */
     /* User code end [Streams: Get Description] */
     return 0;
@@ -154,7 +154,7 @@ int crcb_stream_read(uint32_t sid, cr_StreamData *data)
 
     /* User code start [Streams: Read] */
     /* User code end [Streams: Read] */
-    // return cr_ErrorCodes_NO_ERROR;
+    return rval;
 }
 
 /**
@@ -178,7 +178,7 @@ int crcb_stream_write(uint32_t sid, cr_StreamData *data)
 
     /* User code start [Streams: Write] */
     /* User code end [Streams: Write] */
-    return 0;
+    return rval;
 }
 
 /**
@@ -198,7 +198,7 @@ int crcb_stream_open(uint32_t sid)
 
     /* User code start [Streams: Open] */
     /* User code end [Streams: Open] */
-    return 0;
+    return rval;
 }
 
 /**
@@ -217,7 +217,7 @@ int crcb_stream_close(uint32_t sid)
 
     /* User code start [Streams: Close] */
     /* User code end [Streams: Close] */
-    return 0;
+    return rval;
 }
 /* Template code end [.c Cygnus Reach Callback Functions] */
 
@@ -226,7 +226,7 @@ static int sFindIndexFromSid(uint32_t sid, uint8_t *index)
 {
     uint8_t idx;
     for (idx=0; idx<NUM_STREAMS; idx++) {
-        if (stream_descriptions[idx].stream_id == sid) {
+        if (sStreamDescriptions[idx].stream_id == sid) {
             *index = idx;
             return 0;
         }

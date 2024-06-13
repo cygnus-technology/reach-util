@@ -35,5 +35,5 @@ class CommandService:
         output.contents[".h Defines"].append(ccu.CSnippet(f"#define NUM_COMMANDS {len(self.commands)}"))
         output.contents[".h Data Types"] += enums
         output.contents[".c Local/Extern Variables"].append(
-            ccu.CArray(descriptions, name="static const cr_CommandInfo command_desc"))
+            ccu.CArray(descriptions, name="static const cr_CommandInfo sCommandDescriptions"))
         return output

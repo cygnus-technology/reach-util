@@ -48,8 +48,8 @@ const char *get_app_version()
 int crcb_device_get_info(const cr_DeviceInfoRequest *request, cr_DeviceInfoResponse *pDi)
 {
 	(void) request;
-	memcpy(pDi, &device_info, sizeof(cr_DeviceInfoResponse));
-	I3_LOG(LOG_MASK_REACH, "%s: %s\n", __FUNCTION__, device_info.device_name);
+	memcpy(pDi, &sDeviceInfo, sizeof(cr_DeviceInfoResponse));
+	I3_LOG(LOG_MASK_REACH, "%s: %s\n", __FUNCTION__, sDeviceInfo.device_name);
 
 	sprintf(pDi->firmware_version, "%s", sAppVersion);
 

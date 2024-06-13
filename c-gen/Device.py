@@ -34,7 +34,7 @@ class ReachDevice:
                       {'field': 'device_description', 'value': ccu.CString(self.description)},
                       {'field': 'services', 'value': ' | '.join([service_translation[svc] for svc in self.services])}]
 
-            return ccu.CStruct(fields, name="const cr_DeviceInfoResponse device_info")
+            return ccu.CStruct(fields, name="const cr_DeviceInfoResponse sDeviceInfo")
 
     def __init__(self, device: json):
         self.description = ReachDevice.DeviceDescription(device)
