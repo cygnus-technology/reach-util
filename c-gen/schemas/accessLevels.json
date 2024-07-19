@@ -1,0 +1,39 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "accessLevels",
+	"title": "Supported Access Levels/Challenge Keys",
+	"description": "A description all of the supported access levels (associated with challenge keys)",
+	"type": "object",
+	"properties": {
+		"default": {
+			"Description": "The access description to use when no challenge key is provided",
+			"type": "string"
+		},
+		"levels": {
+			"Description": "The supported access levels and associated challenge keys",
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"name": {
+						"Description": "A unique name for the access level",
+						"type": "string"
+					},
+					"challengeKey": {
+						"Description": "The key which must be used to connect with this access level",
+						"type": "string",
+						"maxLength": 32
+					}
+					"accessDescription": {
+						"Description": "The features supported by this access level",
+						"$ref": "accessLevelDescription"
+					}
+				},
+				"additionalProperties": false,
+				"required": ["name", "challengeKey", "accessDescription"]
+			}
+		}
+	},
+	"additionalProperties": false,
+	"required": ["default", "levels"]
+}

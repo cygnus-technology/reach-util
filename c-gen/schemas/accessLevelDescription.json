@@ -1,0 +1,147 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "accessLevelDescription",
+	"title": "Access Level Description",
+	"description": "A description of the features accessible with an access level (associated with a challenge key)",
+	"type": "object",
+	"properties": {
+		"ping": {
+			"Description": "Whether the device will respond to a 'ping' command",
+			"type": "boolean"
+		},
+		"deviceInfo": {
+			"Description": "Whether the device will respond to a request for device information",
+			"type": "boolean"
+		},
+		"services": {
+			"Description": "Which services the access level will support.  Any service with an empty list will be assumed to support the service as described in the main device description",
+			"type": "object",
+			"properties": {
+				"parameters": {
+					"Description": "",
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"name": {
+								"Description": "The parameter name",
+								"type": "string"
+							},
+							"id": {
+								"Description": "The parameter ID",
+								"type": "integer",
+								"minimum": 0,
+								"maximum": 4294967295
+							},
+							"access": {
+								"Description": "The read/write access available at this access level (default if omitted)",
+								"type": "string",
+								"enum": ["None", "Read", "Write", "Read/Write"]
+							}
+						},
+						"anyOf": [
+							{"required": ["name"]},
+							{"required": ["id"]}
+						]
+					}
+				},
+				"files": {
+					"Description": "",
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"name": {
+								"Description": "The file name",
+								"type": "string"
+							},
+							"id": {
+								"Description": "The file ID",
+								"type": "integer",
+								"minimum": 0,
+								"maximum": 4294967295
+							},
+							"access": {
+								"Description": "The read/write access available at this access level (default if omitted)",
+								"type": "string",
+								"enum": ["None", "Read", "Write", "Read/Write"]
+							}
+						},
+						"anyOf": [
+							{"required": ["name"]},
+							{"required": ["id"]}
+						]
+					}
+				},
+				"commands": {
+					"Description": "",
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"name": {
+								"Description": "The command name",
+								"type": "string"
+							},
+							"id": {
+								"Description": "The command ID",
+								"type": "integer",
+								"minimum": 0,
+								"maximum": 4294967295
+							}
+						},
+						"anyOf": [
+							{"required": ["name"]},
+							{"required": ["id"]}
+						]
+					}
+				},
+				"cli": {
+					"Description": "The allowed command-line interface interactions",
+					"type": "string",
+					"enum": ["Read", "Read/Write"]
+				},
+				"time": {
+					"Description": "The allowed time service interactions",
+					"type": "string",
+					"enum": ["Get", "Set/Get"]
+				},
+				"wifi": {
+					"Description": "The allowed stream service interactions",
+					"type": "string",
+					"enum": ["Discover", "Discover/Connect"]
+				},
+				"streams": {
+					"Description": "",
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"name": {
+								"Description": "The stream name",
+								"type": "string"
+							},
+							"id": {
+								"Description": "The stream ID",
+								"type": "integer",
+								"minimum": 0,
+								"maximum": 4294967295
+							},
+							"access": {
+								"Description": "The read/write access available at this access level (default if omitted)",
+								"type": "string",
+								"enum": ["None", "Read", "Write", "Read/Write"]
+							}
+						},
+						"anyOf": [
+							{"required": ["name"]},
+							{"required": ["id"]}
+						]
+					}
+				}
+			},
+			"additionalProperties": false
+		}
+	},
+	"additionalProperties": false
+}
