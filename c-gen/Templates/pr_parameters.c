@@ -1,5 +1,6 @@
 /* Template code start [.h Includes] */
 #include <stdbool.h>
+#include <stdint.h>
 /* Template code end [.h Includes] */
 
 /* Template code start [.c Includes] */
