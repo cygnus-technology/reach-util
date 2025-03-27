@@ -108,7 +108,7 @@ int crcb_file_discover_next(cr_FileInfo *file_desc)
 	if (sFidIndex >= NUM_FILES) // end of search
 		return cr_ErrorCodes_NO_DATA;
 
-	while (!crcb_access_granted(cr_ServiceIds_FILES, file_desc[sFidIndex].file_id))
+	while (!crcb_access_granted(cr_ServiceIds_FILES, sFileDescriptions[sFidIndex].file_id))
 	{
 		I3_LOG(LOG_MASK_FILES, "%s: sFidIndex (%d) skip, access not granted",
 			   __FUNCTION__, sFidIndex);
@@ -119,8 +119,9 @@ int crcb_file_discover_next(cr_FileInfo *file_desc)
 			return cr_ErrorCodes_NO_DATA;
 		}
 	}
-	*file_desc = sFileDescriptions[sFidIndex++];
-	return 0;
+	int rval = crcb_file_get_description(sFileDescriptions[sFidIndex].file_id, file_desc);
+	sFidIndex++;
+	return rval;
 }
 // which file
 // offset, negative value specifies current location.
