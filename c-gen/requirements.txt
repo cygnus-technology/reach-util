@@ -1,0 +1,6 @@
+# JSON format validation
+jsonschema
+referencing
+
+# For prettier printouts
+termcolor
