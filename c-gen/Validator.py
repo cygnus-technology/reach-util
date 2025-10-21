@@ -33,7 +33,7 @@ class DeviceDescriptionValidator:
             for i in range(len(j)):
                 if id_key in j[i]:
                     # Check that manually-set IDs do not result in ID collisions
-                    if current_id >= j[i][id_key]:
+                    if current_id > j[i][id_key]:
                         errors.append(
                             f"ID {j[i][id_key]} for {desc.lower()} '{j[i][name_key]}' has already been used")
                         local_error_found = True
