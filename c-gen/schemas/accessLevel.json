@@ -12,7 +12,7 @@
 		"challengeKey": {
 			"Description": "A short description of the command",
 			"type": "string",
-			"maxLength": 32
+			"maxLength": 31
 		},
 		"sublevels": {
 			"Description": "A list of levels which inherit access from this level",

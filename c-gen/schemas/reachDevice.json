@@ -8,17 +8,17 @@
 		"name": {
 			"Description": "The name of the device",
 			"type": "string",
-			"maxLength": 24
+			"maxLength": 23
 		},
 		"manufacturer": {
 			"Description": "The manufacturer of the device",
 			"type": "string",
-			"maxLength": 24
+			"maxLength": 23
 		},
 		"description": {
 			"Description": "A short description of what the device does",
 			"type": "string",
-			"maxLength": 48
+			"maxLength": 47
 		},
 		"services": {
 			"Description": "Reach services to support on the device",

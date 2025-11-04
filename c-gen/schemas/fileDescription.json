@@ -14,7 +14,7 @@
 		"name": {
 			"Description": "A unique name for the file",
 			"type": "string",
-			"maxLength": 24
+			"maxLength": 23
 		},
 		"maxSize": {
 			"Description": "The maximum size of the file",

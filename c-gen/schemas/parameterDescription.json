@@ -14,12 +14,12 @@
 		"name": {
 			"Description": "A unique name for the parameter",
 			"type": "string",
-			"maxLength": 24
+			"maxLength": 23
 		},
 		"description": {
 			"Description": "A short description of the parameter",
 			"type": "string",
-			"maxLength": 32
+			"maxLength": 31
 		},
 		"access": {
 			"Description": "Allowed interactions with the parameter",
@@ -78,7 +78,7 @@
 				"rangeMin": {"type": "integer", "minimum": 0, "maximum": 4294967295},
 				"defaultValue": {"type": "integer", "minimum": 0, "maximum": 4294967295},
 				"rangeMax": {"type": "integer", "minimum": 0, "maximum": 4294967295},
-				"units": {"type": "string", "maxLength": 16}
+				"units": {"type": "string", "maxLength": 15}
 			}
 		},
 		{
@@ -88,7 +88,7 @@
 				"rangeMin": {"type": "integer", "minimum": -2147483648, "maximum": 2147483647},
 				"defaultValue": {"type": "integer", "minimum": -2147483648, "maximum": 2147483647},
 				"rangeMax": {"type": "integer", "minimum": -2147483648, "maximum": 2147483647},
-				"units": {"type": "string", "maxLength": 16}
+				"units": {"type": "string", "maxLength": 15}
 			}
 		},
 		{
@@ -99,7 +99,7 @@
 				"defaultValue": {"type": "number"},
 				"rangeMax": {"type": "number"},
 				"precision": {"type": "integer", "minimum": 0, "maximum": 32},
-				"units": {"type": "string", "maxLength": 16}
+				"units": {"type": "string", "maxLength": 15}
 			}
 		},
 		{
@@ -109,7 +109,7 @@
 				"rangeMin": {"type": "integer", "minimum": 0, "maximum": 18446744073709551615},
 				"defaultValue": {"type": "integer", "minimum": 0, "maximum": 18446744073709551615},
 				"rangeMax": {"type": "integer", "minimum": 0, "maximum": 18446744073709551615},
-				"units": {"type": "string", "maxLength": 16}
+				"units": {"type": "string", "maxLength": 15}
 			}
 		},
 		{
@@ -119,7 +119,7 @@
 				"rangeMin": {"type": "integer", "minimum": -9223372036854775808, "maximum": 9223372036854775807},
 				"defaultValue": {"type": "integer", "minimum": -9223372036854775808, "maximum": 9223372036854775807},
 				"rangeMax": {"type": "integer", "minimum": -9223372036854775808, "maximum": 9223372036854775807},
-				"units": {"type": "string", "maxLength": 16}
+				"units": {"type": "string", "maxLength": 15}
 			}
 		},
 		{
@@ -130,7 +130,7 @@
 				"defaultValue": {"type": "number"},
 				"rangeMax": {"type": "number"},
 				"precision": {"type": "integer", "minimum": 0, "maximum": 32},
-				"units": {"type": "string", "maxLength": 16}
+				"units": {"type": "string", "maxLength": 15}
 			}
 		},
 		{
@@ -145,8 +145,8 @@
 			"type": "object",
 			"properties": {
 				"dataType": {"const": "string"},
-				"defaultValue": {"type": "string", "maxLength": 32},
-				"maxSize": {"type": "integer", "maximum": 32}
+				"defaultValue": {"type": "string", "maxLength": 31},
+				"maxSize": {"type": "integer", "maximum": 31}
 			},
 			"required": ["maxSize"]
 		},
@@ -158,7 +158,7 @@
 				"defaultValue": {"type": "integer", "minimum": 0, "maximum": 4294967295},
 				"rangeMax": {"type": "integer", "minimum": 0, "maximum": 4294967295},
 				"labelName": {"type": "string"},
-				"units": {"type": "string", "maxLength": 16}
+				"units": {"type": "string", "maxLength": 15}
 			}
 		},
 		{

@@ -14,12 +14,12 @@
 		"name": {
 			"Description": "A unique name for the stream",
 			"type": "string",
-			"maxLength": 24
+			"maxLength": 23
 		},
 		"description": {
 			"Description": "A short description of the stream",
 			"type": "string",
-			"maxLength": 48
+			"maxLength": 47
 		},
 		"access": {
 			"Description": "Allowed interactions with the stream",

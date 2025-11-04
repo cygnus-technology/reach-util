@@ -30,8 +30,8 @@
 			"type": "object",
 			"properties": {
 				"dataType": {"const": "boolean"},
-				"falseLabel": {"type": "string", "maxLength": 16},
-				"trueLabel": {"type": "string", "maxLength": 16}
+				"falseLabel": {"type": "string", "maxLength": 15},
+				"trueLabel": {"type": "string", "maxLength": 15}
 			},
 			"required": ["falseLabel", "trueLabel"]
 		},
@@ -44,7 +44,7 @@
 					"items": {
 						"type": "object",
 						"properties": {
-							"label": {"Description": "The human-readable label associated with the enumeration", "type": "string", "maxLength": 16},
+							"label": {"Description": "The human-readable label associated with the enumeration", "type": "string", "maxLength": 15},
 							"value": {"Description": "A unique enumeration value.  This will be assigned automatically if not defined.", "type": "integer", "minimum": 0, "maximum": 4294967295}
 						},
 						"required": ["label"]
@@ -62,7 +62,7 @@
 					"items": {
 						"type": "object",
 						"properties": {
-							"label": {"Description": "The human-readable label associated with the bit index", "type": "string", "maxLength": 16},
+							"label": {"Description": "The human-readable label associated with the bit index", "type": "string", "maxLength": 15},
 							"value": {"Description": "A unique bit index.  This will be assigned automatically if not defined.", "type": "integer", "minimum": 0, "maximum": 63}
 						},
 						"required": ["label"]

@@ -14,12 +14,12 @@
 		"name": {
 			"Description": "A unique name for the command",
 			"type": "string",
-			"maxLength": 24
+			"maxLength": 23
 		},
 		"description": {
 			"Description": "A short description of the command",
 			"type": "string",
-			"maxLength": 48
+			"maxLength": 47
 		},
 		"timeout": {
 			"Description": "The maximum time the command should take to execute, in seconds",
