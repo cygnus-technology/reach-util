@@ -278,7 +278,12 @@ int crcb_parameter_write(const uint32_t pid, const cr_ParameterValue *data)
 		rval = 1;
 		break;
 	}  // end switch
-	return rval;
+    if (0 != rval)
+        return rval;
+	/* User code start [Parameter Repository: Parameter Post-Write]
+	 * Here is the place to do any handling required after parameters have been written to the internal storage */
+	/* User code end [Parameter Repository: Parameter Post-Write] */
+    return rval;
 }
 
 int crcb_parameter_get_count()
