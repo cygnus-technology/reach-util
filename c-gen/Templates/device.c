@@ -35,7 +35,7 @@ static const char sAppVersion[] = TOSTRING(APP_MAJOR_VERSION) "." TOSTRING(APP_M
 /* Template code end [.c Local/Extern Variables] */
 
 /* Template code start [.h Global Functions] */
-const char *get_app_version()
+const char *get_app_version(void)
 {
 	return sAppVersion;
 }
