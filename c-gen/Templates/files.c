@@ -5,6 +5,7 @@
 /* Template code start [.c Includes] */
 #include "i3_log.h"
 #include "i3_error.h"
+#include <inttypes.h>
 /* Template code end [.c Includes] */
 
 /* Template code start [.h Defines] */
@@ -89,13 +90,13 @@ int crcb_file_discover_reset(const uint8_t fid)
 	rval = sFindIndexFromFid(fid, &idx);
 	if (0 != rval)
 	{
-		I3_LOG(LOG_MASK_ERROR, "%s(%d): invalid FID, using NUM_FILES.", __FUNCTION__, fid);
+		I3_LOG(LOG_MASK_ERROR, "%s(%"PRIu8"): invalid FID, using NUM_FILES.", __FUNCTION__, fid);
 		sFidIndex = NUM_FILES;
 		return cr_ErrorCodes_INVALID_ID;
 	}
 	if (!crcb_access_granted(cr_ServiceIds_FILES, sFileDescriptions[sFidIndex].file_id))
 	{
-		I3_LOG(LOG_MASK_ERROR, "%s(%d): Access not granted, using NUM_FILES.", __FUNCTION__, fid);
+		I3_LOG(LOG_MASK_ERROR, "%s(%"PRIu8"): Access not granted, using NUM_FILES.", __FUNCTION__, fid);
 		sFidIndex = NUM_FILES;
 		return cr_ErrorCodes_BAD_FILE;
 	}
@@ -135,17 +136,21 @@ int crcb_read_file(const uint32_t fid, const int offset, const size_t bytes_requ
 	rval = sFindIndexFromFid(fid, &idx);
 	if (0 != rval)
 	{
-		I3_LOG(LOG_MASK_ERROR, "%s(%d): invalid FID.", __FUNCTION__, fid);
+		I3_LOG(LOG_MASK_ERROR, "%s(%"PRIu32"): invalid FID.", __FUNCTION__, fid);
 		return cr_ErrorCodes_INVALID_ID;
 	}
 	if (bytes_requested > REACH_BYTES_IN_A_FILE_PACKET)
 	{
-		I3_LOG(LOG_MASK_ERROR, "%s: %d is more than the buffer for a file read (%d).", __FUNCTION__, fid, REACH_BYTES_IN_A_FILE_PACKET);
+		I3_LOG(LOG_MASK_ERROR, "%s: %"PRIu32" is more than the buffer for a file read (%u).", __FUNCTION__, fid, REACH_BYTES_IN_A_FILE_PACKET);
 		return cr_ErrorCodes_BUFFER_TOO_SMALL;
 	}
 
 	/* User code start [Files: Read]
 	 * The code generator does nothing to handle storing files, so this is where pData and bytes_read should be updated */
+    (void)offset;
+    (void)bytes_requested;
+    (void)pData;
+    (void)bytes_read;
 	/* User code end [Files: Read] */
 
 	return rval;
@@ -158,7 +163,7 @@ int crcb_file_prepare_to_write(const uint32_t fid, const size_t offset, const si
 	rval = sFindIndexFromFid(fid, &idx);
 	if (0 != rval)
 	{
-		I3_LOG(LOG_MASK_ERROR, "%s(%d): invalid FID.", __FUNCTION__, fid);
+		I3_LOG(LOG_MASK_ERROR, "%s(%"PRIu32"): invalid FID.", __FUNCTION__, fid);
 		return cr_ErrorCodes_INVALID_ID;
 	}
 	/* User code start [Files: Pre-Write]
@@ -178,7 +183,7 @@ int crcb_write_file(const uint32_t fid, const int offset, const size_t bytes, co
 	rval = sFindIndexFromFid(fid, &idx);
 	if (0 != rval)
 	{
-		I3_LOG(LOG_MASK_ERROR, "%s(%d): invalid FID.", __FUNCTION__, fid);
+		I3_LOG(LOG_MASK_ERROR, "%s(%"PRIu32"): invalid FID.", __FUNCTION__, fid);
 		return cr_ErrorCodes_INVALID_ID;
 	}
 	/* User code start [Files: Write]
@@ -194,7 +199,7 @@ int crcb_file_transfer_complete(const uint32_t fid)
 	rval = sFindIndexFromFid(fid, &idx);
 	if (0 != rval)
 	{
-		I3_LOG(LOG_MASK_ERROR, "%s(%d): invalid FID.", __FUNCTION__, fid);
+		I3_LOG(LOG_MASK_ERROR, "%s(%"PRIu32"): invalid FID.", __FUNCTION__, fid);
 		return cr_ErrorCodes_INVALID_ID;
 	}
 	/* User code start [Files: Write Complete]
@@ -211,7 +216,7 @@ int crcb_erase_file(const uint32_t fid)
 	rval = sFindIndexFromFid(fid, &idx);
 	if (0 != rval)
 	{
-		I3_LOG(LOG_MASK_ERROR, "%s(%d): invalid FID.", __FUNCTION__, fid);
+		I3_LOG(LOG_MASK_ERROR, "%s(%"PRIu32"): invalid FID.", __FUNCTION__, fid);
 		return cr_ErrorCodes_INVALID_ID;
 	}
 	/* User code start [Files: Erase]

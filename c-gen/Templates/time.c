@@ -31,6 +31,7 @@ int crcb_time_get(cr_TimeGetResponse *response)
 {
 	int rval = 0;
 	/* User code start [Time: Get] */
+    (void)response;
 	/* User code end [Time: Get] */
 	return rval;
 }
@@ -39,6 +40,7 @@ int crcb_time_set(const cr_TimeSetRequest *request)
 {
 	int rval = 0;
 	/* User code start [Time: Set] */
+    (void)request;
 	/* User code end [Time: Set] */
 	return rval;
 }

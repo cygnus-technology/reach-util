@@ -3,6 +3,7 @@
 
 /* Template code start [.c Includes] */
 #include <stdint.h>
+#include <inttypes.h>
 #include "i3_log.h"
 #include "cr_stack.h"
 /* Template code end [.c Includes] */
@@ -68,7 +69,7 @@ int crcb_command_discover_reset(const uint32_t cid)
 {
 	if (cid >= NUM_COMMANDS)
 	{
-		i3_log(LOG_MASK_ERROR, "%s: Command ID %d does not exist.", __FUNCTION__, cid);
+		i3_log(LOG_MASK_ERROR, "%s: Command ID %"PRIu32" does not exist.", __FUNCTION__, cid);
 		return cr_ErrorCodes_INVALID_ID;
 	}
 
@@ -80,12 +81,12 @@ int crcb_command_discover_reset(const uint32_t cid)
 				sCommandIndex = 0;
 				break;
 			}
-			I3_LOG(LOG_MASK_PARAMS, "discover command reset (%d) reset to %d", cid, sCommandIndex);
+			I3_LOG(LOG_MASK_PARAMS, "discover command reset (%"PRIu32") reset to %d", cid, sCommandIndex);
 			return 0;
 		}
 	}
 	sCommandIndex = crcb_get_command_count();
-	I3_LOG(LOG_MASK_PARAMS, "discover command reset (%d) reset defaults to %d", cid, sCommandIndex);
+	I3_LOG(LOG_MASK_PARAMS, "discover command reset (%"PRIu32") reset defaults to %d", cid, sCommandIndex);
 	return cr_ErrorCodes_INVALID_ID;
 }
 

@@ -25,7 +25,7 @@ class CliService:
                      '\t// step through remote_command_table and execute if matching\n'''
             end = '''\n\t/* User code start [CLI: Custom command handling] */\n''' \
                   '''\t/* User code end [CLI: Custom command handling] */\n\telse\n''' \
-                  '''\t\ti3_log(LOG_MASK_WARN, "CLI command '%s' not recognized.", ins, *ins);\n\treturn 0;'''
+                  '''\t\ti3_log(LOG_MASK_WARN, "CLI command '%s' not recognized.", ins);\n\treturn 0;'''
             help_text_lines = [f'\t\ti3_log(LOG_MASK_ALWAYS, "  {cmd.string}'
                                f'{" " + cmd.arg_description if cmd.arg_description else ""}: {cmd.description}");'
                                for cmd in self.commands if cmd.description]

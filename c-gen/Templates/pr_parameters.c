@@ -1,5 +1,6 @@
 /* Template code start [.h Includes] */
 #include <stdbool.h>
+#include <inttypes.h>
 #include <stdint.h>
 /* Template code end [.h Includes] */
 
@@ -157,7 +158,7 @@ int crcb_parameter_discover_reset(const uint32_t pid)
 	if (0 != rval)
 	{
 		sCurrentParameter = 0;
-		I3_LOG(LOG_MASK_PARAMS, "dp reset(%d) reset > defaults to %d", pid, sCurrentParameter);
+		I3_LOG(LOG_MASK_PARAMS, "dp reset(%"PRIu32") reset > defaults to %d", pid, sCurrentParameter);
 		return rval;
 	}
 	sCurrentParameter = idx;
@@ -215,9 +216,9 @@ int crcb_parameter_write(const uint32_t pid, const cr_ParameterValue *data)
 	rval = sFindIndexFromPid(pid, &idx);
 	if (0 != rval)
 		return rval;
-	I3_LOG(LOG_MASK_PARAMS, "Write param, pid %d (%d)", idx, data->parameter_id);
-	I3_LOG(LOG_MASK_PARAMS, "  timestamp %d", data->timestamp);
-	I3_LOG(LOG_MASK_PARAMS, "  which %d", data->which_value);
+	I3_LOG(LOG_MASK_PARAMS, "Write param, pid %"PRIu32" (%"PRIu32")", idx, data->parameter_id);
+	I3_LOG(LOG_MASK_PARAMS, "  timestamp %"PRIu32, data->timestamp);
+	I3_LOG(LOG_MASK_PARAMS, "  which %u", data->which_value);
 
 	/* User code start [Parameter Repository: Parameter Write]
 	 * Here is the place to apply this change externally, and return an error if necessary */
@@ -332,9 +333,9 @@ uint32_t crcb_compute_parameter_hash(void)
 		}
 	}
 
-	I3_LOG(LOG_MASK_PARAMS, "%s: hash 0x%x includes EX.\n", __FUNCTION__, hash);
+	I3_LOG(LOG_MASK_PARAMS, "%s: hash 0x%"PRIx32" includes EX.\n", __FUNCTION__, hash);
 #else
-	I3_LOG(LOG_MASK_PARAMS, "%s: hash 0x%x excludes EX.\n", __FUNCTION__, hash);
+	I3_LOG(LOG_MASK_PARAMS, "%s: hash 0x%"PRIx32" excludes EX.\n", __FUNCTION__, hash);
 #endif // NUM_EX_PARAMS
 
 	return hash;

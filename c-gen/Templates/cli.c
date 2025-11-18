@@ -5,6 +5,7 @@
 /* Template code start [.c Includes] */
 #include "i3_log.h"
 #include "cr_stack.h"
+#include "crcb_weak.h"
 /* Template code end [.c Includes] */
 
 /* Template code start [.h Defines] */
@@ -110,6 +111,7 @@ static void cli_write(char *text)
 	/* User code start [CLI: Write]
 	 * This is where other output sources should be handled (for example, writing to a UART port)
 	 * This is called for outputs which are not necessary via BLE, such as clearing lines or handling backspaces */
+    (void)text;
 	/* User code end [CLI: Write] */
 }
 
@@ -117,6 +119,7 @@ static void cli_write_char(char c)
 {
 	/* User code start [CLI: Write Char]
 	 * This is used to write single characters, which may be handled differently from longer strings. */
+    (void)c;
 	/* User code end [CLI: Write Char] */
 }
 
@@ -125,7 +128,9 @@ static bool cli_read_char(char *received)
 	/* User code start [CLI: Read]
 	 * This is where other input sources (such as a UART) should be handled.
 	 * This should be non-blocking, and return true if a character was received, or false if not. */
+    (void)received;
 	/* User code end [CLI: Read] */
+    return false;   // Default implementation, no input available
 }
 
 /* Template code end [.c Local Functions] */
