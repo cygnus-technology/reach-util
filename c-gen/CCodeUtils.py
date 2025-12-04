@@ -86,7 +86,7 @@ class CString:
             ["\r", r"\r"],
             ["\n", r"\n"],
             ["\t", r"\t"],
-            ["°", r"\xC2\xB0"],
+            ["°", r"\302\260"],
         ]
         out = self.text
         for repl in replacement_map:

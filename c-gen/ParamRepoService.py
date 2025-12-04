@@ -125,12 +125,12 @@ class ParamRepoService:
                 case "enumeration":
                     # Just one enumeration to generate
                     enums = [x['label'] for x in self.json["enumValues"]]
-                    values = [x.get("id", None) for x in self.json["enumValues"]]
+                    values = [x.get("value", None) for x in self.json["enumValues"]]
                     return [ccu.CEnum(enums, values, self.json['name'], transform_enum_names=True)]
                 case "bitfield":
                     # Generate both the index and the value enumerations
                     enums = [x['label'] for x in self.json['bitIndices']]
-                    index_values = [x.get("id", None) for x in self.json['bitIndices']]
+                    index_values = [x.get("value", None) for x in self.json['bitIndices']]
                     name = self.json['name']
                     bit_values = [f"""(0b1 << {ccu.make_c_compatible(f"{name} indices {x['label']}", upper=True)})"""
                                   for x in self.json['bitIndices']]
