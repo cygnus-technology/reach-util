@@ -172,7 +172,7 @@ int crcb_file_prepare_to_write(const uint32_t fid, const size_t offset, const si
 	return rval;
 }
 
-int crcb_file_prepare_to_read(const uint32_t fid, const size_t offset, const size_t bytes)
+int crcb_file_prepare_to_read(const uint32_t fid, const size_t offset, size_t *bytes)
 {
     int rval = 0;
     uint32_t idx;
@@ -182,9 +182,9 @@ int crcb_file_prepare_to_read(const uint32_t fid, const size_t offset, const siz
         I3_LOG(LOG_MASK_ERROR, "%s(%"PRIu32"): invalid FID.", __FUNCTION__, fid);
         return cr_ErrorCodes_INVALID_ID;
     }
-    /* User code start [Files: Pre-Write]
-     * This is the opportunity to prepare for a file write, or to reject it. */
-    /* User code end [Files: Pre-Write] */
+    /* User code start [Files: Pre-Read]
+     * This is the opportunity to prepare for a file read, or to reject it. */
+    /* User code end [Files: Pre-Read] */
     return rval;
 }
 
