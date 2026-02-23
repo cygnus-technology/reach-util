@@ -329,7 +329,7 @@ uint32_t crcb_compute_parameter_hash(void)
 		{
 			ptr = (uint32_t *)&sParameterLabelDescriptions[i].labels[j];
 			for (size_t k = 0; k < (sizeof(cr_ParamExKey) / sizeof(uint32_t)); k++)
-				hash ^= ptr[i];
+				hash ^= ptr[k];
 		}
 	}
 
