@@ -31,7 +31,7 @@ static char sInput[CLI_MAX_LINE_LENGTH];
 static uint8_t sInputLength = 0;
 #if (NUM_CMD_MEMORIES > 0) // 0 if undefined
   static size_t sInputIndex = 0;
-#endif
+#endif  // (NUM_CMD_MEMORIES > 0
 /* Template code end [.c Local/Extern Variables] */
 
 /* Template code start [.h Global Functions] */
