@@ -64,7 +64,7 @@ int crcb_discover_wifi(const cr_DiscoverWiFi *request, cr_DiscoverWiFiResponse *
 * @return  The number of wifi access points available to the
 *          the device.
 */
-int crcb_get_wifi_count()
+int crcb_get_wifi_count(void)
 {
 	/* User code start [WiFi: Get Count] */
 	/* User code end [WiFi: Get Count] */
