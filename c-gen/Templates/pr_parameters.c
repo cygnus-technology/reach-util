@@ -287,7 +287,7 @@ int crcb_parameter_write(const uint32_t pid, const cr_ParameterValue *data)
     return rval;
 }
 
-int crcb_parameter_get_count()
+int crcb_parameter_get_count(void)
 {
 	int i;
 	int numAvailable = 0;
