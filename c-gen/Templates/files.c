@@ -90,9 +90,15 @@ int crcb_file_discover_reset(const uint8_t fid)
 	rval = sFindIndexFromFid(fid, &idx);
 	if (0 != rval)
 	{
-		I3_LOG(LOG_MASK_ERROR, "%s(%"PRIu8"): invalid FID, using NUM_FILES.", __FUNCTION__, fid);
-		sFidIndex = NUM_FILES;
-		return cr_ErrorCodes_INVALID_ID;
+		// This gets called with a hardcoded fid of 0 by cr_files.c, it's just trying to get the first file
+		if (fid == 0)
+			idx = 0;
+		else
+		{
+			I3_LOG(LOG_MASK_ERROR, "%s(%"PRIu8"): invalid FID, using NUM_FILES.", __FUNCTION__, fid);
+			sFidIndex = NUM_FILES;
+			return cr_ErrorCodes_INVALID_ID;
+		}
 	}
 	if (!crcb_access_granted(cr_ServiceIds_FILES, sFileDescriptions[sFidIndex].file_id))
 	{
