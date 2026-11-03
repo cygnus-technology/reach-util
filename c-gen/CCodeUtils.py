@@ -358,7 +358,7 @@ class CFile:
  * \brief ''' + f"{brief}" + r'''
  *
  * Original Author: Chuck Peplinski
- * Script Authors: Joseph Peplinski and Andrew Carlson
+ * Script Authors: Alyss Peplinski and Andrew Carlson
  *
  * Generated with version ''' + f"{ScriptVersion.SCRIPT_VERSION}" + ''' of the C code generator
  *
