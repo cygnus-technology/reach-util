@@ -9,6 +9,7 @@
 /* Template code end [.h Defines] */
 
 /* Template code start [.c Defines] */
+#define sWiFi_index sWiFi_index_by_session[cr_current_session()]
 /* Template code end [.c Defines] */
 
 /* Template code start [.h Data Types] */
@@ -21,7 +22,7 @@
 /* Template code end [.h Global Variables] */
 
 /* Template code start [.c Local/Extern Variables] */
-static uint32_t sWiFi_index = 0;
+static uint32_t sWiFi_index_by_session[CR_SESSION_COUNT];
 static uint32_t sWiFi_count = 0;
 static cr_ConnectionDescription wifi_desc[MAX_NUM_WIFI_ACCESS_POINTS];
 /* Template code end [.c Local/Extern Variables] */
@@ -130,7 +131,7 @@ int crcb_wifi_connection(const cr_WiFiConnectionRequest *request, cr_WiFiConnect
 	affirm(request);
 	affirm(response);
 	int rval = 0;
-	
+
 	/* User code start [WiFi: Connect/Disconnect] */
 	/* User code end [WiFi: Connect/Disconnect] */
 

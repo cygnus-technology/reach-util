@@ -13,6 +13,7 @@
 /* Template code end [.h Defines] */
 
 /* Template code start [.c Defines] */
+#define sCurrentParameter sCurrentParameter_by_session[cr_current_session()]
 /* Template code end [.c Defines] */
 
 /* Template code start [.h Data Types] */
@@ -26,7 +27,7 @@
 /* Template code end [.h Global Variables] */
 
 /* Template code start [.c Local/Extern Variables] */
-static int sCurrentParameter = 0;
+static int sCurrentParameter_by_session[CR_SESSION_COUNT];
 static cr_ParameterValue sParameterValues[NUM_PARAMS];
 /* Template code end [.c Local/Extern Variables] */
 
@@ -62,12 +63,12 @@ int parameters_reset_param(param_t pid, bool write, uint32_t write_timestamp)
 	int rval = sFindIndexFromPid(pid, &idx);
 	if (rval)
 		return rval;
-	
+
 	cr_ParameterValue param = {
 		.parameter_id = sParameterValues[idx].parameter_id,
 		.which_value = sParameterValues[idx].which_value
 	};
-	
+
 	switch (param.which_value - cr_ParameterValue_uint32_value_tag)
 	{
 		case cr_ParameterDataType_UINT32:
@@ -127,11 +128,11 @@ int parameters_reset_param(param_t pid, bool write, uint32_t write_timestamp)
 			affirm(0);  // should not happen.
 			break;
 	}  // end switch
-	
+
 	/* User code start [Parameter Repository: Parameter Reset]
 	 * Here is the place to add any application-specific behavior for handling parameter resets */
 	/* User code end [Parameter Repository: Parameter Reset] */
-	
+
 	if (write)
 	{
 		param.timestamp = write_timestamp;

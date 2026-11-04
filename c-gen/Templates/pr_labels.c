@@ -13,6 +13,9 @@
 
 /* Template code start [.c Defines] */
 #define PARAM_EI_TO_NUM_PEI_RESPONSES(param_ex) ((param_ex.num_labels / 8) + ((param_ex.num_labels % 8) ? 1:0))
+#define sRequestedPeiId sRequestedPeiId_by_session[cr_current_session()]
+#define sCurrentPeiIndex sCurrentPeiIndex_by_session[cr_current_session()]
+#define sCurrentPeiKeyIndex sCurrentPeiKeyIndex_by_session[cr_current_session()]
 /* Template code end [.c Defines] */
 
 /* Template code start [.h Data Types] */
@@ -31,9 +34,9 @@ typedef struct {
 /* Template code end [.h Global Variables] */
 
 /* Template code start [.c Local/Extern Variables] */
-static int sRequestedPeiId = -1;
-static int sCurrentPeiIndex = 0;
-static int sCurrentPeiKeyIndex = 0;
+static int sRequestedPeiId_by_session[CR_SESSION_COUNT] = {-1, -1, -1};
+static int sCurrentPeiIndex_by_session[CR_SESSION_COUNT];
+static int sCurrentPeiKeyIndex_by_session[CR_SESSION_COUNT];
 /* Template code end [.c Local/Extern Variables] */
 
 /* Template code start [.h Global Functions] */

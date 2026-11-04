@@ -12,6 +12,7 @@
 /* Template code end [.h Defines] */
 
 /* Template code start [.c Defines] */
+#define sCommandIndex sCommandIndex_by_session[cr_current_session()]
 /* Template code end [.c Defines] */
 
 /* Template code start [.h Data Types] */
@@ -24,7 +25,7 @@
 /* Template code end [.h Global Variables] */
 
 /* Template code start [.c Local/Extern Variables] */
-static int sCommandIndex = 0;
+static int sCommandIndex_by_session[CR_SESSION_COUNT];
 /* Template code end [.c Local/Extern Variables] */
 
 /* Template code start [.h Global Functions] */
